@@ -1,0 +1,42 @@
+{
+	"name": "gatsby-theme-carraway-docs",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"author": "Kate Bartolo <kate.bartolo19@gmail.com> (http://kabartolo.com)",
+	"keywords": [
+		"gatsby",
+		"gatsby-theme",
+		"docs",
+		"carraway-docs",
+		"documentation"
+	],
+	"scripts": {
+		"build": "gatsby build",
+		"clean": "gatsby clean",
+		"develop": "gatsby develop",
+		"lint": "eslint . --ext .js"
+	},
+	"peerDependencies": {
+		"gatsby": "^2.23.1",
+		"react": "^16.13.1",
+		"react-dom": "^16.13.1"
+	},
+	"devDependencies": {
+		"eslint-config-airbnb": "^18.2.0",
+		"eslint-plugin-jsx-a11y": "^6.3.1",
+		"eslint-plugin-react": "^7.20.0",
+		"eslint-plugin-react-hooks": "^4.0.4",
+		"gatsby": "^2.23.1",
+		"gatsby-plugin-eslint": "^2.0.8",
+		"react": "^16.13.1",
+		"react-dom": "^16.13.1"
+	},
+	"dependencies": {
+		"@mdx-js/mdx": "^1.6.6",
+		"@mdx-js/react": "^1.6.6",
+		"gatsby-plugin-mdx": "^1.2.14",
+		"gatsby-source-filesystem": "^2.3.10",
+		"prop-types": "^15.7.2"
+	}
+}
