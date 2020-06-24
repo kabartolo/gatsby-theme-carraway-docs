@@ -41,10 +41,12 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const result = await graphql(`
     query {
       allMdx {
-        nodes {
-          id
-          fields {
-            path
+        edges {
+          node {
+            id
+            fields {
+              path
+            }
           }
         }
       }
@@ -55,7 +57,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     throw result.errors;
   }
 
-  const posts = result.data.allMdx.nodes;
+  const posts = result.data.allMdx.edges;
 
   posts.forEach(({ node }) => {
     createPage({
