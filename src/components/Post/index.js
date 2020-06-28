@@ -5,10 +5,17 @@ import { MDXProvider } from '@mdx-js/react';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
 import { Link } from 'gatsby';
 
-import Code from '../Code';
+import CodeBlock from '../CodeBlock';
+import CodeExample from '../CodeExample';
+import TopicArea from '../TopicArea';
 import { PostContext } from '../Layout/post-context';
 
-const shortcodes = { Link, Code };
+const shortcodes = {
+  Link,
+  code: CodeBlock,
+  CodeExample,
+  TopicArea,
+};
 
 export default function Post({ data: { mdx } }) {
   const { title } = mdx.frontmatter;
