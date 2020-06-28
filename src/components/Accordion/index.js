@@ -3,11 +3,18 @@ import PropTypes from 'prop-types';
 
 import { Link } from 'gatsby';
 
-export default function Accordion({ children, allowMultipleOpen, allowTOC }) {
+import accordionStyles from './accordion.module.css';
+
+export default function Accordion({
+  items: parentItems,
+  allowMultipleOpen,
+  allowTOC,
+  onClickLink,
+}) {
   /* eslint-disable no-param-reassign */
-  const sections = children.reduce((map, child) => {
-    if (child.isOpen) {
-      map[child.name] = true;
+  const sections = parentItems.reduce((map, item) => {
+    if (item.isOpen) {
+      map[item.name] = true;
     }
     return map;
   }, {});
@@ -31,56 +38,76 @@ export default function Accordion({ children, allowMultipleOpen, allowTOC }) {
   }
 
   return (
-    <ul>
-      {children.map((child) => {
-        const {
-          id,
-          name,
-          path,
-          items,
-        } = child;
+    <div className={accordionStyles.accordion}>
+      <ul className={accordionStyles.list}>
+        {parentItems.map((item) => {
+          const {
+            id,
+            name,
+            path,
+            items,
+          } = item;
 
-        const label = path
-          ? <Link to={path}>{name}</Link>
-          : name;
+          const label = path
+            ? (
+              <Link className={accordionStyles.link} to={path} onClick={() => onClickLink()}>
+                {name}
+              </Link>
+            )
+            : name;
 
-        const isOpen = openSections[name];
-        const hasItems = (!path && items) || (path && allowTOC && items);
+          const isOpen = openSections[name];
+          const hasItems = (!path && items) || (path && allowTOC && items);
 
-        return hasItems
-          ? (
-            <li className="accordion-section" key={id}>
-              <h3>
-                <button
-                  type="button"
-                  onClick={() => onClick(name)}
-                >
-                  <span>{label}</span>
-                  <span>
-                    {!isOpen && <span>&#9650;</span>}
-                    {isOpen && <span>&#9660;</span>}
-                  </span>
-                </button>
-              </h3>
-              {isOpen && (
-                <Accordion allowMultipleOpen={allowMultipleOpen} allowTOC={allowTOC}>
-                  {items}
-                </Accordion>
-              )}
-            </li>
-          )
-          : (
-            <li>
-              <h3>{label}</h3>
-            </li>
-          );
-      })}
-    </ul>
+          return hasItems
+            ? (
+              <li className={accordionStyles.section} key={id}>
+                <h3>
+                  <button
+                    className={accordionStyles.button}
+                    type="button"
+                    onClick={() => onClick(name)}
+                  >
+                    <span>{label}</span>
+                    <span>
+                      {!isOpen && (
+                        <span className={accordionStyles.icon}>
+                          <i className="material-icons">expand_more</i>
+                        </span>
+                      )}
+                      {isOpen && (
+                        <span className={accordionStyles.icon}>
+                          <i className="material-icons">expand_less</i>
+                        </span>
+                      )}
+                    </span>
+                  </button>
+                </h3>
+                {isOpen && (
+                  <Accordion
+                    allowMultipleOpen={allowMultipleOpen}
+                    allowTOC={allowTOC}
+                    items={items}
+                    dropDown={false}
+                    onClickLink={onClickLink}
+                  />
+                )}
+              </li>
+            )
+            : (
+              <li className={accordionStyles.item}>
+                <h3>{label}</h3>
+              </li>
+            );
+        })}
+      </ul>
+    </div>
   );
 }
 
 Accordion.propTypes = {
   allowMultipleOpen: PropTypes.bool.isRequired,
   allowTOC: PropTypes.bool.isRequired,
-  children: PropTypes.instanceOf(Object).isRequired,
+  items: PropTypes.instanceOf(Array).isRequired,
+  onClickLink: PropTypes.func.isRequired,
 };

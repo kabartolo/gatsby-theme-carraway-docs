@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import layoutStyles from './layout.module.css';
+
+import useWindowDimensions from '../../hooks/useWindowDimensions';
+
 import { PostContext } from './post-context';
+
+import Dropdown from '../Dropdown';
 import Sidebar from '../Sidebar';
 import Header from '../Header';
 import Footer from '../Footer';
@@ -16,31 +21,46 @@ export default function Layout({
   const [postType, setPostType] = useState('');
   const [currentGroup, setCurrentGroup] = useState('');
   const [postID, setPostID] = useState('');
+  const { width } = useWindowDimensions();
+
+  const useMobileNav = width < 992;
 
   return (
     <div className={layoutStyles.container}>
-      <Header />
-      <div className={layoutStyles.main}>
-        <PostContext.Provider
-          value={{
-            postType,
-            setPostType,
-            currentGroup,
-            setCurrentGroup,
-            postID,
-            setPostID,
-          }}
-        >
-          <Sidebar
-            menus={sidebar}
-            allowMultipleOpen={allowMultipleOpen}
-            allowTOC={allowTOC}
-          />
-          <div>
+      <PostContext.Provider
+        value={{
+          postType,
+          setPostType,
+          currentGroup,
+          setCurrentGroup,
+          postID,
+          setPostID,
+        }}
+      >
+        <Header>
+          {useMobileNav && (
+            <Dropdown label="Menu">
+              <Sidebar
+                menus={sidebar}
+                allowMultipleOpen={allowMultipleOpen}
+                allowTOC={allowTOC}
+              />
+            </Dropdown>
+          )}
+        </Header>
+        <div className={layoutStyles.wrapper}>
+          {!useMobileNav && (
+            <Sidebar
+              menus={sidebar}
+              allowMultipleOpen={allowMultipleOpen}
+              allowTOC={allowTOC}
+            />
+          )}
+          <div className={layoutStyles.main}>
             {children}
           </div>
-        </PostContext.Provider>
-      </div>
+        </div>
+      </PostContext.Provider>
       <Footer />
     </div>
   );

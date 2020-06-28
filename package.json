@@ -35,8 +35,11 @@
 	"dependencies": {
 		"@mdx-js/mdx": "^1.6.6",
 		"@mdx-js/react": "^1.6.6",
+		"gatsby-plugin-google-fonts": "^1.0.1",
 		"gatsby-plugin-mdx": "^1.2.14",
 		"gatsby-source-filesystem": "^2.3.10",
+		"normalize.css": "^8.0.1",
+		"prism-react-renderer": "^1.1.1",
 		"prop-types": "^15.7.2"
 	}
 }

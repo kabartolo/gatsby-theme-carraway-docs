@@ -22,7 +22,7 @@ export default function useSidebar(menus) {
             frontmatter {
               name
             }
-            tableOfContents(maxDepth: 1)
+            tableOfContents(maxDepth: 2)
           }
         }
       }
@@ -80,7 +80,9 @@ export default function useSidebar(menus) {
     });
   };
 
-  return postTypeMenu.items.map((item) => (
-    item.name ? groupData(item) : itemData(item)
-  ));
+  return ({
+    posts: postTypeMenu.items.map((item) => (
+      item.name ? groupData(item) : itemData(item)
+    )),
+  });
 }

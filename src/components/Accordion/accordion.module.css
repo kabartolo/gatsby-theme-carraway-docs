@@ -1,0 +1,57 @@
+h3 {
+	font-weight: normal;
+}
+
+.accordion {
+}
+
+.section {
+
+}
+
+.list {
+	list-style: none;
+}
+
+.item {
+}
+
+.link {
+	text-decoration: none;
+	color: #1E1E1E;
+}
+
+a.link:hover {
+	color: #A19D80;
+	text-decoration: underline;
+}
+
+.icon {
+
+}
+
+.button {
+	border: none;
+	background: inherit;
+	display: flex;
+	justify-content: space-between;
+	padding: 0;
+	width: 100%;
+}
+
+button.button:hover,
+button.button:focus {
+}
+
+button.button:focus {
+}
+
+button.button:active {
+}
+
+/* green: A19D80
+  darkBlue: 1E1E1E
+  lightGrey: DDDDDD
+  lightGreen: EAE9D4
+  background: F4F2F3
+*/

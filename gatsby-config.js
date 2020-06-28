@@ -15,6 +15,14 @@ module.exports = ({ postsPath }) => {
           extensions: ['.mdx', '.md'],
         }
       },
+      {
+        resolve: 'gatsby-plugin-google-fonts',
+        options: {
+          fonts: [
+            'Material Icons',
+          ],
+        },
+      },
     ],
   }
 }

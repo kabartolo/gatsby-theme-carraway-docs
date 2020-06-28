@@ -2,6 +2,29 @@
 	font-family: 'Ubuntu';
 }
 
-.main {
+.wrapper {
 	display: flex;
+}
+
+.main {
+	min-width: 500px;
+	padding: 50px;
+}
+
+@media (max-width: 850px) {
+	.wrapper {
+		flex-direction: column;
+	}
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
 }
