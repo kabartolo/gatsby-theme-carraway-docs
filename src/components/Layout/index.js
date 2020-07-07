@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import layoutStyles from './layout.module.css';
+import layoutStyles from './layout.module.scss';
 
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 
@@ -22,7 +22,6 @@ export default function Layout({
   const [currentGroup, setCurrentGroup] = useState('');
   const [postID, setPostID] = useState('');
   const { width } = useWindowDimensions();
-
   const useMobileNav = width < 992;
 
   return (
@@ -37,8 +36,8 @@ export default function Layout({
           setPostID,
         }}
       >
-        <Header>
-          {useMobileNav && (
+        {useMobileNav && (
+          <Header>
             <Dropdown label="Menu">
               <Sidebar
                 menus={sidebar}
@@ -46,22 +45,28 @@ export default function Layout({
                 allowTOC={allowTOC}
               />
             </Dropdown>
-          )}
-        </Header>
-        <div className={layoutStyles.wrapper}>
+          </Header>
+        )}
+        <div
+          id="page-wrapper"
+          className={layoutStyles.wrapper}
+          // style={{ height: height - headerHeight }}
+        >
           {!useMobileNav && (
             <Sidebar
               menus={sidebar}
               allowMultipleOpen={allowMultipleOpen}
               allowTOC={allowTOC}
-            />
+            >
+              <Header />
+            </Sidebar>
           )}
-          <div className={layoutStyles.main}>
+          <div id="main" className={layoutStyles.main}>
             {children}
+            <Footer />
           </div>
         </div>
       </PostContext.Provider>
-      <Footer />
     </div>
   );
 }
