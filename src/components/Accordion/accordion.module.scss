@@ -1,0 +1,25 @@
+.accordion {
+	.list {
+		margin: 0;
+		list-style: none;
+	}
+	h3 {
+		font-weight: normal;
+		margin-bottom: 0;
+	}
+	.link-item,
+	.group-item button {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+	}
+	.label {
+		text-transform: uppercase;
+		color: #2a2f45;
+	}
+	.button {
+		border: none;
+		background: inherit;
+		padding: 0;
+	}
+}
