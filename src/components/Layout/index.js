@@ -16,7 +16,7 @@ import Toggle from '../Toggle';
 
 export default function Layout({
   children,
-  sidebar,
+  menus,
   allowMultipleOpen,
   allowTOC,
 }) {
@@ -49,7 +49,7 @@ export default function Layout({
               <Toggle onToggle={toggleTheme} name="theme-toggle" />
               <Dropdown label="Menu">
                 <Sidebar
-                  menus={sidebar}
+                  menus={menus}
                   allowMultipleOpen={allowMultipleOpen}
                   allowTOC={allowTOC}
                 />
@@ -63,7 +63,7 @@ export default function Layout({
           >
             {!useMobileNav && (
               <Sidebar
-                menus={sidebar}
+                menus={menus}
                 allowMultipleOpen={allowMultipleOpen}
                 allowTOC={allowTOC}
               >
@@ -88,7 +88,7 @@ Layout.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]).isRequired,
-  sidebar: PropTypes.instanceOf(Object).isRequired,
+  menus: PropTypes.instanceOf(Object).isRequired,
   allowMultipleOpen: PropTypes.bool.isRequired,
   allowTOC: PropTypes.bool.isRequired,
 };

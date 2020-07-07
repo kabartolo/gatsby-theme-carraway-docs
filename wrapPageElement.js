@@ -5,12 +5,12 @@ import PropTypes from 'prop-types';
 import Layout from './src/components/Layout';
 
 const wrapPageElement = ({ element, ...props }, pluginOptions) => {
-  const { sidebar, sidebarAllowMultipleOpen, sidebarAllowTOC } = pluginOptions;
+  const { menus, sidebarAllowMultipleOpen, sidebarAllowTOC } = pluginOptions;
 
   return (
     <Layout
       {...props}
-      sidebar={sidebar}
+      menus={menus}
       allowMultipleOpen={sidebarAllowMultipleOpen}
       allowTOC={sidebarAllowTOC}
     >
@@ -26,7 +26,7 @@ wrapPageElement.propTypes = {
   pluginOptions: PropTypes.shape({
     sidebarAllowTOC: PropTypes.bool,
     sidebarAllowMultipleOpen: PropTypes.bool,
-    sidebar: PropTypes.instanceOf(Object),
+    menus: PropTypes.instanceOf(Object),
   }),
 };
 
@@ -34,6 +34,6 @@ wrapPageElement.defaultProps = {
   pluginOptions: PropTypes.shape({
     sidebarAllowTOC: true,
     sidebarAllowMultipleOpen: true,
-    sidebar: {},
+    menus: {},
   }),
 };
