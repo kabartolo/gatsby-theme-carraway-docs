@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useStaticQuery, graphql } from 'gatsby';
 
-import headerStyles from './header.module.css';
+import styles from './header.module.scss';
+
+import { ThemeContext } from '../Layout/theme-context';
 
 export default function Header({ children }) {
   const { site } = useStaticQuery(
@@ -17,10 +19,16 @@ export default function Header({ children }) {
     `,
   );
 
+  const { theme } = useContext(ThemeContext);
+  const themeClass = theme === 'dark' ? styles.darkTheme : styles.lightTheme;
   return (
-    <div>
-      <h1 className={headerStyles.header}>{site.siteMetadata.title}</h1>
-      <div>{children}</div>
+    <div className={styles.layout}>
+      <div id="header" className={themeClass}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>{site.siteMetadata.title}</h1>
+          {children}
+        </div>
+      </div>
     </div>
   );
 }
