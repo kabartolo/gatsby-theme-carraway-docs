@@ -10,6 +10,8 @@ import CodeExample from '../CodeExample';
 import TopicArea from '../TopicArea';
 import { PostContext } from '../Layout/post-context';
 
+import styles from './post.module.scss';
+
 const shortcodes = {
   Link,
   code: CodeBlock,
@@ -30,12 +32,14 @@ export default function Post({ data: { mdx } }) {
   });
 
   return (
-    <div>
-      <h1>{title}</h1>
+    <article id="post-container" className={styles.article}>
+      <header>
+        <h1>{title}</h1>
+      </header>
       <MDXProvider components={shortcodes}>
         <MDXRenderer>{body}</MDXRenderer>
       </MDXProvider>
-    </div>
+    </article>
   );
 }
 

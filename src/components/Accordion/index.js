@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Link } from 'gatsby';
 
-import accordionStyles from './accordion.module.css';
+import accordionStyles from './accordion.module.scss';
 
 export default function Accordion({
   items: parentItems,
@@ -22,8 +22,10 @@ export default function Accordion({
 
   const [openSections, setOpenSections] = useState(sections);
 
-  function onClick(name) {
+  function onClick(name, isLink) {
     const isOpen = !!openSections[name];
+
+    if (isLink && isOpen) return;
 
     if (allowMultipleOpen) {
       setOpenSections({
@@ -50,7 +52,13 @@ export default function Accordion({
 
           const label = path
             ? (
-              <Link className={accordionStyles.link} to={path} onClick={() => onClickLink()}>
+              <Link
+                to={path}
+                onClick={() => {
+                  onClickLink();
+                  onClick(name, true);
+                }}
+              >
                 {name}
               </Link>
             )
@@ -58,29 +66,30 @@ export default function Accordion({
 
           const isOpen = openSections[name];
           const hasItems = (!path && items) || (path && allowTOC && items);
+          const icon = isOpen
+            ? (
+              <span>
+                <i className="material-icons">expand_less</i>
+              </span>
+            )
+            : (
+              <span>
+                <i className="material-icons">expand_more</i>
+              </span>
+            );
 
           return hasItems
             ? (
-              <li className={accordionStyles.section} key={id}>
-                <h3>
+              <li key={id}>
+                <h3 className={path ? accordionStyles.linkItem : accordionStyles.groupItem}>
+                  {path && <span className={accordionStyles.link}>{label}</span>}
                   <button
                     className={accordionStyles.button}
                     type="button"
                     onClick={() => onClick(name)}
                   >
-                    <span>{label}</span>
-                    <span>
-                      {!isOpen && (
-                        <span className={accordionStyles.icon}>
-                          <i className="material-icons">expand_more</i>
-                        </span>
-                      )}
-                      {isOpen && (
-                        <span className={accordionStyles.icon}>
-                          <i className="material-icons">expand_less</i>
-                        </span>
-                      )}
-                    </span>
+                    {!path && <span className={accordionStyles.label}>{label}</span>}
+                    <span>{icon}</span>
                   </button>
                 </h3>
                 {isOpen && (
@@ -95,7 +104,7 @@ export default function Accordion({
               </li>
             )
             : (
-              <li className={accordionStyles.item}>
+              <li>
                 <h3>{label}</h3>
               </li>
             );
