@@ -1,0 +1,49 @@
+$dark-theme: (
+	header: (
+		bg: #011627,
+		color: #d6deeb
+	),
+	title: (
+		color: #fff
+	),
+);
+
+$light-theme: (
+	header: (
+		bg: white,
+		color: #011627
+	),
+);
+
+@mixin themable($theme-map) {
+	@each $section, $map in $theme-map {
+		.#{$section} {
+			background-color: map-get($map, bg);
+			color: map-get($map, color);
+		}
+	}
+}
+
+.light-theme {
+	@include themable($light-theme);
+}
+
+.dark-theme {
+	@include themable($dark-theme);
+}
+
+.layout {
+	width: 100%;
+	margin-bottom: calc(#{$main-padding} + #{$article-title-line-height} - calc(#{$header-height} + #{$page-padding-left}));
+	height: $header-height;
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.title {
+	margin: 0;
+}

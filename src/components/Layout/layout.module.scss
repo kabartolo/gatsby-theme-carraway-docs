@@ -1,0 +1,43 @@
+html,
+body {
+	height: initial;
+}
+
+.wrapper {
+}
+
+.main {
+	position: relative;
+	margin-left: $sidebar-width;
+}
+
+ul ul li {
+	padding-left: 2em;
+	li {
+	  	padding-left: 1em;
+	}
+}
+
+@media (max-width: 850px) {
+	.wrapper {
+		flex-direction: column;
+	}
+}
+
+::-webkit-scrollbar {
+	height: 7px;
+    width: 7px;
+}
+ 
+::-webkit-scrollbar-track {
+    border-radius: 5px;
+}
+ 
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background: #878fa1;
+}
+
+::-webkit-scrollbar-corner {
+	background: transparent;
+}

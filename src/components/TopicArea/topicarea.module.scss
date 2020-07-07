@@ -1,0 +1,22 @@
+.topic-area {
+	display: flex;
+	align-items: top;
+	justify-content: space-between;
+}
+
+.example-area {
+	flex: 0 0 40%;
+	max-height: 100vh;
+	position: sticky;
+	align-self: flex-start;
+	top: 0;
+	padding-top: calc(#{$h2-margin} + #{$h2-margin} + #{$topic-line-height});
+}
+
+.content-area {
+	flex: 0 0 50%;
+	h2  {
+		margin: $h2-margin 0;
+		line-height: $topic-line-height;
+	}
+}
