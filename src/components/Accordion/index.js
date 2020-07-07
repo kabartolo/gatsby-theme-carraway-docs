@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Link } from 'gatsby';
 
-import accordionStyles from './accordion.module.scss';
+import styles from './accordion.module.scss';
 
 export default function Accordion({
   items: parentItems,
@@ -40,14 +40,15 @@ export default function Accordion({
   }
 
   return (
-    <div className={accordionStyles.accordion}>
-      <ul className={accordionStyles.list}>
+    <div className={styles.accordion}>
+      <ul className={styles.list}>
         {parentItems.map((item) => {
           const {
             id,
             name,
             path,
             items,
+            isGroup,
           } = item;
 
           const label = path
@@ -78,17 +79,20 @@ export default function Accordion({
               </span>
             );
 
+          const itemStyle = path ? styles.linkItem : styles.groupItem;
+          const textStyle = isGroup ? styles.label : null;
+
           return hasItems
             ? (
               <li key={id}>
-                <h3 className={path ? accordionStyles.linkItem : accordionStyles.groupItem}>
-                  {path && <span className={accordionStyles.link}>{label}</span>}
+                <h3 className={`${itemStyle} ${textStyle}`}>
+                  {path && <span className={styles.link}>{label}</span>}
                   <button
-                    className={accordionStyles.button}
+                    className={styles.button}
                     type="button"
                     onClick={() => onClick(name)}
                   >
-                    {!path && <span className={accordionStyles.label}>{label}</span>}
+                    {!path && <span className={styles.label}>{label}</span>}
                     <span>{icon}</span>
                   </button>
                 </h3>

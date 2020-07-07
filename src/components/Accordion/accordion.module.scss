@@ -13,9 +13,9 @@
 		display: flex;
 		justify-content: space-between;
 	}
-	.label {
+	.label,
+	.label a {
 		text-transform: uppercase;
-		color: #2a2f45;
 	}
 	.button {
 		border: none;

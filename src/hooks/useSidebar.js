@@ -46,19 +46,28 @@ export default function useSidebar(menus) {
       path: path.replace(/\/$/, heading.url),
       items: null,
       isOpen: null,
+      isGroup: false,
     }));
   };
 
-  const itemData = (slug) => {
-    const node = postTypeNodes.find((postNode) => postNode.fields.slug === slug);
+  const groupHasIndex = (menu, path) => (
+    menu.filter((item) => item.path === path).length > 0
+  );
 
-    return ({
-      id: node.id,
-      name: node.frontmatter.name,
-      path: node.fields.path,
-      items: contentData(node.fields.path, node.tableOfContents),
-      isOpen: node.id === postID,
-    });
+  const itemDataByNode = (node) => ({
+    id: node.id,
+    name: node.frontmatter.name,
+    path: node.fields.path,
+    items: contentData(node.fields.path, node.tableOfContents),
+    isOpen: node.id === postID,
+    isGroup: false,
+  });
+
+  const itemDataBySlug = (slug) => {
+    const node = postTypeNodes.find((postNode) => postNode.fields.slug === slug);
+    if (!node) return null;
+
+    return itemDataByNode(node);
   };
 
   const getNodesByGroup = (groupName) => (
@@ -68,21 +77,24 @@ export default function useSidebar(menus) {
   const groupData = (groupItem) => {
     const { name, folder, items } = groupItem;
     const menu = items && items.length
-      ? items.map((item) => itemData(item))
-      : getNodesByGroup(folder).map((node) => itemData(node.fields.slug));
-
+      ? items.map((item) => itemDataBySlug(item)).filter((item) => item !== null)
+      : getNodesByGroup(folder).map((node) => itemDataByNode(node));
+    const path = `/${postType}/${folder}/`;
     return ({
       id: folder,
       name,
-      path: null,
+      path: groupHasIndex(menu, path) ? path : null,
       items: menu,
       isOpen: folder === currentGroup,
+      isGroup: true,
     });
   };
 
+  const posts = postTypeMenu.items.map((item) => (
+    item.name ? groupData(item) : itemDataBySlug(item)
+  ));
+
   return ({
-    posts: postTypeMenu.items.map((item) => (
-      item.name ? groupData(item) : itemData(item)
-    )),
+    posts: posts.filter((post) => post !== null),
   });
 }
