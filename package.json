@@ -37,9 +37,18 @@
 		"@mdx-js/react": "^1.6.6",
 		"gatsby-plugin-google-fonts": "^1.0.1",
 		"gatsby-plugin-mdx": "^1.2.14",
+		"gatsby-plugin-sass": "^2.3.7",
+		"gatsby-plugin-typography": "^2.5.9",
+		"gatsby-remark-autolink-headers": "^2.3.10",
 		"gatsby-source-filesystem": "^2.3.10",
+		"node-sass": "^4.14.1",
 		"normalize.css": "^8.0.1",
 		"prism-react-renderer": "^1.1.1",
-		"prop-types": "^15.7.2"
+		"prop-types": "^15.7.2",
+		"react-copy-to-clipboard": "^5.0.2",
+		"react-sticky": "^6.0.3",
+		"react-typography": "^0.16.19",
+		"typography": "^0.16.19",
+		"typography-theme-noriega": "^0.16.19"
 	}
 }
