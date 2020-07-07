@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import useWindowDimensions from '../../hooks/useWindowDimensions';
-import styles from './topicarea.module.css';
+import styles from './topicarea.module.scss';
 
 export default function TopicArea({ children }) {
   const { width } = useWindowDimensions();
@@ -20,19 +20,16 @@ export default function TopicArea({ children }) {
       ? codeBlocks = codeBlocks.concat(child)
       : rest = rest.concat(child);
   });
-  // gather code examples if twoColumn is true
-  // place them in div that appears on the right if screen is wide
-  // otherwise, place code blocks wherever they originally appeared
 
   return (
-    <div className={styles.topicArea}>
-      <div>
+    <section className={styles.topicArea}>
+      <section className={styles.contentArea}>
         {rest}
-      </div>
-      <div>
+      </section>
+      <section className={styles.exampleArea}>
         {codeBlocks}
-      </div>
-    </div>
+      </section>
+    </section>
   );
 }
 
