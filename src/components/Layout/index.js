@@ -88,7 +88,7 @@ Layout.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]).isRequired,
-  menus: PropTypes.instanceOf(Object).isRequired,
+  menus: PropTypes.instanceOf(Array).isRequired,
   allowMultipleOpen: PropTypes.bool.isRequired,
   allowTOC: PropTypes.bool.isRequired,
 };
