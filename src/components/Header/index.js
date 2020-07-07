@@ -22,12 +22,10 @@ export default function Header({ children }) {
   const { theme } = useContext(ThemeContext);
   const themeClass = theme === 'dark' ? styles.darkTheme : styles.lightTheme;
   return (
-    <div className={styles.layout}>
-      <div id="header" className={themeClass}>
-        <div className={styles.header}>
-          <h1 className={styles.title}>{site.siteMetadata.title}</h1>
-          {children}
-        </div>
+    <div id="header" className={themeClass}>
+      <div className={styles.header}>
+        <h1 className={styles.title}>{site.siteMetadata.title}</h1>
+        {children}
       </div>
     </div>
   );

@@ -19,23 +19,27 @@ export default function Sidebar({
 
   return (
     <div className={styles.container}>
-      {children}
-      {(menus.length > 1)
-        && (
-        <ul>
-          {menus.map((menu) => <li><Link to={`/${menu.type}`}>{menu.name}</Link></li>)}
-        </ul>
+      <div className={styles.fixedHeader}>
+        {children}
+      </div>
+      <div className={styles.scrollable}>
+        {(menus.length > 1)
+          && (
+          <ul>
+            {menus.map((menu) => <li><Link to={`/${menu.type}`}>{menu.name}</Link></li>)}
+          </ul>
+          )}
+        {isPost && (
+          <div className={styles.accordion}>
+            <Accordion
+              allowMultipleOpen={allowMultipleOpen}
+              allowTOC={allowTOC}
+              items={data.posts}
+              onClickLink={closeDropdown}
+            />
+          </div>
         )}
-      {isPost && (
-        <div className={styles.accordion}>
-          <Accordion
-            allowMultipleOpen={allowMultipleOpen}
-            allowTOC={allowTOC}
-            items={data.posts}
-            onClickLink={closeDropdown}
-          />
-        </div>
-      )}
+      </div>
     </div>
   );
 }

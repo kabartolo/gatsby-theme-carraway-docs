@@ -32,12 +32,6 @@ $light-theme: (
 	@include themable($dark-theme);
 }
 
-.layout {
-	width: 100%;
-	margin-bottom: calc(#{$main-padding} + #{$article-title-line-height} - calc(#{$header-height} + #{$page-padding-left}));
-	height: $header-height;
-}
-
 .header {
 	display: flex;
 	align-items: center;
