@@ -18,6 +18,8 @@ export default function useBreadcrumb(menus, postPath, postType, currentGroup) {
   `);
 
   const postTypeMenu = menus.find((menu) => menu.type === postType);
+  if (!postTypeMenu) return {};
+
   const postData = (menu) => {
     if (!menu) return null;
 
