@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 
-import styles from './dropdown.module.css';
+import styles from './dropdown.module.scss';
 
 export default function Dropdown({ children, label }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,36 +20,36 @@ export default function Dropdown({ children, label }) {
   }
 
   return (
-    <div>
-      <button
-        type="button"
-        onClick={onClick}
-      >
-        <span>{label}</span>
-        <span>
-          {!isOpen && (
-            <span>
+    <>
+      <div className={styles.layout}>
+        <button
+          type="button"
+          onClick={onClick}
+        >
+          <span>{label}</span>
+          <>
+            {!isOpen && (
               <i className="material-icons">expand_more</i>
-            </span>
-          )}
-          {isOpen && (
-            <span>
+            )}
+            {isOpen && (
               <i className="material-icons">expand_less</i>
-            </span>
-          )}
-        </span>
-      </button>
-      {isOpen && (
-        <div className={styles.dropdown}>
-          {Children.map(children, (child) => {
-            if (isValidElement(child)) {
-              return cloneElement(child, { closeDropdown });
-            }
-            return child;
-          })}
-        </div>
-      )}
-    </div>
+            )}
+          </>
+        </button>
+      </div>
+      <>
+        {isOpen && (
+          <div className={styles.dropdown}>
+            {Children.map(children, (child) => {
+              if (isValidElement(child)) {
+                return cloneElement(child, { closeDropdown });
+              }
+              return child;
+            })}
+          </div>
+        )}
+      </>
+    </>
   );
 }
 
