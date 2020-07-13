@@ -4,44 +4,46 @@ import PropTypes from 'prop-types';
 import Highlight, { defaultProps } from 'prism-react-renderer';
 import nightOwl from 'prism-react-renderer/themes/nightOwl';
 
-import styles from './codeBlock.module.css';
+import styles from './codeBlock.module.scss';
 
 export default function CodeBlock({ children, metastring, className: gatsbyClassName }) {
   const language = gatsbyClassName ? gatsbyClassName.replace(/language-/, '') : '';
   console.log(metastring);
   return (
-    <Highlight {... defaultProps} theme={nightOwl} code={children} language={language}>
-      {({
-        style,
-        tokens,
-        className,
-        getLineProps,
-        getTokenProps,
-      }) => (
-        <pre className={`${className} ${styles.prismCode}`} style={style}>
-          <div className={styles.codeContainer}>
-            <div>
-              {tokens.map((line, i) => (
-                <div className={styles.number} key={i}>
-                  {i + 1}
-                </div>
-              ))}
+    <div className={styles.scroll}>
+      <Highlight {... defaultProps} theme={nightOwl} code={children} language={language}>
+        {({
+          style,
+          tokens,
+          className,
+          getLineProps,
+          getTokenProps,
+        }) => (
+          <pre className={`${className} ${styles.prismCode}`} style={style}>
+            <div className={styles.codeContainer}>
+              <div>
+                {tokens.map((line, i) => (
+                  <div className={styles.number} key={i}>
+                    {i + 1}
+                  </div>
+                ))}
+              </div>
+              <div className={styles.code}>
+                {tokens.map((line, i) => (
+                  <div className={styles.line} key={i} {...getLineProps({ line, key: i })}>
+                    <span className={styles.content}>
+                      {line.map((token, key) => (
+                        <span key={key} {...getTokenProps({ token, key })} />
+                      ))}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className={styles.code}>
-              {tokens.map((line, i) => (
-                <div className={styles.line} key={i} {...getLineProps({ line, key: i })}>
-                  <span className={styles.content}>
-                    {line.map((token, key) => (
-                      <span key={key} {...getTokenProps({ token, key })} />
-                    ))}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </pre>
-      )}
-    </Highlight>
+          </pre>
+        )}
+      </Highlight>
+    </div>
   );
 }
 

@@ -1,20 +1,27 @@
+$example-margin-top: calc(#{$h2-margin} + #{$h2-margin} + #{$topic-line-height});
+
 .topic-area {
 	display: flex;
-	align-items: top;
+	align-items: center;
 	justify-content: space-between;
 }
 
 .example-area {
-	flex: 0 0 40%;
-	max-height: 100vh;
+	min-width: 300px;
+	max-width: 600px;
+	flex-grow: 1;
+	position: -webkit-sticky;
 	position: sticky;
 	align-self: flex-start;
 	top: 0;
-	padding-top: calc(#{$h2-margin} + #{$h2-margin} + #{$topic-line-height});
+	padding-top: $example-margin-top;
 }
 
 .content-area {
-	flex: 0 0 50%;
+	min-width: 300px;
+	max-width: 600px;
+	flex-grow: 0;
+	align-self: flex-start;
 	h2  {
 		margin: $h2-margin 0;
 		line-height: $topic-line-height;
