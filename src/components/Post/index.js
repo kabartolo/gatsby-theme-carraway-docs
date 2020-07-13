@@ -8,7 +8,10 @@ import { Link } from 'gatsby';
 import CodeBlock from '../CodeBlock';
 import CodeExample from '../CodeExample';
 import TopicArea from '../TopicArea';
+
 import { PostContext } from '../Layout/post-context';
+
+import useBreadcrumb from '../../hooks/useBreadcrumb';
 
 import styles from './post.module.scss';
 
@@ -19,11 +22,14 @@ const shortcodes = {
   TopicArea,
 };
 
-export default function Post({ data: { mdx } }) {
+export default function Post({ data: { mdx }, menus }) {
   const { title } = mdx.frontmatter;
   const { body, fields } = mdx;
-
-  const { setPostType, setCurrentGroup, setPostID } = useContext(PostContext);
+  const {
+    setPostType,
+    setCurrentGroup,
+    setPostID,
+  } = useContext(PostContext);
 
   useEffect(() => {
     setPostType(fields.postType);
@@ -31,8 +37,38 @@ export default function Post({ data: { mdx } }) {
     setPostID(mdx.id);
   });
 
+  const {
+    postBreadcrumb,
+    groupBreadcrumb,
+    postIsIndex,
+  } = useBreadcrumb(menus, fields.path, fields.postType, fields.group);
+
   return (
     <article id="post-container" className={styles.article}>
+      <nav>
+        {postBreadcrumb && (
+          <>
+            <span><Link to={postBreadcrumb.path}>{postBreadcrumb.name}</Link></span>
+          </>
+        )}
+        {groupBreadcrumb && (
+          <>
+            {postBreadcrumb && <span> &#47; </span>}
+            <span>
+              {groupBreadcrumb.path
+                ? (
+                  <Link to={groupBreadcrumb.path}>{groupBreadcrumb.name}</Link>
+                ) : <span>{groupBreadcrumb.name}</span>}
+            </span>
+          </>
+        )}
+        {!postIsIndex && (
+          <>
+            {(postBreadcrumb || groupBreadcrumb) && <span> &#47; </span>}
+            <span><Link to={fields.path}>{title}</Link></span>
+          </>
+        )}
+      </nav>
       <header>
         <h1>{title}</h1>
       </header>
@@ -51,6 +87,7 @@ export const pageQuery = graphql`
       fields {
         postType
         group
+        path
       }
       frontmatter {
         title
@@ -64,4 +101,9 @@ Post.propTypes = {
   data: PropTypes.shape({
     mdx: PropTypes.instanceOf(Object).isRequired,
   }).isRequired,
+  menus: PropTypes.instanceOf(Array),
+};
+
+Post.defaultProps = {
+  menus: [],
 };

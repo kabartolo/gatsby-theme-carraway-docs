@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import layoutStyles from './layout.module.scss';
+import headerStyles from '../Header/header.module.scss';
 
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 
@@ -12,7 +13,6 @@ import Dropdown from '../Dropdown';
 import Sidebar from '../Sidebar';
 import Header from '../Header';
 import Footer from '../Footer';
-import Toggle from '../Toggle';
 
 export default function Layout({
   children,
@@ -26,10 +26,6 @@ export default function Layout({
   const [theme, setTheme] = useState('light');
   const { width } = useWindowDimensions();
   const useMobileNav = width < 992;
-
-  function toggleTheme() {
-    setTheme(theme === 'light' ? 'dark' : 'light');
-  }
 
   return (
     <div className={layoutStyles.container}>
@@ -45,8 +41,7 @@ export default function Layout({
           }}
         >
           {useMobileNav && (
-            <Header>
-              <Toggle onToggle={toggleTheme} name="theme-toggle" />
+            <Header className={headerStyles.top}>
               <Dropdown label="Menu">
                 <Sidebar
                   menus={menus}
@@ -59,7 +54,6 @@ export default function Layout({
           <div
             id="page-wrapper"
             className={layoutStyles.wrapper}
-            // style={{ height: height - headerHeight }}
           >
             {!useMobileNav && (
               <Sidebar
@@ -67,9 +61,7 @@ export default function Layout({
                 allowMultipleOpen={allowMultipleOpen}
                 allowTOC={allowTOC}
               >
-                <Header>
-                  <Toggle onToggle={toggleTheme} name="theme-toggle" />
-                </Header>
+                <Header className={headerStyles.sidebar} />
               </Sidebar>
             )}
             <div id="main" className={layoutStyles.main}>
