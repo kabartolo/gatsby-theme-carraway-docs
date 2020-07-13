@@ -21,6 +21,7 @@ export default function useSidebar(menus) {
             }
             frontmatter {
               name
+              title
             }
             tableOfContents(maxDepth: 2)
           }
@@ -80,6 +81,7 @@ export default function useSidebar(menus) {
       ? items.map((item) => itemDataBySlug(item)).filter((item) => item !== null)
       : getNodesByGroup(folder).map((node) => itemDataByNode(node));
     const path = `/${postType}/${folder}/`;
+
     return ({
       id: folder,
       name,
@@ -90,11 +92,11 @@ export default function useSidebar(menus) {
     });
   };
 
-  const posts = postTypeMenu.items.map((item) => (
+  const items = postTypeMenu.items.map((item) => (
     item.name ? groupData(item) : itemDataBySlug(item)
   ));
 
   return ({
-    posts: posts.filter((post) => post !== null),
+    items: items.filter((post) => post !== null),
   });
 }

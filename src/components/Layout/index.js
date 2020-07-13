@@ -1,4 +1,9 @@
-import React, { useState } from 'react';
+import React, {
+  Children,
+  isValidElement,
+  cloneElement,
+  useState,
+} from 'react';
 import PropTypes from 'prop-types';
 
 import layoutStyles from './layout.module.scss';
@@ -65,7 +70,12 @@ export default function Layout({
               </Sidebar>
             )}
             <div id="main" className={layoutStyles.main}>
-              {children}
+              {Children.map(children, (child) => {
+                if (isValidElement(child)) {
+                  return cloneElement(child, { menus });
+                }
+                return child;
+              })}
               <Footer />
             </div>
           </div>

@@ -15,7 +15,7 @@ export default function Sidebar({
   closeDropdown,
 }) {
   const data = useSidebar(menus);
-  const isPost = data && data.posts;
+  const isPost = data && data.items;
 
   return (
     <div className={styles.container}>
@@ -34,7 +34,7 @@ export default function Sidebar({
             <Accordion
               allowMultipleOpen={allowMultipleOpen}
               allowTOC={allowTOC}
-              items={data.posts}
+              items={data.items}
               onClickLink={closeDropdown}
             />
           </div>
