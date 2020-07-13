@@ -32,7 +32,8 @@ $light-theme: (
 	@include themable($dark-theme);
 }
 
-.header {
+.header,
+.main {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
