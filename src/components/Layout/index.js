@@ -6,34 +6,28 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 
-import layoutStyles from './layout.module.scss';
-import headerStyles from '../Header/header.module.scss';
-
-import useWindowDimensions from '../../hooks/useWindowDimensions';
+import styles from './layout.module.scss';
 
 import { PostContext } from './post-context';
 import { ThemeContext } from './theme-context';
 
-import Dropdown from '../Dropdown';
-import Sidebar from '../Sidebar';
 import Header from '../Header';
 import Footer from '../Footer';
+import Sidebar from '../Sidebar';
 
 export default function Layout({
   children,
   menus,
-  allowMultipleOpen,
-  allowTOC,
+  sidebarOptions,
+  location,
 }) {
   const [postType, setPostType] = useState('');
   const [currentGroup, setCurrentGroup] = useState('');
   const [postID, setPostID] = useState('');
   const [theme, setTheme] = useState('light');
-  const { width } = useWindowDimensions();
-  const useMobileNav = width < 992;
 
   return (
-    <div className={layoutStyles.container}>
+    <div className={styles.container}>
       <ThemeContext.Provider value={{ theme, setTheme }}>
         <PostContext.Provider
           value={{
@@ -45,31 +39,23 @@ export default function Layout({
             setPostID,
           }}
         >
-          {useMobileNav && (
-            <Header className={headerStyles.top}>
-              <Dropdown label="Menu">
-                <Sidebar
-                  menus={menus}
-                  allowMultipleOpen={allowMultipleOpen}
-                  allowTOC={allowTOC}
-                />
-              </Dropdown>
-            </Header>
-          )}
           <div
             id="page-wrapper"
-            className={layoutStyles.wrapper}
+            className={styles.wrapper}
           >
-            {!useMobileNav && (
+            <>
+              <Header
+                menus={menus}
+                sidebarOptions={sidebarOptions}
+                location={location}
+              />
               <Sidebar
                 menus={menus}
-                allowMultipleOpen={allowMultipleOpen}
-                allowTOC={allowTOC}
-              >
-                <Header className={headerStyles.sidebar} />
-              </Sidebar>
-            )}
-            <div id="main" className={layoutStyles.main}>
+                options={sidebarOptions}
+                location={location}
+              />
+            </>
+            <main id="main" className={styles.main}>
               {Children.map(children, (child) => {
                 if (isValidElement(child)) {
                   return cloneElement(child, { menus });
@@ -77,7 +63,7 @@ export default function Layout({
                 return child;
               })}
               <Footer />
-            </div>
+            </main>
           </div>
         </PostContext.Provider>
       </ThemeContext.Provider>
@@ -91,6 +77,6 @@ Layout.propTypes = {
     PropTypes.node,
   ]).isRequired,
   menus: PropTypes.instanceOf(Array).isRequired,
-  allowMultipleOpen: PropTypes.bool.isRequired,
-  allowTOC: PropTypes.bool.isRequired,
+  sidebarOptions: PropTypes.instanceOf(Object).isRequired,
+  location: PropTypes.instanceOf(Object).isRequired,
 };

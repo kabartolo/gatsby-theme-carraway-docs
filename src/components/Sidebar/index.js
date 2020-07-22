@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'gatsby';
 
 import styles from './sidebar.module.scss';
 import Accordion from '../Accordion';
@@ -8,10 +7,9 @@ import Accordion from '../Accordion';
 import useSidebar from '../../hooks/useSidebar';
 
 export default function Sidebar({
-  children,
   menus,
-  allowMultipleOpen,
-  allowTOC,
+  location,
+  options,
   closeDropdown,
 }) {
   const data = useSidebar(menus);
@@ -19,39 +17,27 @@ export default function Sidebar({
 
   return (
     <div className={styles.container}>
-      <div className={styles.fixedHeader}>
-        {children}
-      </div>
-      <div className={styles.scrollable}>
-        {(menus.length > 1)
-          && (
-          <ul>
-            {menus.map((menu) => <li><Link to={`/${menu.type}`}>{menu.name}</Link></li>)}
-          </ul>
-          )}
+      <nav className={styles.scrollable}>
         {isPost && (
           <div className={styles.accordion}>
             <Accordion
-              allowMultipleOpen={allowMultipleOpen}
-              allowTOC={allowTOC}
+              allowMultipleOpen={options.allowMultipleOpen}
+              allowTOC={options.allowTOC}
               items={data.items}
               onClickLink={closeDropdown}
+              location={location}
             />
           </div>
         )}
-      </div>
+      </nav>
     </div>
   );
 }
 
 Sidebar.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]).isRequired,
   menus: PropTypes.instanceOf(Array).isRequired,
-  allowMultipleOpen: PropTypes.bool.isRequired,
-  allowTOC: PropTypes.bool.isRequired,
+  location: PropTypes.instanceOf(Object).isRequired,
+  options: PropTypes.instanceOf(Object).isRequired,
   closeDropdown: PropTypes.func,
 };
 
