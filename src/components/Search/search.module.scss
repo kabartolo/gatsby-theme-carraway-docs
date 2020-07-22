@@ -1,0 +1,96 @@
+$search-icon-left: 0.5rem;
+
+.wrapper {
+	position: relative;
+	align-self: flex-start;
+}
+
+.search-form {
+	margin-bottom: 0;
+	.search-group {
+		position: relative;
+	    &:before {
+	    	position: absolute;
+			top: calc(#{$searchbar-padding} + 0.5rem);
+			left: $search-icon-left;
+			z-index: 2;
+	    	font-family: "Material Icons";
+	    	font-weight: bold;
+	    	font-size: 1.1rem;
+	    	content: "\e8b6";
+	    	display: block;
+	    	text-align: center;
+	    }
+		.search-input {
+			position: relative;
+			z-index: 1;
+			margin-top: $searchbar-padding;
+			padding: 1rem 1.8rem;
+			height: $searchbar-height;
+			border: 1px solid $input-border-color;
+			border-radius: 3px;
+			outline: none;
+			box-shadow: inset 0 1px 2px rgba(27,31,35,.075);
+		    -webkit-appearance: textfield;
+		    outline-offset: -2px;
+			&:focus {
+				border: 1px solid $input-border-color-focus;
+				box-shadow: inset 0 1px 2px $input-border-color,0 0 0 .2em $input-border-color-focus;
+			}
+		}
+		.search-input.expanded {
+			position: absolute;
+			left: $searchbar-padding;
+			width: calc(#{$search-container-width)} - calc(2 * #{$searchbar-padding}));
+			max-width: calc(#{$search-container-maxwidth)} - calc(2 * #{$searchbar-padding}));
+		}
+	}	
+	.search-group.expanded:before {
+		left: calc(#{$search-icon-left} + #{$searchbar-padding});
+	}
+}
+
+.container.open {
+	display: block;
+	border-radius: 3px;
+	min-height: $header-main-height;
+	width: $search-container-width;
+	max-width: $search-container-maxwidth;
+	background: #fff;
+	padding: $searchbar-padding;
+	.search-results.open {
+		margin-top: $header-main-height;
+		max-height: 80vh;
+		background: #fff;
+		transition: width .3s ease-in-out;
+		overflow-y: auto;
+		.result-container {
+			padding: 24px 0;
+			border-top: 1px #e1e4e8 solid;
+		}
+		ol {
+			list-style: none;
+		}
+		h3 {
+			margin: 0;
+		}
+		mark {
+			background: inherit;
+			color: blue;
+		}
+	}
+}
+
+@media (min-width: $menu-breakpoint) {
+	.search-overlay.open {
+		position: fixed;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		z-index: -1;
+		display: block;
+		content: " ";
+		background: rgba(27,31,35,.15);
+	}
+}
