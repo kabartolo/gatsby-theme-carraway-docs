@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-
 import { Link } from 'gatsby';
-
-import styles from './accordion.module.scss';
 
 export default function Accordion({
   items: parentItems,
+  location,
   allowMultipleOpen,
   allowTOC,
   onClickLink,
@@ -40,20 +40,24 @@ export default function Accordion({
   }
 
   return (
-    <div className={styles.accordion}>
-      <ul className={styles.list}>
+    <div>
+      <ul sx={{ variant: 'lists.accordion' }}>
         {parentItems.map((item) => {
           const {
             id,
             name,
             path,
             items,
-            isGroup,
           } = item;
+
+          const linkIsCurrent = path && path === `${location.pathname}${location.hash}`;
+          const isOpen = openSections[name];
+          const hasItems = (!path && items) || (path && allowTOC && items);
 
           const label = path
             ? (
               <Link
+                sx={{ variant: linkIsCurrent ? 'links.current' : 'links.accordion' }}
                 to={path}
                 onClick={() => {
                   onClickLink();
@@ -65,8 +69,6 @@ export default function Accordion({
             )
             : name;
 
-          const isOpen = openSections[name];
-          const hasItems = (!path && items) || (path && allowTOC && items);
           const icon = isOpen
             ? (
               <span>
@@ -79,20 +81,17 @@ export default function Accordion({
               </span>
             );
 
-          const itemStyle = path ? styles.linkItem : styles.groupItem;
-          const textStyle = isGroup ? styles.label : null;
-
           return hasItems
             ? (
               <li key={id}>
-                <h3 className={`${itemStyle} ${textStyle}`}>
-                  {path && <span className={styles.link}>{label}</span>}
+                <h3 sx={{ variant: 'layouts.spaceBetween' }}>
+                  {path && <span>{label}</span>}
                   <button
-                    className={styles.button}
+                    sx={{ variant: ['buttons.unstyled', !path && 'layouts.spaceBetween'] }}
                     type="button"
                     onClick={() => onClick(name)}
                   >
-                    {!path && <span className={styles.label}>{label}</span>}
+                    {!path && <span sx={{ variant: 'text.accordionGroup' }}>{label}</span>}
                     <span>{icon}</span>
                   </button>
                 </h3>
@@ -103,12 +102,13 @@ export default function Accordion({
                     items={items}
                     dropDown={false}
                     onClickLink={onClickLink}
+                    location={location}
                   />
                 )}
               </li>
             )
             : (
-              <li>
+              <li key={id}>
                 <h3>{label}</h3>
               </li>
             );
@@ -123,4 +123,5 @@ Accordion.propTypes = {
   allowTOC: PropTypes.bool.isRequired,
   items: PropTypes.instanceOf(Array).isRequired,
   onClickLink: PropTypes.func.isRequired,
+  location: PropTypes.instanceOf(Object).isRequired,
 };

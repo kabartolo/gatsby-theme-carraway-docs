@@ -3,10 +3,10 @@ module.exports = ({ postsPath }) => {
     plugins: [
       'gatsby-plugin-eslint',
       {
-        resolve: 'gatsby-plugin-typography',
+        resolve: 'gatsby-plugin-theme-ui',
         options: {
-          pathToConfigModule: `${__dirname}/src/utils/typography`,
-        },
+          prismPreset: 'night-owl',
+        }
       },
       {
         resolve: 'gatsby-source-filesystem',
@@ -26,7 +26,7 @@ module.exports = ({ postsPath }) => {
               { 
                 elements: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
               },
-            }
+            },
           ],
         },
       },

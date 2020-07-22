@@ -35,9 +35,13 @@
 	"dependencies": {
 		"@mdx-js/mdx": "^1.6.6",
 		"@mdx-js/react": "^1.6.6",
+		"@theme-ui/preset-bulma": "^0.3.0",
+		"@theme-ui/preset-polaris": "^0.3.0",
+		"@theme-ui/typography": "^0.3.0",
 		"gatsby-plugin-google-fonts": "^1.0.1",
 		"gatsby-plugin-mdx": "^1.2.14",
 		"gatsby-plugin-sass": "^2.3.7",
+		"gatsby-plugin-theme-ui": "^0.3.0",
 		"gatsby-plugin-typography": "^2.5.9",
 		"gatsby-remark-autolink-headers": "^2.3.10",
 		"gatsby-source-filesystem": "^2.3.10",
@@ -48,7 +52,7 @@
 		"react-copy-to-clipboard": "^5.0.2",
 		"react-typography": "^0.16.19",
 		"react-uid": "^2.3.0",
-		"typography": "^0.16.19",
+		"theme-ui": "^0.3.1",
 		"typography-theme-noriega": "^0.16.19",
 		"url-slug": "^2.3.1"
 	}
