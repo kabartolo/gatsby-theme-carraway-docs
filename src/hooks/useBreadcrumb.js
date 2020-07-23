@@ -1,16 +1,14 @@
 import { graphql, useStaticQuery } from 'gatsby';
 
 export default function useBreadcrumb(menus, postPath, postType, currentGroup) {
-  const { allMdx } = useStaticQuery(graphql`
+  const { allPost } = useStaticQuery(graphql`
     query {
-      allMdx {
-        group(field: fields___group) {
+      allPost {
+        group(field: group) {
           fieldValue
           nodes {
-            fields {
-              postType
-              slug
-            }
+            postType
+            slug
           }
         }
       }
@@ -32,7 +30,7 @@ export default function useBreadcrumb(menus, postPath, postType, currentGroup) {
   const groupData = (typePath, name) => {
     if (!currentGroup) return null;
 
-    const data = allMdx.group.find((mdxGroup) => mdxGroup.fieldValue === currentGroup);
+    const data = allPost.group.find((mdxGroup) => mdxGroup.fieldValue === currentGroup);
 
     if (!data) return null;
 

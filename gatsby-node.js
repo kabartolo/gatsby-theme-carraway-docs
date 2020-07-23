@@ -1,38 +1,122 @@
 const { createFilePath } = require('gatsby-source-filesystem');
+const crypto = require('crypto');
 
-exports.onCreateNode = ({ node, actions, getNode }) => {
-  const { createNodeField } = actions;
-  const parent = getNode(node.parent);
+exports.sourceNodes = ({ actions, schema }) => {
+  const { createTypes } = actions;
+  createTypes([
+    schema.buildObjectType({
+      interfaces: ['Node'],
+      name: 'Post',
+      fields: {
+        id: { type: 'ID!' },
+        title: {
+          type: 'String!',
+          resolve({ title }, args, context, info) {
+            return (title == null || title === '')
+              ? 'Untitled'
+              : title
+          },
+        },
+        label: { type: 'String' },
+        description: { type: 'String' },
+        excerpt: {
+          type: 'String!',
+          resolve: async (source, args, context, info) => {
+            const type = info.schema.getType('Mdx');
+            const mdxNode = context.nodeModel.getNodeById({
+              id: source.parent,
+            });
+            const resolver = type.getFields()['excerpt'].resolve;
+            const excerpt = await resolver(
+              mdxNode,
+              { pruneLength: 140 },
+              context,
+              { fieldName: 'excerpt' },
+            );
+            return excerpt;
+          },
+        },
+        body: {
+          type: 'String!',
+          resolve(source, args, context, info) {
+            const type = info.schema.getType('Mdx');
+            const mdxNode = context.nodeModel.getNodeById({
+              id: source.parent,
+            });
+            const resolver = type.getFields()['body'].resolve;
+            return resolver(mdxNode, {}, context, {
+              fieldName: 'body',
+            });
+          },
+        },
+      },
+    }),
+  ]);
+}
 
-  if (node.internal.type === 'Mdx' && parent.internal.type === 'File') {
-    const path = createFilePath({ node, getNode });
-    const slug = parent.name;
-    const [postType, group] = parent.relativeDirectory.split('/');
+exports.onCreateNode = ({
+  node,
+  actions,
+  getNode,
+  createNodeId,
+}) => {
+  const {
+    createNodeField,
+    createNode,
+    createParentChildLink,
+  } = actions;
 
-    createNodeField({
-      name: 'path',
-      node,
-      value: path,
-    });
+  if (node.internal.type === 'Mdx') {
+    const { frontmatter } = node;
+    const parent = getNode(node.parent);
 
-    createNodeField({
-      name: 'postType',
-      node,
-      value: postType,
-    });
+    if (
+      parent.internal.type === 'File' &&
+      parent.sourceInstanceName === 'posts'
+    ) {
+      const path = createFilePath({ node, getNode });
+      const slug = parent.name;
+      const [postType, group] = parent.relativeDirectory.split('/');
 
-	  createNodeField({
-		  name: 'slug',
-		  node,
-		  value: slug,
-	  });
+      const fieldData = {
+        title: node.frontmatter.title,
+        label: node.frontmatter.label,
+        description: node.frontmatter.description,
+        path,
+        postType,
+        slug,
+        group,
+      }
 
-    createNodeField({
-      name: 'group',
-      node,
-      value: group,
-    });
+      createNode({
+        ...fieldData,
+        id: createNodeId(`${node.id} >>> Post`),
+        parent: node.id,
+        children: [],
+        internal: {
+          type: 'Post',
+          contentDigest: crypto
+            .createHash('md5')
+            .update(JSON.stringify(fieldData))
+            .digest('hex'),
+          content: JSON.stringify(fieldData),
+          description: 'Carraway Docs post',
+        },
+      });
+
+      createParentChildLink({
+        parent: parent,
+        child: node,
+      });
+    } 
   }
+};
+
+exports.onCreateWebpackConfig = ({ actions, loaders, getConfig }) => {
+    const config = getConfig();
+    config.node = {
+        fs: 'empty',
+    };
 }
 
 exports.createPages = async ({ graphql, actions, reporter }) => {
@@ -40,13 +124,11 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
   const result = await graphql(`
     query {
-      allMdx {
+      allPost {
         edges {
           node {
             id
-            fields {
-              path
-            }
+            path
           }
         }
       }
@@ -57,11 +139,11 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     throw result.errors;
   }
 
-  const posts = result.data.allMdx.edges;
+  const posts = result.data.allPost.edges;
 
   posts.forEach(({ node }) => {
     createPage({
-      path: node.fields.path,
+      path: node.path,
       component: require.resolve('./src/components/Post'),
       context: { id: node.id },
     });

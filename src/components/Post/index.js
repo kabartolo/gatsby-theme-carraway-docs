@@ -22,9 +22,16 @@ const shortcodes = {
   TopicArea,
 };
 
-export default function Post({ data: { mdx }, menus }) {
-  const { title } = mdx.frontmatter;
-  const { body, fields } = mdx;
+export default function Post({ data: { post }, menus }) {
+  const {
+    id,
+    title,
+    body,
+    path,
+    postType,
+    group,
+  } = post;
+
   const {
     setPostType,
     setCurrentGroup,
@@ -32,16 +39,16 @@ export default function Post({ data: { mdx }, menus }) {
   } = useContext(PostContext);
 
   useEffect(() => {
-    setPostType(fields.postType);
-    setCurrentGroup(fields.group);
-    setPostID(mdx.id);
+    setPostType(postType);
+    setCurrentGroup(group);
+    setPostID(id);
   });
 
   const {
     postBreadcrumb,
     groupBreadcrumb,
     postIsIndex,
-  } = useBreadcrumb(menus, fields.path, fields.postType, fields.group);
+  } = useBreadcrumb(menus, path, postType, group);
 
   return (
     <article id="post-container" className={styles.article}>
@@ -65,11 +72,11 @@ export default function Post({ data: { mdx }, menus }) {
         {!postIsIndex && (
           <>
             {(postBreadcrumb || groupBreadcrumb) && <span> &#47; </span>}
-            <span><Link to={fields.path}>{title}</Link></span>
+            <span><Link to={path}>{title}</Link></span>
           </>
         )}
       </nav>
-      <header>
+      <header className={styles.header}>
         <h1>{title}</h1>
       </header>
       <MDXProvider components={shortcodes}>
@@ -81,25 +88,20 @@ export default function Post({ data: { mdx }, menus }) {
 
 export const pageQuery = graphql`
   query ($id: String) {
-    mdx(id: { eq: $id }) {
+    post(id: { eq: $id }) {
       id
       body
-      fields {
-        postType
-        group
-        path
-      }
-      frontmatter {
-        title
-      }
-      tableOfContents(maxDepth: 2)
+      postType
+      group
+      path
+      title
     }
   }
 `;
 
 Post.propTypes = {
   data: PropTypes.shape({
-    mdx: PropTypes.instanceOf(Object).isRequired,
+    post: PropTypes.instanceOf(Object).isRequired,
   }).isRequired,
   menus: PropTypes.instanceOf(Array),
 };

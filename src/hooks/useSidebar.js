@@ -8,22 +8,22 @@ export default function useSidebar(menus) {
 
   const data = useStaticQuery(graphql`
     query {
-      allMdx {
-        group(field: fields___postType) {
+      allPost {
+        group(field: postType) {
           fieldValue
           nodes {
             id
-            fields {
-              group
-              postType
-              path
-              slug
+            group
+            postType
+            path
+            slug
+            label
+            title
+            parent {
+              ... on Mdx {
+                tableOfContents
+              }
             }
-            frontmatter {
-              name
-              title
-            }
-            tableOfContents(maxDepth: 2)
           }
         }
       }
@@ -36,7 +36,7 @@ export default function useSidebar(menus) {
 
   if (!postTypeMenu) return null;
 
-  const postTypeNodes = data.allMdx.group.find((group) => group.fieldValue === postType).nodes;
+  const postTypeNodes = data.allPost.group.find((group) => group.fieldValue === postType).nodes;
 
   const contentData = (path, contents) => {
     if (!contents.items) return null;
@@ -47,7 +47,6 @@ export default function useSidebar(menus) {
       path: path.replace(/\/$/, heading.url),
       items: null,
       isOpen: null,
-      isGroup: false,
     }));
   };
 
@@ -57,22 +56,21 @@ export default function useSidebar(menus) {
 
   const itemDataByNode = (node) => ({
     id: node.id,
-    name: node.frontmatter.name,
-    path: node.fields.path,
-    items: contentData(node.fields.path, node.tableOfContents),
+    name: node.label || node.title,
+    path: node.path,
+    items: contentData(node.path, node.parent.tableOfContents),
     isOpen: node.id === postID,
-    isGroup: false,
   });
 
   const itemDataBySlug = (slug) => {
-    const node = postTypeNodes.find((postNode) => postNode.fields.slug === slug);
+    const node = postTypeNodes.find((postNode) => postNode.slug === slug);
     if (!node) return null;
 
     return itemDataByNode(node);
   };
 
   const getNodesByGroup = (groupName) => (
-    postTypeNodes.filter((node) => node.fields.group === groupName)
+    postTypeNodes.filter((node) => node.group === groupName)
   );
 
   const groupData = (groupItem) => {
@@ -88,7 +86,6 @@ export default function useSidebar(menus) {
       path: groupHasIndex(menu, path) ? path : null,
       items: menu,
       isOpen: folder === currentGroup,
-      isGroup: true,
     });
   };
 
@@ -98,5 +95,6 @@ export default function useSidebar(menus) {
 
   return ({
     items: items.filter((post) => post !== null),
+    postType,
   });
 }
