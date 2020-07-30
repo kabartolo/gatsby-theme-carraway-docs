@@ -3,6 +3,10 @@ import { jsx } from 'theme-ui';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+
+import styles from './accordion.module.scss';
 
 export default function Accordion({
   items: parentItems,
@@ -40,81 +44,71 @@ export default function Accordion({
   }
 
   return (
-    <div>
-      <ul sx={{ variant: 'lists.accordion' }}>
-        {parentItems.map((item) => {
-          const {
-            id,
-            name,
-            path,
-            items,
-          } = item;
+    <ul className={styles.accordion}>
+      {parentItems.map((item) => {
+        const {
+          id,
+          name,
+          path,
+          items,
+        } = item;
 
-          const linkIsCurrent = path && path === `${location.pathname}${location.hash}`;
-          const isOpen = openSections[name];
-          const hasItems = (!path && items) || (path && allowTOC && items);
+        const linkIsCurrent = path && path === `${location.pathname}${location.hash}`;
+        const isOpen = openSections[name];
+        const hasItems = (!path && items) || (path && allowTOC && items);
 
-          const label = path
-            ? (
-              <Link
-                sx={{ variant: linkIsCurrent ? 'links.current' : 'links.accordion' }}
-                to={path}
-                onClick={() => {
-                  onClickLink();
-                  onClick(name, true);
-                }}
-              >
-                {name}
-              </Link>
-            )
-            : name;
+        const label = path
+          ? (
+            <Link
+              sx={{ variant: linkIsCurrent ? 'links.current' : 'links.accordion' }}
+              to={path}
+              onClick={() => {
+                onClickLink();
+                onClick(name, true);
+              }}
+            >
+              {name}
+            </Link>
+          )
+          : name;
 
-          const icon = isOpen
-            ? (
-              <span>
-                <i className="material-icons">expand_less</i>
-              </span>
-            )
-            : (
-              <span>
-                <i className="material-icons">expand_more</i>
-              </span>
-            );
+        const icon = isOpen
+          ? <FontAwesomeIcon icon={faChevronUp} />
+          : <FontAwesomeIcon icon={faChevronDown} />;
 
-          return hasItems
-            ? (
-              <li key={id}>
-                <h3 sx={{ variant: 'layouts.spaceBetween' }}>
-                  {path && <span>{label}</span>}
-                  <button
-                    sx={{ variant: ['buttons.unstyled', !path && 'layouts.spaceBetween'] }}
-                    type="button"
-                    onClick={() => onClick(name)}
-                  >
-                    {!path && <span sx={{ variant: 'text.accordionGroup' }}>{label}</span>}
-                    <span>{icon}</span>
-                  </button>
-                </h3>
-                {isOpen && (
-                  <Accordion
-                    allowMultipleOpen={allowMultipleOpen}
-                    allowTOC={allowTOC}
-                    items={items}
-                    dropDown={false}
-                    onClickLink={onClickLink}
-                    location={location}
-                  />
-                )}
-              </li>
-            )
-            : (
-              <li key={id}>
-                <h3>{label}</h3>
-              </li>
-            );
-        })}
-      </ul>
-    </div>
+        return hasItems
+          ? (
+            <li key={id}>
+              <h3 className={path ? styles.link : ''}>
+                {path && <span>{label}</span>}
+                <button
+                  sx={{ variant: 'buttons.unstyled' }}
+                  type="button"
+                  onClick={() => onClick(name)}
+                >
+                  {!path && <span sx={{ variant: 'text.accordionGroup' }}>{label}</span>}
+                  <span>{icon}</span>
+                </button>
+              </h3>
+              {isOpen && (
+                <Accordion
+                  allowMultipleOpen={allowMultipleOpen}
+                  allowTOC={allowTOC}
+                  items={items}
+                  dropDown={false}
+                  onClickLink={onClickLink}
+                  location={location}
+                />
+              )}
+            </li>
+          )
+          : (
+            <li key={id}>
+              <h3>{label}</h3>
+            </li>
+          );
+      })}
+    </ul>
   );
 }
 
