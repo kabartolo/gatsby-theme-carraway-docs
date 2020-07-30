@@ -1,6 +1,6 @@
 import { graphql, useStaticQuery } from 'gatsby';
 
-export default function useBreadcrumb(menus, postPath, postType, currentGroup) {
+export default function useBreadcrumb(menus, post) {
   const { allPost } = useStaticQuery(graphql`
     query {
       allPost {
@@ -14,6 +14,8 @@ export default function useBreadcrumb(menus, postPath, postType, currentGroup) {
       }
     }
   `);
+  if (post == null) return {};
+  const { postType, currentGroup, postPath } = post;
 
   const postTypeMenu = menus.find((menu) => menu.type === postType);
   if (!postTypeMenu) return {};
@@ -55,8 +57,8 @@ export default function useBreadcrumb(menus, postPath, postType, currentGroup) {
     || (!!groupBreadcrumb && postPath === groupBreadcrumb.path);
 
   return ({
-    postBreadcrumb,
-    groupBreadcrumb,
+    post: postBreadcrumb,
+    group: groupBreadcrumb,
     postIsIndex,
   });
 }

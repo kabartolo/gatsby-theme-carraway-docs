@@ -24,54 +24,56 @@ const shortcodes = {
 
 export default function Post({ data: { post }, menus }) {
   const {
-    id,
-    title,
-    body,
-    path,
-    postType,
-    group,
-  } = post;
-
-  const {
     setPostType,
     setCurrentGroup,
     setPostID,
   } = useContext(PostContext);
 
   useEffect(() => {
-    setPostType(postType);
-    setCurrentGroup(group);
-    setPostID(id);
+    if (post == null) return;
+    setPostType(post.postType);
+    setCurrentGroup(post.group);
+    setPostID(post.id);
   });
 
+  const breadcrumb = useBreadcrumb(menus.sidebar, post);
+
+  if (post == null) {
+    return (
+      <div id="post-container" className={styles.article}>
+        <p>Error: Post does not exist or may contain errors.</p>
+      </div>
+    );
+  }
+
   const {
-    postBreadcrumb,
-    groupBreadcrumb,
-    postIsIndex,
-  } = useBreadcrumb(menus, path, postType, group);
+    title,
+    body,
+    path,
+  } = post;
 
   return (
     <article id="post-container" className={styles.article}>
       <nav>
-        {postBreadcrumb && (
+        {breadcrumb.post && (
           <>
-            <span><Link to={postBreadcrumb.path}>{postBreadcrumb.name}</Link></span>
+            <span><Link to={breadcrumb.post.path}>{breadcrumb.post.name}</Link></span>
           </>
         )}
-        {groupBreadcrumb && (
+        {breadcrumb.group && (
           <>
-            {postBreadcrumb && <span> &#47; </span>}
+            {breadcrumb.post && <span> &#47; </span>}
             <span>
-              {groupBreadcrumb.path
+              {breadcrumb.group.path
                 ? (
-                  <Link to={groupBreadcrumb.path}>{groupBreadcrumb.name}</Link>
-                ) : <span>{groupBreadcrumb.name}</span>}
+                  <Link to={breadcrumb.group.path}>{breadcrumb.group.name}</Link>
+                ) : <span>{breadcrumb.group.name}</span>}
             </span>
           </>
         )}
-        {!postIsIndex && (
+        {!breadcrumb.postIsIndex && (
           <>
-            {(postBreadcrumb || groupBreadcrumb) && <span> &#47; </span>}
+            {(breadcrumb.post || breadcrumb.group) && <span> &#47; </span>}
             <span><Link to={path}>{title}</Link></span>
           </>
         )}
@@ -100,12 +102,10 @@ export const pageQuery = graphql`
 `;
 
 Post.propTypes = {
-  data: PropTypes.shape({
-    post: PropTypes.instanceOf(Object).isRequired,
-  }).isRequired,
-  menus: PropTypes.instanceOf(Array),
+  data: PropTypes.instanceOf(Object).isRequired,
+  menus: PropTypes.instanceOf(Object),
 };
 
 Post.defaultProps = {
-  menus: [],
+  menus: {},
 };
