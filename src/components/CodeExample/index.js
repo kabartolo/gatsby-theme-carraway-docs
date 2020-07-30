@@ -1,11 +1,13 @@
-import React, { useState, useContext, useEffect } from 'react';
+/** @jsx jsx */
+import { jsx } from 'theme-ui';
+import { useState, useEffect, Children } from 'react';
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useUID } from 'react-uid';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCopy, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './codeExample.module.scss';
-
-import { ThemeContext } from '../Layout/theme-context';
 
 export default function CodeExample({
   children,
@@ -13,7 +15,7 @@ export default function CodeExample({
   labels,
   updateBlockHeight,
 }) {
-  const childrenArray = React.Children.toArray(children);
+  const childrenArray = Children.toArray(children);
   const codeBlocks = childrenArray.filter((child) => child.props.mdxType === 'pre');
   const uid = `code-example-${useUID()}`;
 
@@ -31,9 +33,6 @@ export default function CodeExample({
 
   const [blockValue, setBlockValue] = useState(blocksByLang[defaultLang]);
 
-  const { theme } = useContext(ThemeContext);
-  const themeClass = theme === 'dark' ? styles.darkTheme : styles.lightTheme;
-
   function getText(blockObject) {
     return blockObject.props.children.props.children;
   }
@@ -43,37 +42,41 @@ export default function CodeExample({
   }
 
   return (
-    <div id={uid} className={themeClass}>
-      <div className={styles.container}>
-        <div className={styles.topBar}>
-          <h3 className={styles.title}>{title}</h3>
-          <span className={styles.util}>
-            {(labels.length > 1)
-              ? (
-                <span className={styles.selectWrapper}>
-                  <select className={styles.select} onChange={onChange} onBlur={onChange}>
-                    {languages.map((lang, i) => (
-                      <option value={lang}>{labels[i]}</option>
-                    ))}
-                  </select>
-                </span>
-              )
-              : <span className={styles.label}>{labels[0]}</span>}
-            <span className={styles.divider} />
-            <CopyToClipboard text={getText(blockValue)}>
-              <button
-                type="button"
-                title="Click to copy"
-                className={styles.copyButton}
-              >
-                <i className={`${styles.materialIcons} material-icons`}>content_copy</i>
-              </button>
-            </CopyToClipboard>
-          </span>
-        </div>
-        <div className={styles.codeBlock}>
-          {blockValue}
-        </div>
+    <div id={uid} className={styles.container} sx={{ variant: 'divs.code' }}>
+      <div className={styles.topBar} sx={{ variant: 'divs.codeTop' }}>
+        <h3 className={styles.title}>{title}</h3>
+        <span className={styles.util}>
+          {(labels.length > 1)
+            ? (
+              <span className={styles.selectWrapper}>
+                <select
+                  name="select-language"
+                  className={styles.select}
+                  onChange={onChange}
+                  onBlur={onChange}
+                >
+                  {languages.map((lang, i) => (
+                    <option value={lang}>{labels[i]}</option>
+                  ))}
+                </select>
+                <FontAwesomeIcon icon={faChevronDown} className={styles.selectArrow} />
+              </span>
+            )
+            : <span className={styles.label}>{labels[0]}</span>}
+          <span className={styles.divider} />
+          <CopyToClipboard text={getText(blockValue)}>
+            <button
+              type="button"
+              title="Click to copy"
+              className={styles.copyButton}
+            >
+              <FontAwesomeIcon icon={faCopy} />
+            </button>
+          </CopyToClipboard>
+        </span>
+      </div>
+      <div className={styles.codeBody}>
+        {blockValue}
       </div>
     </div>
   );
@@ -85,11 +88,12 @@ CodeExample.propTypes = {
     PropTypes.node,
   ]).isRequired,
   title: PropTypes.string,
-  labels: PropTypes.arrayOf(String).isRequired,
+  labels: PropTypes.arrayOf(String),
   updateBlockHeight: PropTypes.func,
 };
 
 CodeExample.defaultProps = {
   title: '',
   updateBlockHeight: () => {},
+  labels: [],
 };

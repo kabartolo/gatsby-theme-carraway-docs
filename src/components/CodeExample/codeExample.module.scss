@@ -1,0 +1,83 @@
+.container {
+	border-radius: 7px;
+	margin-bottom: 12px;
+	min-width: 300px;
+    max-width: 550px;
+}
+
+.top-bar {
+	display: flex;
+	border-radius: 7px 7px 0 0;
+	align-items: center;
+	justify-content: space-between;
+	height: $top-bar-height;
+	opacity: .7;
+	h3 {
+		margin: 0;
+	}
+}
+
+.util {
+	display: flex;
+}
+
+.material-icons {
+	font-size: 1em;
+	font-weight: bold;
+	display: inline;
+	vertical-align: middle;
+}
+
+.title {
+	font-size: 0.8rem;
+	font-weight: 500;
+	padding-left: 15px;
+}
+
+.copy-button {
+	padding-left: 0;
+	display: flex;
+	align-items: center;
+}
+
+.copy-button,
+.select {
+	background: transparent;
+	border: none;
+	cursor: pointer;
+}
+
+.label,
+.select {
+	font-size: 1em;
+}
+
+.divider {
+	border-left: 1px solid;
+	height: 1rem;
+	opacity: .3;
+	margin: 0 0.5em;
+}
+
+
+
+.select-wrapper {
+	position: relative;
+	display: flex;
+	align-items: center;
+	.select {
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		-ms-appearance: none;
+		 -o-appearance: none;
+			appearance: none;
+		width: 7em;
+		text-align: right;
+		padding-right: 1em;
+	}
+	.select-arrow {
+	  	position: absolute;
+	  	right: 0;
+	  	pointer-events: none;
+	}
+}
