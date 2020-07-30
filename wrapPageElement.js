@@ -5,7 +5,12 @@ import PropTypes from 'prop-types';
 import Layout from './src/components/Layout';
 
 const wrapPageElement = ({ element, props: { location }, ...props }, pluginOptions) => {
-  const { menus, sidebarAllowMultipleOpen, sidebarAllowTOC } = pluginOptions;
+  const {
+    menus,
+    sidebarAllowMultipleOpen,
+    sidebarAllowTOC,
+    github,
+  } = pluginOptions;
 
   return (
     <Layout
@@ -16,6 +21,7 @@ const wrapPageElement = ({ element, props: { location }, ...props }, pluginOptio
         allowMultipleOpen: sidebarAllowMultipleOpen,
         allowTOC: sidebarAllowTOC,
       }}
+      github={github}
     >
       {element}
     </Layout>
