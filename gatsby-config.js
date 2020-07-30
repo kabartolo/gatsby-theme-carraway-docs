@@ -40,14 +40,7 @@ module.exports = ({ postsPath }) => {
         },
         includePaths: [`${__dirname}/src/styles/`],
       },
-      {
-        resolve: 'gatsby-plugin-google-fonts',
-        options: {
-          fonts: [
-            'Material Icons',
-          ],
-        },
-      },
+      'gatsby-plugin-fontawesome-css',
     ],
   }
 }
