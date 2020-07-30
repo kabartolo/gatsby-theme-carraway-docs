@@ -1,28 +1,11 @@
-html,
-body {
-	height: initial;
-	font-size: 16px;
-}
-
-.wrapper {
+.container {
 	position: relative;
 	z-index: 1;
 }
 
 .main {
-	margin-left: $sidebar-width;
-}
-
-ul ul li {
-	padding-left: 2em;
-	li {
-	  	padding-left: 1em;
-	}
-}
-
-@media (max-width: 992px) {
-	.wrapper {
-		flex-direction: column;
+	@include for-desktop-up {
+		margin-left: $sidebar-width;
 	}
 }
 
