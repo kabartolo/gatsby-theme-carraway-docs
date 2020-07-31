@@ -1,6 +1,15 @@
 .article {
-	padding: $main-padding;
-	h1 {
-		line-height: $article-title-line-height;
+	padding: 0 $main-padding;
+	padding-top: $main-margin-top;
+	@include for-tablet-under {    
+		padding-top: calc(#{$main-margin-top} + #{$post-dropdown-height});
+   }
+	nav {
+		padding-top: $sidebar-padding;
+	}
+	.header {
+		h1 {
+			line-height: $article-title-line-height;
+		}
 	}
 }
