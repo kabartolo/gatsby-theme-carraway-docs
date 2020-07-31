@@ -39,7 +39,7 @@ export default function useSidebar(menus) {
   const postTypeNodes = data.allPost.group.find((group) => group.fieldValue === postType).nodes;
 
   const contentData = (path, contents) => {
-    if (!contents.items) return null;
+    if (!contents || !contents.items) return null;
 
     return contents.items.map((heading) => ({
       id: heading.url,
@@ -58,7 +58,7 @@ export default function useSidebar(menus) {
     id: node.id,
     name: node.label || node.title,
     path: node.path,
-    items: contentData(node.path, node.parent.tableOfContents),
+    items: contentData(node.path, node.parent && node.parent.tableOfContents),
     isOpen: node.id === postID,
   });
 
