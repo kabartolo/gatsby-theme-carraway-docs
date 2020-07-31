@@ -1,3 +1,6 @@
+/** @jsx jsx */
+/* eslint-disable no-unused-vars */
+import { jsx } from 'theme-ui';
 import React, {
   Children,
   isValidElement,
@@ -6,9 +9,13 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 
-import styles from './dropdown.module.scss';
-
-export default function Dropdown({ children, label }) {
+export default function Dropdown({
+  children,
+  label,
+  openIcon,
+  closeIcon,
+  themeUI,
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
   function onClick() {
@@ -21,34 +28,24 @@ export default function Dropdown({ children, label }) {
 
   return (
     <>
-      <div className={styles.layout}>
-        <button
-          type="button"
-          onClick={onClick}
-        >
-          <span>{label}</span>
-          <>
-            {!isOpen && (
-              <i className="material-icons">expand_more</i>
-            )}
-            {isOpen && (
-              <i className="material-icons">expand_less</i>
-            )}
-          </>
-        </button>
-      </div>
-      <>
-        {isOpen && (
-          <div className={styles.dropdown}>
-            {Children.map(children, (child) => {
-              if (isValidElement(child)) {
-                return cloneElement(child, { closeDropdown });
-              }
-              return child;
-            })}
-          </div>
-        )}
-      </>
+      <button
+        type="button"
+        onClick={onClick}
+        sx={{ variant: 'buttons.unstyled' }}
+      >
+        {label !== '' && <span>{label}</span>}
+        <span>{isOpen ? closeIcon : openIcon}</span>
+      </button>
+      {isOpen && (
+        <div sx={themeUI}>
+          {Children.map(children, (child) => {
+            if (isValidElement(child)) {
+              return cloneElement(child, { closeDropdown });
+            }
+            return child;
+          })}
+        </div>
+      )}
     </>
   );
 }
@@ -58,5 +55,13 @@ Dropdown.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]).isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  openIcon: PropTypes.node.isRequired,
+  closeIcon: PropTypes.node.isRequired,
+  themeUI: PropTypes.instanceOf(Object),
+};
+
+Dropdown.defaultProps = {
+  label: '',
+  themeUI: {},
 };
