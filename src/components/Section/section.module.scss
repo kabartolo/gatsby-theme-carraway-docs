@@ -1,0 +1,28 @@
+$example-margin-top: calc(#{$h2-margin} + #{$h2-margin} + #{$topic-line-height});
+
+.section {
+	border-top: $layout-border;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: $main-padding;
+	.left-column {
+		min-width: 400px;
+		flex-grow: 1;
+		align-self: flex-start;
+		padding-right: calc(#{$main-padding} / 2);
+		h2  {
+			margin: $h2-margin 0;
+			line-height: $topic-line-height;
+		}
+	}
+	.right-column {
+		min-width: 400px;
+		flex-grow: 1;
+		position: -webkit-sticky;
+		position: sticky;
+		align-self: flex-start;
+		top: 0;
+		padding-top: $example-margin-top;
+	}
+}

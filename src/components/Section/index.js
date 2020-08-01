@@ -8,38 +8,38 @@ import PropTypes from 'prop-types';
 import { useUID } from 'react-uid';
 
 import useWindowDimensions from '../../hooks/useWindowDimensions';
-import styles from './topicarea.module.scss';
+import styles from './section.module.scss';
 
-export default function TopicArea({ children }) {
+export default function Section({ children }) {
   const uid = useUID();
   const { height, width } = useWindowDimensions();
   const blockMargin = 12;
 
-  function getCodeBlocks() {
-    const example = document.getElementById(`example-container-${uid}`);
-    if (!example) return null;
-    return Array.from(example.children).map((child) => child.getElementsByClassName('prism-code')[0]);
+  function getBlocks() {
+    const container = document.getElementById(`block-container-${uid}`);
+    if (!container) return null;
+    return Array.from(container.children);
   }
 
   function updateBlockHeight() {
-    const codeBlocks = getCodeBlocks();
-    if (!codeBlocks) return;
+    const rightColumnBlocks = getBlocks();
+    if (!rightColumnBlocks) return;
 
     /* eslint-disable no-param-reassign */
-    const totalBlockHeights = codeBlocks.reduce((sum, block) => (
+    const totalBlockHeights = rightColumnBlocks.reduce((sum, block) => (
       sum + block.offsetHeight + blockMargin
     ), 0);
 
-    const parent = document.getElementById(`example-area-${uid}`);
+    const parent = document.getElementById(`right-column-${uid}`);
     const padding = parseInt(window.getComputedStyle(parent).paddingTop, 10);
-    const numBlocks = codeBlocks.length;
+    const numBlocks = rightColumnBlocks.length;
 
     const areaHeight = height - (padding * 2) + blockMargin;
     const blockHeight = areaHeight / numBlocks;
 
     if (totalBlockHeights <= areaHeight) return;
 
-    codeBlocks.forEach((block) => {
+    rightColumnBlocks.forEach((block) => {
       block.style.marginBottom = `${blockMargin}px`;
       block.style.maxHeight = `${blockHeight - blockMargin}px`;
     });
@@ -58,35 +58,40 @@ export default function TopicArea({ children }) {
     );
   }
 
-  const childrenArray = React.Children.toArray(children);
-  let codeBlocks = [];
-  let rest = [];
-  childrenArray.forEach((child) => {
-    child.props.mdxType === 'pre' || child.props.mdxType === 'CodeExample'
-      ? codeBlocks = codeBlocks.concat(child)
-      : rest = rest.concat(child);
+  let leftColumn = [];
+  let rightColumn = [];
+  let leftComplete = false;
+  Children.toArray(children).forEach((child) => {
+    if (child.props.mdxType === 'hr') {
+      leftComplete = true;
+      return;
+    }
+
+    leftComplete
+      ? rightColumn = rightColumn.concat(child)
+      : leftColumn = leftColumn.concat(child);
   });
 
   return (
-    <section id={`topic-${uid}`} className={styles.topicArea}>
-      <section id={`content-${uid}`} className={styles.contentArea}>
-        {rest}
-      </section>
-      <section id={`example-area-${uid}`} className={styles.exampleArea}>
-        <div id={`example-container-${uid}`} className={styles.examples}>
-          {Children.map(codeBlocks, (child) => {
+    <section id={`section-${uid}`} className={styles.section}>
+      <div id={`left-column-${uid}`} className={styles.leftColumn}>
+        {leftColumn}
+      </div>
+      <div id={`right-column-${uid}`} className={styles.rightColumn}>
+        <div id={`block-container-${uid}`} className={styles.blocks}>
+          {Children.map(rightColumn, (child) => {
             if (isValidElement(child)) {
               return cloneElement(child, { updateBlockHeight });
             }
             return child;
           })}
         </div>
-      </section>
+      </div>
     </section>
   );
 }
 
-TopicArea.propTypes = {
+Section.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
