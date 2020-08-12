@@ -1,7 +1,6 @@
 import { graphql, useStaticQuery } from 'gatsby';
 
 export default function useSidebar(type) {
-
   const { allSidebarMenu } = useStaticQuery(graphql`
     query {
       allSidebarMenu {
