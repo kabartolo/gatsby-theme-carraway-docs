@@ -1,13 +1,9 @@
 module.exports = ({ postsPath }) => {
   return {
     plugins: [
+      'gatsby-plugin-react-helmet',
       'gatsby-plugin-eslint',
-      {
-        resolve: 'gatsby-plugin-theme-ui',
-        options: {
-          prismPreset: 'night-owl',
-        }
-      },
+      'gatsby-plugin-styled-components',
       {
         resolve: 'gatsby-source-filesystem',
         options: {
@@ -22,9 +18,9 @@ module.exports = ({ postsPath }) => {
           gatsbyRemarkPlugins: [
             {
               resolve: 'gatsby-remark-autolink-headers',
-              options: 
-              { 
-                elements: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+              options: {
+                elements: ['h2', 'h3', 'h4', 'h5', 'h6'],
+                
               },
             },
           ],
@@ -41,6 +37,33 @@ module.exports = ({ postsPath }) => {
         includePaths: [`${__dirname}/src/styles/`],
       },
       'gatsby-plugin-fontawesome-css',
+      {
+        resolve: 'gatsby-plugin-theme-ui',
+        options: {
+          prismPreset: 'night-owl',
+        },
+      },
+      {
+        resolve: '@gatsby-contrib/gatsby-plugin-elasticlunr-search',
+        options: {
+          fields: [
+            'title',
+            'description',
+            'headers',
+            'paragraphs',
+          ],
+          resolvers: {
+            Post: {
+              title: (node) => node.title,
+              description: (node) => node.description,
+              path: (node) => node.path,
+              sections: (node) => node.sections,
+              headers: (node) => node.headers,
+              paragraphs: (node) => node.paragraphs,
+            },
+          },
+        },
+      },
     ],
   }
 }

@@ -15,6 +15,6 @@ module.exports = {
     'import/no-duplicates': 0,
     'import/prefer-default-export': 0,
     'no-unused-expressions': [1, { 'allowTernary': true }],
-    'react/jsx-pascal-case': [0],
+    'react/jsx-pascal-case': 0,
   }
 }
