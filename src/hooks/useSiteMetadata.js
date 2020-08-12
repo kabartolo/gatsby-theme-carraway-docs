@@ -6,6 +6,13 @@ export default function useSiteMetadata() {
       site {
         siteMetadata {
           title
+          defaultTitle
+          siteTitleShort
+          siteDescription
+          siteAuthor
+          siteLanguage
+          basePath
+          footerText
         }
       }
     }

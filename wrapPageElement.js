@@ -10,6 +10,8 @@ const wrapPageElement = ({ element, props: { location }, ...props }, pluginOptio
     sidebarAllowMultipleOpen,
     sidebarAllowTOC,
     github,
+    toggleTheme,
+    allowBreadcrumbs,
   } = pluginOptions;
 
   return (
@@ -21,6 +23,8 @@ const wrapPageElement = ({ element, props: { location }, ...props }, pluginOptio
         allowMultipleOpen: sidebarAllowMultipleOpen,
         allowTOC: sidebarAllowTOC,
       }}
+      toggleTheme={toggleTheme}
+      allowBreadcrumbs={allowBreadcrumbs}
       github={github}
     >
       {element}
@@ -36,6 +40,8 @@ wrapPageElement.propTypes = {
     sidebarAllowTOC: PropTypes.bool,
     sidebarAllowMultipleOpen: PropTypes.bool,
     menus: PropTypes.instanceOf(Object),
+    toggleTheme: PropTypes.bool,
+    allowBreadcrumbs: PropTypes.bool,
   }),
   props: PropTypes.instanceOf(Object).isRequired,
 };
@@ -45,5 +51,7 @@ wrapPageElement.defaultProps = {
     sidebarAllowTOC: true,
     sidebarAllowMultipleOpen: true,
     menus: {},
+    toggleTheme: true,
+    allowBreadcrumbs: true,
   }),
 };
