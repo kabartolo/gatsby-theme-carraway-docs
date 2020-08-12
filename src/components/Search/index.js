@@ -1,90 +1,62 @@
-import React, { useState, useEffect, useRef } from 'react';
+/** @jsx jsx */
+/* eslint-disable no-unused-vars */
+import { jsx, Styled } from 'theme-ui';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useContext,
+} from 'react';
 import PropTypes from 'prop-types';
-
-import {
-  Link,
-  navigate,
-  useStaticQuery,
-  graphql,
-} from 'gatsby';
+import { Index } from 'elasticlunr';
+import { navigate } from 'gatsby';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { useClickOutside } from '../../hooks/useClickOutside';
-import { markText, rebuildIndex } from './helpers';
+import { useEscape } from '../../hooks/useEscape';
+import useSearchIndex from '../../hooks/useSearchIndex';
 
 import styles from './search.module.scss';
 
-function SearchResult({ page, query }) {
-  const tokens = query.split(' ');
-  const title = markText(page.title, tokens);
-  const description = page.description && markText(page.description, tokens);
+import SearchResults from './searchResults';
 
-  const primaryMatch = title.length > 1 || (description && description.length > 1);
-  const headers = Object.keys(page.headerData)
-    .map((header) => ({ marked: markText(header, tokens), url: page.headerData[header] }))
-    .filter((header) => header.marked.length > 1);
-
-  return (
-    <>
-      {primaryMatch
-      && (
-        <li key={page.id}>
-          <div className={styles.resultContainer}>
-            <h3><Link to={page.path}>{title}</Link></h3>
-            {description && <p>{description}</p>}
-          </div>
-        </li>
-      )}
-      {headers.map((header) => (
-        <li key={header.url}>
-          <div className={styles.resultContainer}>
-            <h3>
-              <Link to={page.path}>{title}</Link>
-              &#58;&#160;
-              <Link to={`${page.path}${header.url}`}>{header.marked}</Link>
-            </h3>
-          </div>
-        </li>
-      ))}
-    </>
-  );
-}
-
-export default function Search({ location }) {
-  const { allPost } = useStaticQuery(
-    graphql`
-      query {
-        allPost {
-          nodes {
-            id
-            title
-            description
-            path
-            parent {
-              ... on Mdx {
-                tableOfContents
-              }
-            }
-          }
-        }
-      }
-    `,
-  );
-
-  const { nodes } = allPost;
+export default function Search({ location, closeDropdown }) {
   const searchQuery = new URLSearchParams(location.search).get('query') || '';
+  const searchIndexData = useSearchIndex();
   const [query, setQuery] = useState(searchQuery);
+  const [index, setIndex] = useState(Index.load(searchIndexData));
   const [results, setResults] = useState([]);
-  const [index, setIndex] = useState(rebuildIndex(nodes));
-  const [isOpen, setIsOpen] = useState(false);
 
-  const ref = useRef();
+  const [isOpen, setIsOpen] = useState(false);
   const [focus, setFocus] = useState(false);
-  useClickOutside(ref, () => {
-    if (focus) {
-      setFocus(false);
-      setResults([]);
-      navigate(`${location.pathname}${location.hash}`, { state: { preventScroll: true } });
-    }
+
+  const clickOutsideRef = useRef();
+  const escapeRef = useRef();
+
+  function clearSearch() {
+    navigate(`${location.pathname}${location.hash}`, { state: { preventScroll: true } });
+  }
+
+  function blurInput() {
+    const inputs = document.getElementsByClassName('searchbar');
+    Array.from(inputs)
+      .find((el) => el.offsetHeight > 0 && el.offsetWidth > 0)
+      .blur();
+  }
+
+  function focusInput() {
+    const inputs = document.getElementsByClassName('searchbar');
+    Array.from(inputs)
+      .find((el) => el.offsetHeight > 0 && el.offsetWidth > 0)
+      .focus();
+  }
+
+  useClickOutside(clickOutsideRef, () => setFocus(false));
+
+  useEscape(escapeRef, () => {
+    setFocus(false);
+    blurInput();
   });
 
   useEffect(() => {
@@ -93,15 +65,17 @@ export default function Search({ location }) {
     if (searchQuery === '') {
       setResults([]);
     } else {
-      setIndex(index || rebuildIndex(nodes));
-      setResults(index.search(query));
+      const newResults = index
+        .search(searchQuery)
+        .map(({ ref }) => index.documentStore.getDoc(ref));
+      setResults(newResults);
     }
-  }, [location.search], query);
+  }, [location.search], searchQuery);
 
   useEffect(() => {
     setIsOpen(!!results.length);
-    setFocus(isOpen
-      || document.getElementById('search-input') === document.activeElement);
+    setFocus(!!results.length
+    || document.getElementById('search-input') === document.activeElement);
   }, [results, isOpen]);
 
   const search = (event) => {
@@ -110,44 +84,68 @@ export default function Search({ location }) {
 
   return (
     <>
-      <div ref={ref} className={styles.wrapper}>
+      <div ref={clickOutsideRef} className={styles.wrapper}>
         <form className={styles.searchForm} role="search" method="GET">
           <div className={`${styles.searchGroup} ${focus ? styles.expanded : ''}`}>
+            <FontAwesomeIcon
+              icon={faSearch}
+              className={styles.searchIcon}
+              sx={{ variant: 'icons.search' }}
+            />
             <input
               type="search"
+              ref={escapeRef}
               id="search-input"
-              className={`${styles.searchInput} ${focus ? styles.expanded : ''}`}
               name="query"
               value={query}
               placeholder="Search"
               onFocus={() => setFocus(true)}
               onChange={search}
+              sx={{ variant: 'inputs.searchbar' }}
+              className={`searchbar ${styles.searchInput} ${focus ? styles.expanded : ''}`}
             />
+            {query
+            && (
+              <button
+                type="button"
+                sx={{ variant: 'buttons.unstyled' }}
+                onClick={() => {
+                  clearSearch();
+                  if (focus) focusInput();
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faTimesCircle}
+                  className={styles.closeIcon}
+                  sx={{ variant: 'icons.clearSearch' }}
+                />
+              </button>
+            )}
           </div>
         </form>
-        {(isOpen || focus)
-          && (
-            <div className={`${styles.container} ${isOpen || focus ? styles.open : ''}`}>
+        {focus && (
+          <div
+            sx={{ variant: 'divs.resultContainer' }}
+            className={`${styles.container} ${isOpen || focus ? styles.open : ''}`}
+          >
+            {!!results.length && query.length > 2 && (
               <section className={`${styles.searchResults} ${isOpen ? styles.open : ''}`}>
-                <ol>
-                  {results.map((result) => (
-                    <SearchResult page={result} query={query} />
-                  ))}
-                </ol>
+                <SearchResults results={results} query={query} closeDropdown={closeDropdown} />
               </section>
-            </div>
-          )}
+            )}
+          </div>
+        )}
       </div>
-      <div className={`${styles.searchOverlay} ${isOpen || focus ? styles.open : ''}`} />
+      <div className={`${styles.searchOverlay} ${focus ? styles.open : ''}`} />
     </>
   );
 }
 
-Search.propTypes = ({
+Search.propTypes = {
   location: PropTypes.instanceOf(Object).isRequired,
-});
+  closeDropdown: PropTypes.func,
+};
 
-SearchResult.propTypes = {
-  page: PropTypes.instanceOf(Object).isRequired,
-  query: PropTypes.string.isRequired,
+Search.defaultProps = {
+  closeDropdown: () => null,
 };

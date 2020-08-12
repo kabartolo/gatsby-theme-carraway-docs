@@ -1,96 +1,119 @@
-$search-icon-left: 0.5rem;
+$icon-size: 0.9rem;
+$search-icon-padding: calc(#{$icon-size} / 2 + 3px);
 
 .wrapper {
 	position: relative;
-	align-self: flex-start;
-}
-
-.search-form {
-	margin-bottom: 0;
-	.search-group {
-		position: relative;
-	    &:before {
-	    	position: absolute;
-			top: calc(#{$searchbar-padding} + 0.5rem);
-			left: $search-icon-left;
-			z-index: 2;
-	    	font-family: "Material Icons";
-	    	font-weight: bold;
-	    	font-size: 1.1rem;
-	    	content: "\e8b6";
-	    	display: block;
-	    	text-align: center;
-	    }
-		.search-input {
+	z-index: 4;
+	.search-form {
+		margin-bottom: 0;
+		text-align: left;
+		.search-group {
 			position: relative;
-			z-index: 1;
-			margin-top: $searchbar-padding;
-			padding: 1rem 1.8rem;
-			height: $searchbar-height;
-			border: 1px solid $input-border-color;
-			border-radius: 3px;
-			outline: none;
-			box-shadow: inset 0 1px 2px rgba(27,31,35,.075);
-		    -webkit-appearance: textfield;
-		    outline-offset: -2px;
-			&:focus {
-				border: 1px solid $input-border-color-focus;
-				box-shadow: inset 0 1px 2px $input-border-color,0 0 0 .2em $input-border-color-focus;
+			.search-icon,
+			.close-icon {
+				position: absolute;
+				top: calc(#{$searchbar-padding} + #{$search-icon-padding});
+				z-index: 2;
+				font-size: $icon-size;
+				line-height: $icon-size;
+			}
+			.search-icon {
+				left: $search-icon-padding;
+			}
+			.close-icon {
+				right: $search-icon-padding;
+				cursor: pointer;
+			}
+			.search-input {
+				position: relative;
+				z-index: 1;
+				margin-top: $searchbar-padding;
+				padding: $searchbar-padding 2rem;
+				height: $searchbar-height;
+				min-width: calc(#{search-container-width} / 2);
 			}
 		}
-		.search-input.expanded {
-			position: absolute;
-			left: $searchbar-padding;
-			width: calc(#{$search-container-width)} - calc(2 * #{$searchbar-padding}));
-			max-width: calc(#{$search-container-maxwidth)} - calc(2 * #{$searchbar-padding}));
-		}
-	}	
-	.search-group.expanded:before {
-		left: calc(#{$search-icon-left} + #{$searchbar-padding});
 	}
-}
-
-.container.open {
-	display: block;
-	border-radius: 3px;
-	min-height: $header-main-height;
-	width: $search-container-width;
-	max-width: $search-container-maxwidth;
-	background: #fff;
-	padding: $searchbar-padding;
-	.search-results.open {
-		margin-top: $header-main-height;
-		max-height: 80vh;
-		background: #fff;
-		transition: width .3s ease-in-out;
-		overflow-y: auto;
-		.result-container {
-			padding: 24px 0;
-			border-top: 1px #e1e4e8 solid;
-		}
-		ol {
-			list-style: none;
-		}
-		h3 {
-			margin: 0;
-		}
-		mark {
-			background: inherit;
-			color: blue;
+	.container.open {
+		display: block;
+		border-radius: 3px;
+		.search-results.open {
+			position: relative;
+			z-index: 5;
+			max-height: 80vh;
+			transition: width .3s ease-in-out;
+			overflow-y: auto;
+			.result-container {
+				padding: 1em 0;
+			}
+			ol {
+				padding-left: 0;
+			}
+			h3 {
+				margin: 0;
+			}
 		}
 	}
 }
 
-@media (min-width: $menu-breakpoint) {
+@include for-tablet-up {
+	.wrapper {
+		align-self: flex-start;
+		flex: 0 1 auto;
+		.search-form {
+			.search-group {
+				.search-input.expanded {
+					position: absolute;
+					left: $searchbar-padding;
+					width: calc(#{$search-container-width)} - calc(2 * #{$searchbar-padding}));
+					max-width: calc(#{$search-container-maxwidth)} - calc(2 * #{$searchbar-padding}));
+				}
+			}
+			.search-group.expanded {
+				.search-icon {
+					left: calc(#{$search-icon-padding} + #{$searchbar-padding});
+				}
+				.close-icon {
+					right: calc(#{$search-icon-padding} + #{$searchbar-padding});
+				}
+			}
+		}
+		.search-results.open {
+			width: 100%;
+			margin-top: $searchbar-height;
+		}
+		.container {
+			padding: $searchbar-padding;
+		}
+		.container.open {
+			width: $search-container-width;
+			max-width: $search-container-maxwidth;
+			min-height: $header-main-height;
+		}
+	}
 	.search-overlay.open {
 		position: fixed;
 		top: 0;
 		right: 0;
 		bottom: 0;
 		left: 0;
-		z-index: -1;
+		z-index: 3;
 		display: block;
 		content: " ";
 		background: rgba(27,31,35,.15);
+	}
+}
+
+@include for-mobile-only {
+	.search-input {
+		width: 100%;
+	}
+	.container {
+		position: absolute;
+		width: 100%;
+		.search-results.open {
+			background: inherit;
+			margin-top: 4px;
+		}
 	}
 }
