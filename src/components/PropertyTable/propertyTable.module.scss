@@ -1,0 +1,18 @@
+.property-table {
+	list-style: none;
+	padding-left: 0;
+	li {
+		padding: 1rem 0;
+	}
+	.header {
+		display: flex;
+		align-items: center;
+		.name {
+			margin: 0;
+			margin-right: 1em;
+		}
+	}
+	.default-value {
+		margin-left: 1em;
+	}
+}
