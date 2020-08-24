@@ -1,15 +1,87 @@
+@include for-widescreen-up {
+	.main {
+		display: flex;
+		&.with-toc {
+			flex-direction: row-reverse;
+			.toc-container {
+				flex: 25%;
+				position: sticky;
+				align-self: flex-start;
+				top: $header-main-height;
+			}
+			.article-content {
+				position: relative;
+				width: 70%;
+				margin-right: calc(#{$main-padding} / 2);
+			}
+		}
+	}
+}
+
+.toc-container {
+	width: 400px;
+	max-width: 50%;
+	@include for-tablet-under {
+		width: 100%;
+		max-width: 100%;
+	}
+}
+
 .article {
+	position: relative;
 	padding: 0 $main-padding;
 	padding-top: $main-margin-top;
 	@include for-tablet-under {    
 		padding-top: calc(#{$main-margin-top} + #{$post-dropdown-height});
    }
-	nav {
-		padding-top: $sidebar-padding;
-	}
-	.header {
+	.page-header {
 		h1 {
 			line-height: $article-title-line-height;
+		}
+	}
+	.main {
+		margin-bottom: $main-padding;
+		// styles for headers from gatsby-plugin-autolink-headers
+		.header {
+			&:hover,
+			&:focus {
+				.header-link {
+					svg {
+					  visibility: visible;
+					 }
+				}
+			}
+			.header-link {
+				position: absolute;
+				top: 0;
+				left: 0;
+				padding-right: 4px;
+				transform: translateX(-100%);
+				svg {
+					visibility: hidden;
+				}
+			}
+		}
+	}
+	.post-nav {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		.next {
+			text-align: left;
+			.nav-link-label {
+				svg {
+					margin-left: 1rem;
+				}
+			}
+		}
+		.previous {
+			text-align: right;
+			.nav-link-label {
+				svg {
+					margin-right: 1rem;
+				}
+			}
 		}
 	}
 }

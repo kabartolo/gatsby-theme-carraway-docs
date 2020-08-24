@@ -1,42 +1,70 @@
-import React, { useContext, useEffect } from 'react';
+/** @jsx jsx */
+/* eslint-disable no-unused-vars */
+import { jsx } from 'theme-ui';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { graphql } from 'gatsby';
+import { Helmet } from 'react-helmet';
+import { graphql, Link } from 'gatsby';
 import { MDXProvider } from '@mdx-js/react';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
-import { Link } from 'gatsby';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faAngleDoubleLeft,
+  faAngleDoubleRight,
+} from '@fortawesome/free-solid-svg-icons';
 
+import Breadcrumb from './Breadcrumb';
+import NavLink from './NavLink';
 import CodeBlock from '../CodeBlock';
 import CodeExample from '../CodeExample';
-import TopicArea from '../TopicArea';
+import Section from '../Section';
+import TOC from '../TOC';
+import PropertyTable from '../PropertyTable';
 
-import { PostContext } from '../Layout/post-context';
+import themeComponents from '../../gatsby-plugin-theme-ui/components';
 
-import useBreadcrumb from '../../hooks/useBreadcrumb';
+import usePostContext from '../../hooks/usePostContext';
+import useTableOfContents from '../../hooks/useTableOfContents';
+import useThemeOptions from '../../hooks/useThemeOptions';
+import useSiteMetadata from '../../hooks/useSiteMetadata';
 
 import styles from './post.module.scss';
 
 const shortcodes = {
+  ...themeComponents,
   Link,
   code: CodeBlock,
   CodeExample,
-  TopicArea,
+  Section,
+  TOC,
+  PropertyTable,
 };
 
-export default function Post({ data: { post }, menus }) {
+export default function Post({ data: { post }, pageContext }) {
   const {
-    setPostType,
-    setCurrentGroup,
     setPostID,
-  } = useContext(PostContext);
+  } = usePostContext();
+  const { allowBreadCrumbs } = useThemeOptions();
+  const { title: siteTitle } = useSiteMetadata();
+  const tableOfContents = useTableOfContents(post.id);
+  const { breadcrumb, previous, next } = pageContext;
+  const leftArrow = <FontAwesomeIcon icon={faAngleDoubleLeft} />;
+  const rightArrow = <FontAwesomeIcon icon={faAngleDoubleRight} />;
 
+  // Set post context
   useEffect(() => {
     if (post == null) return;
-    setPostType(post.postType);
-    setCurrentGroup(post.group);
     setPostID(post.id);
   });
 
-  const breadcrumb = useBreadcrumb(menus.sidebar, post);
+  // Add style to linked headers added by gatsby-remark-autolink-headers
+  useEffect(() => {
+    const headers = document.getElementsByClassName('anchor', 'before');
+    Array.from(headers).forEach((header) => {
+      header.classList.add(styles.headerLink);
+      header.parentElement.classList.add(styles.header);
+    });
+  });
 
   if (post == null) {
     return (
@@ -47,43 +75,66 @@ export default function Post({ data: { post }, menus }) {
   }
 
   const {
+    id,
     title,
+    description,
     body,
     path,
+    slug,
+    showTOC,
   } = post;
 
+  const tocVisible = showTOC && !!tableOfContents.nested.items;
+
   return (
-    <article id="post-container" className={styles.article}>
-      <nav>
-        {breadcrumb.post && (
-          <>
-            <span><Link to={breadcrumb.post.path}>{breadcrumb.post.name}</Link></span>
-          </>
-        )}
-        {breadcrumb.group && (
-          <>
-            {breadcrumb.post && <span> &#47; </span>}
-            <span>
-              {breadcrumb.group.path
-                ? (
-                  <Link to={breadcrumb.group.path}>{breadcrumb.group.name}</Link>
-                ) : <span>{breadcrumb.group.name}</span>}
-            </span>
-          </>
-        )}
-        {!breadcrumb.postIsIndex && (
-          <>
-            {(breadcrumb.post || breadcrumb.group) && <span> &#47; </span>}
-            <span><Link to={path}>{title}</Link></span>
-          </>
-        )}
-      </nav>
-      <header className={styles.header}>
+    <article id={slug} className={styles.article}>
+      <Helmet titleTemplate={`%s | ${siteTitle}`}>
+        <title>{title}</title>
+        <meta property="description" content={description} />
+      </Helmet>
+      {allowBreadCrumbs && (
+        <Breadcrumb
+          data={breadcrumb}
+          path={path}
+          title={title}
+          slug={slug}
+        />
+      )}
+      <header className={styles.pageHeader}>
         <h1>{title}</h1>
       </header>
-      <MDXProvider components={shortcodes}>
-        <MDXRenderer>{body}</MDXRenderer>
-      </MDXProvider>
+      <div id="article-main" className={`article-main ${styles.main} ${tocVisible ? styles.withToc : ''}`}>
+        {tocVisible && <TOC contents={tableOfContents.nested} className={styles.tocContainer} />}
+        <div id="article-content" className={styles.articleContent}>
+          <MDXProvider components={shortcodes}>
+            <MDXRenderer>{body}</MDXRenderer>
+          </MDXProvider>
+        </div>
+      </div>
+      <nav className={styles.postNav}>
+        <span className={styles.previous}>
+          {previous && (
+            <NavLink path={previous.path}>
+              <div className={styles.navLinkLabel} sx={{ variant: 'as.navLinkLabel' }}>
+                {leftArrow}
+                <span>Previous</span>
+              </div>
+              <span sx={{ variant: 'as.navLink' }}>{previous.label}</span>
+            </NavLink>
+          )}
+        </span>
+        <span className={styles.next}>
+          {next && (
+            <NavLink path={next.path}>
+              <div className={styles.navLinkLabel} sx={{ variant: 'as.navLinkLabel' }}>
+                <span>Next</span>
+                {rightArrow}
+              </div>
+              <span sx={{ variant: 'as.navLink' }}>{next.label}</span>
+            </NavLink>
+          )}
+        </span>
+      </nav>
     </article>
   );
 }
@@ -93,19 +144,16 @@ export const pageQuery = graphql`
     post(id: { eq: $id }) {
       id
       body
-      postType
-      group
       path
       title
+      slug
+      description
+      showTOC
     }
   }
 `;
 
 Post.propTypes = {
   data: PropTypes.instanceOf(Object).isRequired,
-  menus: PropTypes.instanceOf(Object),
-};
-
-Post.defaultProps = {
-  menus: {},
+  pageContext: PropTypes.instanceOf(Object).isRequired,
 };

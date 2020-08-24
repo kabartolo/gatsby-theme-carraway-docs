@@ -10,17 +10,7 @@ export default function usePostData() {
           label
           description
           path
-          slug          
-          postType {
-            name
-            type
-            path
-          }
-          group {
-            name
-            type
-            path
-          }
+          slug
           excerpt
           body
         }

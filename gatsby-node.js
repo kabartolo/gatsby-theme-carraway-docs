@@ -42,32 +42,42 @@ const getParagraphs = (AST) => {
   return paragraphs.filter((paragraph) => paragraph != null);
 };
 
-const createSidebarMenuInterface = (menus) => {
-  const itemData = (item) => ({
-    id: item,
-    name: item,
-    type: item,
-    path: null,
-    items: null,
+
+const getSidebarMenu = (menus, postPath) => {
+  const sidebarMenu = menus.find((menu) => {
+    const basePath = new RegExp(`^/${menu.slug}`, 'i');
+    return menu.slug !== '' && !!postPath.match(basePath);
   });
 
-  const sidebarMenus = menus.map((menu) => ({
-    ...menu,
-    items: menu.items.map((item) => {
-      if (typeof item === 'string') return itemData(item);
-      return {
-        id: item.type,
-        name: item.name,
-        type: item.type,
-        path: item.path,
-        items: item.items ? item.items.map((post) => itemData(post)) : [],
-      };
-    })
-  }));
+  return sidebarMenu || menus.find((menu) => menu.slug === '');
+};
+
+const getGroupMenu = (sidebarMenu, postPath) => {
+  return sidebarMenu.items.find((menuItem) => {
+    const path = new RegExp(`^/${sidebarMenu.slug}/${menuItem.slug}`, 'i');
+    return menuItem.isGroup && !!postPath.match(path);
+  })
+};
+
+const itemInterface = (item) => {
+  const slug = typeof item === 'string' ? item : item.slug;
+
+  return ({
+    id: slug,
+    name: item.name,
+    slug: slug,
+    path: slug,
+    isGroup: typeof item !== 'string',
+    items: item.items ? item.items.map((subItem) => itemInterface(subItem)) : [],
+  });
+};
+
+const createSidebarMenuInterface = (menus) => {
+  const sidebarMenus = menus.map((menu) => itemInterface(menu));
 
   return ({
     id: SIDEBAR_MENU_ID,
-    parent,
+    parent: '___SOURCE___',
     children: [],
     menus: sidebarMenus,
     internal: {
@@ -80,35 +90,41 @@ const createSidebarMenuInterface = (menus) => {
 };
 
 const appendToMenu = (
-  { menus },
-  postType,
-  groupFolder,
-  slug,
-  name,
-  path,
+  menuInterface,
+  postId,
+  postSlug,
+  postName,
+  postPath,
 ) => {
-  const newMenus = menus.slice();
-  const postMenu = newMenus.find((menu) => menu.type === postType);
+  const newMenus = menuInterface.menus.slice();
+  const sidebarMenu = getSidebarMenu(newMenus, postPath);
+  let post;
 
-  if (postMenu) {
-    const groupMenu = postMenu.items.find((group) => group.type === groupFolder);
-    const postData = groupMenu
-      ? groupMenu.items.find((post) => post.type === slug)
-      : postMenu.items.find((post) => post.type === slug);
+  if (sidebarMenu) {
+    sidebarMenu.path = sidebarMenu.slug === '' ? '/' : `/${sidebarMenu.slug}/`;
+    const groupMenu = getGroupMenu(sidebarMenu, postPath);
+    if (groupMenu) {
+      if (postSlug === 'index' && !groupMenu.name) {
+        groupMenu.name = postName;
+      }
+      groupMenu.path = `${sidebarMenu.path}${groupMenu.slug}/`.replace(/\/\//, '/');
 
+      post = groupMenu.items.find((item) => item.slug === postSlug);
+
+      if (!post && postSlug !== 'index') {
+        post = itemInterface(postSlug);
+        groupMenu.items.push(post);
+      }
+    }
+
+    const postData = post || sidebarMenu.items.find((item) => item.slug === postSlug);
     if (postData) {
-      postData.name = name;
-      postData.path = path;
-    } else if (groupMenu && slug != 'index') {
-      groupMenu.items.push({
-        id: slug,
-        name,
-        type: slug,
-        slug,
-        path,
-      });
+      postData.id = postId;
+      postData.name = postName;
+      postData.path = postPath;
     }
   }
+
   const content = JSON.stringify(newMenus);
   return {
     id: SIDEBAR_MENU_ID,
@@ -124,23 +140,24 @@ const appendToMenu = (
   }
 }
 
-exports.sourceNodes = ({ actions, getNodes, schema }, themeOptions) => {
+exports.sourceNodes = ({ actions, getNodes, schema }) => {
   const { createTypes, touchNode } = actions;
 
   // Prevent custom nodes from being garbage collected
   const nodes = getNodes().filter((node) => (
     node.internal.owner === 'gatsby-theme-carraway-docs'
   ));
-  nodes.forEach((node) => touchNode(node.id));
+  nodes.forEach((node) => touchNode(node));
 
   createTypes([
     schema.buildObjectType({
       name: 'Menu',
       fields: {
-        id: 'String!',
+        id: 'String',
         name: 'String',
-        type: 'String',
+        slug: 'String',
         path: 'String',
+        isGroup: 'Boolean',
         items: '[Menu]',
       },
     }),
@@ -164,14 +181,7 @@ exports.sourceNodes = ({ actions, getNodes, schema }, themeOptions) => {
       fields: {
         title: 'String',
         url: 'String',
-      },
-    }),
-    schema.buildObjectType({
-      name: 'Breadcrumb',
-      fields: {
-        name: 'String',
-        type: 'String',
-        path: 'String',
+        items: '[Heading]',
       },
     }),
     schema.buildObjectType({
@@ -179,31 +189,12 @@ exports.sourceNodes = ({ actions, getNodes, schema }, themeOptions) => {
       name: 'Post',
       fields: {
         id: { type: 'ID!' },
-        title: {
-          type: 'String!',
-          resolve({ title }, args, context, info) {
-            return (title == null || title === '')
-              ? 'Untitled'
-              : title
-          },
-        },
+        title: { type: 'String!' },
         label: { type: 'String' },
         description: { type: 'String' },
         path: { type: 'String' },
         slug: { type: 'String' },
-        postType: {
-          type: 'Breadcrumb!',
-          resolve({ postType }, args, context, info) {
-            const type = (postType.type == null || postType.type === '')
-              ? 'root'
-              : postType.type;
-            return {
-              name: postType.name,
-              type,
-              path: postType.path,
-            };
-          }},
-        group: { type: 'Breadcrumb!' },
+        showTOC: { type: 'Boolean' },
         excerpt: {
           type: 'String!',
           resolve: async (source, args, context, info) => {
@@ -249,24 +240,7 @@ exports.sourceNodes = ({ actions, getNodes, schema }, themeOptions) => {
               fieldName: 'tableOfContents',
             });
             return flattenTOC(tableOfContents.items);
-          },          
-        },
-        tableOfContents: {
-          type: '[Heading]',
-          resolve: async (source, args, context, info) => {
-            const type = info.schema.getType('Mdx');
-            const mdxNode = context.nodeModel.getNodeById({
-              id: source.parent,
-            });
-            const resolver = type.getFields()['tableOfContents'].resolve;
-            const tableOfContents = await resolver(
-              mdxNode,
-              { depth: 3 },
-              context,
-              { fieldName: 'tableOfContents' },
-            );
-            return tableOfContents.items || [];
-          },          
+          },
         },
       },
     }),
@@ -286,7 +260,7 @@ exports.onCreateNode = ({
     createParentChildLink,
   } = actions;
 
-  const { menus } = themeOptions;
+  const { menus, alwaysShowTOC } = themeOptions;
 
   if (node.internal.type === 'Mdx') {
     const { frontmatter } = node;
@@ -297,30 +271,15 @@ exports.onCreateNode = ({
       parent.sourceInstanceName === 'posts'
     ) {
 
-      const title = node.frontmatter.title;
+      let { title, showTOC } = node.frontmatter;
       const label = node.frontmatter.label;
+      if (!title) title = label || 'Untitled';
+      showTOC = (typeof showTOC === 'undefined') ? alwaysShowTOC : showTOC;
+
       const description = node.frontmatter.description;
       const path = createFilePath({ node, getNode });
       const slug = parent.name;
-
-      let [type, groupFolder] = parent.relativeDirectory.split('/');
-      if (themeOptions.usePostTypes === false) {
-        groupFolder = type;
-        type = 'root';
-      }
-
-      const menu = menus.sidebar.find((menu) => menu.type === type);
-      const postType = {
-        name: menu && menu.name,
-        type,
-        path: menu && menu.path,
-      };
-      const groupMenu = menu && menu.items.find((item) => item.type === groupFolder);
-      const group = {
-        name: groupMenu && groupMenu.name,
-        type: groupFolder,
-        path: groupMenu && groupMenu.path,
-      };
+      const id = createNodeId(`${node.id} >>> Post`);
 
       // AST used to build search index
       const compiler = mdx.createMdxAstCompiler({ remarkPlugins: [] });
@@ -334,11 +293,11 @@ exports.onCreateNode = ({
           self.indexOf(heading) === index
         ));
 
-      const sidebarMenus = getNode(SIDEBAR_MENU_ID) || createSidebarMenuInterface(menus.sidebar);
+      const sidebarMenus = getNode(SIDEBAR_MENU_ID)
+        || createSidebarMenuInterface(menus.sidebar);
       createNode(appendToMenu(
           sidebarMenus,
-          type,
-          groupFolder,
+          id,
           slug,
           label || title,
           path,
@@ -350,17 +309,15 @@ exports.onCreateNode = ({
         description,
         path,
         slug,
-        postType,
-        group,
+        showTOC,
         sections,
         headers,
         paragraphs,
-        AST,
       };
 
       createNode({
         ...postData,
-        id: createNodeId(`${node.id} >>> Post`),
+        id,
         parent: node.id,
         children: [],
         internal: {
@@ -388,6 +345,36 @@ exports.onCreateWebpackConfig = ({ actions, loaders, getConfig }) => {
 
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
+  const sidebarMenu = await graphql(`
+    query {
+      allSidebarMenu {
+        nodes {
+          menus {
+            id
+            name
+            slug
+            path
+            items {
+              id
+              name
+              slug
+              path
+              items {
+                id
+                name
+                slug
+                path
+              }
+            }
+          }
+        }
+      }
+    }
+  `);
+
+  if (sidebarMenu.errors) {
+    throw sidebarMenu.errors;
+  }
 
   const result = await graphql(`
     query {
@@ -396,6 +383,8 @@ exports.createPages = async ({ graphql, actions }) => {
           node {
             id
             path
+            title
+            label
           }
         }
       }
@@ -406,13 +395,69 @@ exports.createPages = async ({ graphql, actions }) => {
     throw result.errors;
   }
 
+  const flattenItem = ({ id, slug, path, name, items = [] }) => (
+    [{ id, slug, path, name }, ...flattenMenu(items)]
+  );
+
+  const flattenMenu = (items = []) => (
+    items.flatMap((item) => flattenItem(item))
+  );
+
   const posts = result.data.allPost.edges;
 
+  const { allSidebarMenu } = sidebarMenu.data;
+  if (!allSidebarMenu || !allSidebarMenu.nodes[0]) {
+    throw 'gatsby-theme-carraway-docs: Check for errors in your mdx files or gatsby-config.js, or try restarting the development server.';
+  }
+  
+  const menus = allSidebarMenu.nodes[0].menus;
+
   posts.forEach(({ node }) => {
+    let previous;
+    let next;
+    let breadcrumb;
+    const menu = getSidebarMenu(menus, node.path);
+
+    if (menu) {
+      const flatMenu = flattenMenu([menu]);
+      breadcrumb = node.path
+        .slice(1, -1)
+        .split('/')
+        .map((slug) => {
+          const menuItem = flatMenu.find((item) => item.slug === slug);
+
+          return menuItem 
+          ? {
+              path: menuItem.path,
+              name: menuItem.name,
+            }
+          : null;
+        });
+
+      let index = flatMenu.findIndex((item) => item.path === node.path);
+      if (index !== -1) {
+        const prevPath = (index === 0) ? null : flatMenu[index - 1].path;
+        const nextPath = (index === (flatMenu.length - 1)) ? null : flatMenu[index + 1].path;
+        previous = prevPath && posts.find((post) => post.node.path === prevPath);
+        next = nextPath && posts.find((post) => post.node.path === nextPath);
+      }
+    }
+
     createPage({
       path: node.path,
       component: require.resolve('./src/components/Post'),
-      context: { id: node.id },
+      context: {
+        id: node.id,
+        breadcrumb,
+        previous: previous && {
+          path: previous.node.path,
+          label: previous.node.label || previous.node.title,
+        },
+        next: next && {
+          path: next.node.path,
+          label: next.node.label || next.node.title,
+        },
+      },
     });
   });
 }

@@ -1,48 +1,67 @@
-.container {
-	h3,
-	span,
-	a,
-	a:visited {
-		font-size: 0.9rem;
-		font-weight: bold;
-		color: #697386;
-	}
-	a {
-		text-decoration: none;
-		&:hover {
-			color: #2a2f45;
-		}
-	}
+.sidebar,
+.dropdown {
+	position: fixed;
+	top: $header-main-height;
 }
 
-@media (min-width: 992px) {
-	.container {
+.sidebar {
+	@include for-mobile-only {
+		display: none;
+	}
+	@include for-desktop-under {
+		width: $sidebar-width-tablet;
+	}
+	@include for-desktop-up {
 		width: $sidebar-width;
-		min-width: $sidebar-width;
-		height: 100%;
-		border-right: $layout-border;
-		padding-top: $sidebar-padding;
-		position: fixed;
-		.fixed-header {
-			width: $sidebar-width;
-			height: $header-height;
-			position: fixed;
-			border-right: $layout-border;
+	}
+	padding: $sidebar-padding;
+	.scrollable {
+		height: calc(100vh - #{$header-main-height} - calc(2 * #{$sidebar-padding}));
+		overflow-y: auto;
+		.accordion {		
+			h3 {
+				margin: 0;
+			}
+			ul {
+				padding-left: 1rem;
+			}
 		}
-		.scrollable {
-			width: 100%;
-			overflow-y: auto;
-			height: calc(100% - #{$header-height} - #{$sidebar-padding});
-			margin-top: $header-height + $sidebar-padding;
-			padding: 0 $sidebar-padding;
+		.accordion > ul {
+			padding-left: 0;
 		}
 	}
 }
 
-@media (max-width: 992px) {
-	.container {
-		border: none;
+.dropdown {
+	padding: 0;
+	width: 100%;
+	z-index: 2;
+	@include for-tablet-up {
+		display: none;
+	}
+	.dropdown > div {
+		position: absolute;
+		right: 0;
+		top: $header-main-height;
+		width: 100vw;
+		z-index: 2;
+	}
+	.scrollable {
 		width: 100%;
-		background: inherit;
+		height: calc(100vh - #{$post-dropdown-top});
+		overflow-y: auto;
+		.accordion {
+			padding: 0;
+		}
+	}
+	button {
+		display: flex;
+		position: relative;
+		height: $post-dropdown-height;
+		justify-content: space-between;
+		width: 100%;
+		padding: 0 $sidebar-padding;
+		font-size: 1.1rem;
+		z-index: 2;
 	}
 }

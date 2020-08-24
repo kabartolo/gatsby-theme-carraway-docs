@@ -1,22 +1,26 @@
 import { graphql, useStaticQuery } from 'gatsby';
 
-export default function useSidebar(type) {
+export default function useSidebar(slug) {
   const { allSidebarMenu } = useStaticQuery(graphql`
     query {
       allSidebarMenu {
         nodes {
           menus {
+            id
             name
-            type
             path
+            slug
             items {
+              id
               name
-              type
               path
+              slug
+              isGroup
               items {
+                id
                 name
-                type
                 path
+                slug
               }
             }
           }
@@ -25,5 +29,5 @@ export default function useSidebar(type) {
     }
   `);
 
-  return allSidebarMenu.nodes[0].menus.find((menu) => menu.type === type);
+  return allSidebarMenu.nodes[0].menus.find((menu) => menu.slug === slug);
 }

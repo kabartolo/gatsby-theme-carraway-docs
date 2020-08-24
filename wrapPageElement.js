@@ -4,33 +4,16 @@ import PropTypes from 'prop-types';
 
 import Layout from './src/components/Layout';
 
-const wrapPageElement = ({ element, props: { location }, ...props }, pluginOptions) => {
-  const {
-    menus,
-    sidebarAllowMultipleOpen,
-    sidebarAllowTOC,
-    github,
-    toggleTheme,
-    allowBreadcrumbs,
-  } = pluginOptions;
-
-  return (
-    <Layout
-      {...props}
-      location={location}
-      menus={menus}
-      sidebarOptions={{
-        allowMultipleOpen: sidebarAllowMultipleOpen,
-        allowTOC: sidebarAllowTOC,
-      }}
-      toggleTheme={toggleTheme}
-      allowBreadcrumbs={allowBreadcrumbs}
-      github={github}
-    >
-      {element}
-    </Layout>
-  );
-};
+const wrapPageElement = ({ element, props: { location }, ...props }, pluginOptions) => (
+  <Layout
+    {...props}
+    location={location}
+    menus={pluginOptions.menus}
+    options={pluginOptions}
+  >
+    {element}
+  </Layout>
+);
 
 export default wrapPageElement;
 
@@ -42,6 +25,7 @@ wrapPageElement.propTypes = {
     menus: PropTypes.instanceOf(Object),
     toggleTheme: PropTypes.bool,
     allowBreadcrumbs: PropTypes.bool,
+    github: PropTypes.string,
   }),
   props: PropTypes.instanceOf(Object).isRequired,
 };
@@ -53,5 +37,6 @@ wrapPageElement.defaultProps = {
     menus: {},
     toggleTheme: true,
     allowBreadcrumbs: true,
+    github: '',
   }),
 };

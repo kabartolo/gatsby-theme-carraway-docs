@@ -1,0 +1,9 @@
+.scroll {
+	padding-right: 2rem;
+	max-height: calc(100vh - #{$header-main-height});
+	overflow-y: auto;
+	ol,
+	h2 {
+		padding-left: 2rem;
+	}
+}

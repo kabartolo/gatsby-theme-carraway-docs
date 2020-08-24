@@ -1,14 +1,15 @@
 import { graphql, useStaticQuery } from 'gatsby';
 
-export default function useTableOfContents() {
+export default function useTableOfContents(postID) {
   const { allPost } = useStaticQuery(graphql`
     query {
       allPost {
         nodes {
           id
-          tableOfContents {
-            title
-            url
+          parent {
+            ... on Mdx {
+              tableOfContents(maxDepth: 6)
+            }
           }
           headerFlatMap {
             title
@@ -19,5 +20,13 @@ export default function useTableOfContents() {
     }
   `);
 
-  return allPost.nodes;
+  const result = allPost.nodes.map((node) => ({
+    id: node.id,
+    nested: node.parent && node.parent.tableOfContents,
+    flatMap: node.headerFlatMap,
+  }));
+
+  return postID
+    ? result.find((node) => node.id === postID)
+    : result;
 }
