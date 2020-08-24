@@ -1,9 +1,15 @@
 import React from 'react';
 
+import useSiteMetadata from '../../hooks/useSiteMetadata';
+
+import styles from './footer.module.scss';
+
 export default function Footer() {
+  const { footerText } = useSiteMetadata();
+
   return (
-    <div>
-      <p>Site footer</p>
+    <div className={styles.footer}>
+      <p>{footerText}</p>
     </div>
   );
 }

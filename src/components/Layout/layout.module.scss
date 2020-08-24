@@ -4,6 +4,12 @@
 }
 
 .main {
+	@include for-desktop-under {
+		margin-left: $sidebar-width-tablet;
+	}
+	@include for-mobile-only {
+		margin-left: 0;
+	}
 	@include for-desktop-up {
 		margin-left: $sidebar-width;
 	}

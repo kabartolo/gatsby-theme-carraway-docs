@@ -1,44 +1,79 @@
-$dark-theme: (
-	header: (
-		bg: #011627,
-		color: #d6deeb
-	),
-	title: (
-		color: #fff
-	),
-);
-
-$light-theme: (
-	header: (
-		bg: white,
-		color: #011627
-	),
-);
-
-@mixin themable($theme-map) {
-	@each $section, $map in $theme-map {
-		.#{$section} {
-			background-color: map-get($map, bg);
-			color: map-get($map, color);
+.container {
+	position: fixed;
+	z-index: 3;
+	height: $header-main-height;
+	width: 100%;
+	.header,
+	.mobile-menu {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.icons {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+	}
+	.header {
+		height: 100%;
+		width: 100%;
+		h1 {
+			flex-shrink: 0;
+			margin: 0;
+			padding-left: $sidebar-padding;
+		}
+		.header-content {
+			@include for-mobile-only {
+				display: none;
+			}
+			flex: 1 1 auto;
+			display: flex;
+			justify-content: space-between;
+			height: 100%;
+			.main-menu {
+				display: flex;
+				align-items: center;
+				margin: 0;
+				height: 100%;
+				li {
+					list-style: none;
+					margin: 0 1em;
+				}
+			}
+			.header-right {
+				display: flex;
+			}
+		}
+		.mobile-menu {
+			@include for-tablet-up {
+				display: none;
+			}
+			align-self: flex-start;
+			height: 100%;
+			.main-menu {
+				padding-left: 0;
+				li {
+					display: flex;
+					align-items: center;
+					list-style: none;
+					height: 3em;
+					a {
+						width: 100%;
+					}
+				}
+			}
+		}
+		.mobile-menu > div > button {
+			font-size: 1.5em;
+			height: 100%;
+			padding-right: $sidebar-padding;
+		}
+		.mobile-menu > div > div {
+			position: absolute;
+			right: 0;
+			top: calc(#{$header-main-height} - 2px);
+			width: 100%;
+			padding: $sidebar-padding;
 		}
 	}
-}
-
-.light-theme {
-	@include themable($light-theme);
-}
-
-.dark-theme {
-	@include themable($dark-theme);
-}
-
-.header,
-.main {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.title {
-	margin: 0;
 }
