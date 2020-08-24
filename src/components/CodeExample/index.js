@@ -56,7 +56,7 @@ export default function CodeExample({
                   onBlur={onChange}
                 >
                   {languages.map((lang, i) => (
-                    <option value={lang}>{labels[i]}</option>
+                    <option key={lang} value={lang}>{labels[i]}</option>
                   ))}
                 </select>
                 <FontAwesomeIcon icon={faChevronDown} className={styles.selectArrow} />

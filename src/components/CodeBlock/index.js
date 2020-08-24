@@ -89,11 +89,12 @@ export default function CodeBlock({ children, metastring, className: gatsbyClass
 
 CodeBlock.propTypes = {
   children: PropTypes.string,
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
   metastring: PropTypes.string,
 };
 
 CodeBlock.defaultProps = {
   children: '',
+  className: '',
   metastring: '',
 };
