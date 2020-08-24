@@ -44,12 +44,13 @@ $search-icon-padding: calc(#{$icon-size} / 2 + 3px);
 			transition: width .3s ease-in-out;
 			overflow-y: auto;
 			.result-container {
-				padding: 1em 0;
+				padding: 1em 0.5em;
 			}
 			ol {
 				padding-left: 0;
 			}
-			h3 {
+			h3,
+			p {
 				margin: 0;
 			}
 		}

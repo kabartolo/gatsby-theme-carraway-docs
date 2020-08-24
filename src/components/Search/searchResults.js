@@ -25,7 +25,7 @@ function markText(text, words) {
 
 function addEllipses(excerpt) {
   if (!excerpt.length) return null;
-  const ellipses = (excerpt.join('').length > EXCERPT_LENGTH) && <span>...</span>;
+  const ellipses = (excerpt.join('').length > EXCERPT_LENGTH) && '...';
   return excerpt.concat(ellipses);
 }
 
@@ -44,7 +44,7 @@ export default function SearchResults({ results, query, closeDropdown }) {
       sections,
       headers,
     } = post;
-    const { headerFlatMap } = tableOfContents.find((node) => node.id === id);
+    const { flatMap } = tableOfContents.find((node) => node.id === id);
     const markedTitle = markText(title, tokens);
     const markedDescription = markText(description, tokens);
 
@@ -59,15 +59,14 @@ export default function SearchResults({ results, query, closeDropdown }) {
           excerpt={addEllipses(markedDescription)}
           path={path}
           onClick={closeDropdown}
-          key={parseInt(id, 10)}
-          id={parseInt(id, 10)}
+          key={id}
         />
       );
       primaryResults.push(element);
     }
 
     headers.forEach((header) => {
-      const headerData = headerFlatMap && headerFlatMap.find((data) => data.title === header);
+      const headerData = flatMap && flatMap.find((data) => data.title === header);
       const slug = headerData ? headerData.url : '';
       const paragraphs = sections.filter((section) => section.heading === header);
       const markedHeader = markText(header, tokens);
@@ -82,10 +81,9 @@ export default function SearchResults({ results, query, closeDropdown }) {
             title={markedTitle}
             heading={markedHeader}
             excerpt={addEllipses(excerpt)}
-            path={`${path}${slug}`}
+            path={path.replace(/\/$/, slug)}
             onClick={closeDropdown}
-            key={paragraphs.id}
-            id={paragraphs.id}
+            key={paragraphs[0].id}
           />
         );
         primaryResults.push(element);
@@ -99,8 +97,7 @@ export default function SearchResults({ results, query, closeDropdown }) {
               excerpt={addEllipses(markText(paragraph.content.slice(0, EXCERPT_LENGTH), tokens))}
               path={`${path}${slug}`}
               onClick={closeDropdown}
-              key={paragraphs.id}
-              id={paragraphs.id}
+              key={paragraph.id}
             />
           ));
         otherResults = otherResults.concat(paragraphMatches);
@@ -109,11 +106,9 @@ export default function SearchResults({ results, query, closeDropdown }) {
   });
 
   return (
-    <>
-      <ol>
-        {primaryResults.concat(otherResults)}
-      </ol>
-    </>
+    <ol>
+      {primaryResults.concat(otherResults)}
+    </ol>
   );
 }
 

@@ -5,7 +5,6 @@ import React, {
   useState,
   useEffect,
   useRef,
-  useContext,
 } from 'react';
 import PropTypes from 'prop-types';
 import { Index } from 'elasticlunr';
@@ -15,13 +14,15 @@ import { faSearch, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { useClickOutside } from '../../hooks/useClickOutside';
 import { useEscape } from '../../hooks/useEscape';
+import useLocation from '../../hooks/useLocation';
 import useSearchIndex from '../../hooks/useSearchIndex';
 
 import styles from './search.module.scss';
 
 import SearchResults from './searchResults';
 
-export default function Search({ location, closeDropdown }) {
+export default function Search({ closeDropdown }) {
+  const location = useLocation();
   const searchQuery = new URLSearchParams(location.search).get('query') || '';
   const searchIndexData = useSearchIndex();
   const [query, setQuery] = useState(searchQuery);
@@ -66,7 +67,7 @@ export default function Search({ location, closeDropdown }) {
       setResults([]);
     } else {
       const newResults = index
-        .search(searchQuery)
+        .search(searchQuery, {})
         .map(({ ref }) => index.documentStore.getDoc(ref));
       setResults(newResults);
     }
@@ -142,7 +143,6 @@ export default function Search({ location, closeDropdown }) {
 }
 
 Search.propTypes = {
-  location: PropTypes.instanceOf(Object).isRequired,
   closeDropdown: PropTypes.func,
 };
 

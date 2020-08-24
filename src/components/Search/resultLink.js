@@ -16,10 +16,12 @@ export default function ResultLink({
   onClick,
 }) {
   return (
-    <li sx={{ variant: 'divs.searchResult' }}>
+    <li
+      sx={{ variant: 'lis.searchResult' }}
+      className={styles.resultContainer}
+    >
       <Styled.a
         as={Link}
-        className={styles.resultContainer}
         to={path}
         onClick={onClick}
       >
