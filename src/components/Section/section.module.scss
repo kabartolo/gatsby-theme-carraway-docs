@@ -6,18 +6,17 @@ $example-margin-top: calc(#{$h2-margin} + #{$h2-margin} + #{$topic-line-height})
 	align-items: center;
 	justify-content: space-between;
 	margin-bottom: $main-padding;
+	h2  {
+		margin: $h2-margin 0;
+		line-height: $topic-line-height;
+	}
 	.left-column {
-		min-width: 400px;
+		max-width: 50%;
 		flex-grow: 1;
 		align-self: flex-start;
 		padding-right: calc(#{$main-padding} / 2);
-		h2  {
-			margin: $h2-margin 0;
-			line-height: $topic-line-height;
-		}
 	}
 	.right-column {
-		min-width: 400px;
 		flex-grow: 1;
 		position: -webkit-sticky;
 		position: sticky;

@@ -1,5 +1,6 @@
 import React, {
   useEffect,
+  useRef,
   Children,
   isValidElement,
   cloneElement,
@@ -14,6 +15,7 @@ export default function Section({ children }) {
   const uid = useUID();
   const { height, width } = useWindowDimensions();
   const blockMargin = 12;
+  const sectionRef = useRef();
 
   function getBlocks() {
     const container = document.getElementById(`block-container-${uid}`);
@@ -47,6 +49,14 @@ export default function Section({ children }) {
   }
 
   useEffect(() => {
+    const section = sectionRef.current;
+    const heading = section.querySelector('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
+    if (heading) {
+      section.id = heading.getAttribute('id');
+    }
+  });
+
+  useEffect(() => {
     if (width >= 850) updateBlockHeight();
   });
 
@@ -73,14 +83,14 @@ export default function Section({ children }) {
   });
 
   return (
-    <section id={`section-${uid}`} className={styles.section}>
-      <div id={`left-column-${uid}`} className={styles.leftColumn}>
+    <section ref={sectionRef} className={styles.section}>
+      <div id={`left-column-${uid}`} className={rightColumn.length ? styles.leftColumn : ''}>
         {leftColumn}
       </div>
-      <div id={`right-column-${uid}`} className={styles.rightColumn}>
+      <div id={`right-column-${uid}`} className={rightColumn.length ? styles.rightColumn : ''}>
         <div id={`block-container-${uid}`} className={styles.blocks}>
           {Children.map(rightColumn, (child) => {
-            if (isValidElement(child)) {
+            if (isValidElement(child) && child.props.mdxType === 'CodeExample') {
               return cloneElement(child, { updateBlockHeight });
             }
             return child;
