@@ -1,4 +1,5 @@
 /** @jsx jsx */
+/* eslint-disable no-param-reassign */
 import { jsx } from 'theme-ui';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
@@ -6,24 +7,28 @@ import { Link } from 'gatsby';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 
+import useLocation from '../../hooks/useLocation';
+
 import styles from './accordion.module.scss';
 
 export default function Accordion({
   items: parentItems,
-  location,
   allowMultipleOpen,
-  allowTOC,
   onClickLink,
+  activeId,
 }) {
-  /* eslint-disable no-param-reassign */
   const sections = parentItems.reduce((map, item) => {
     if (item.isOpen) {
       map[item.name] = true;
     }
     return map;
   }, {});
-  /* eslint-enable no-param-reassign */
 
+  const location = useLocation();
+  const activePost = parentItems.find((item) => (
+    item.path === location.pathname
+    && !item.path.match('#')
+  ));
   const [openSections, setOpenSections] = useState(sections);
 
   function onClick(name, isLink) {
@@ -44,23 +49,26 @@ export default function Accordion({
   }
 
   return (
-    <ul className={styles.accordion}>
+
+    <ul className={`accordion-list ${styles.accordion}`}>
       {parentItems.map((item) => {
         const {
           id,
           name,
           path,
+          slug,
+          isGroup,
           items,
         } = item;
 
-        const linkIsCurrent = path && path === `${location.pathname}${location.hash}`;
+        const currentLinkClass = item === activePost ? 'activePost' : '';
+        const currentHeaderClass = (activeId && path && path.match(`#${activeId}`)) ? 'active' : '';
         const isOpen = openSections[name];
-        const hasItems = (!path && items) || (path && allowTOC && items);
 
         const label = path
           ? (
             <Link
-              sx={{ variant: linkIsCurrent ? 'links.current' : 'links.accordion' }}
+              className={currentLinkClass || currentHeaderClass}
               to={path}
               onClick={() => {
                 onClickLink();
@@ -76,35 +84,34 @@ export default function Accordion({
           ? <FontAwesomeIcon icon={faChevronUp} />
           : <FontAwesomeIcon icon={faChevronDown} />;
 
-        return hasItems
+        return items && items.length
           ? (
-            <li key={id}>
-              <h3 className={path ? styles.link : ''}>
-                {path && <span>{label}</span>}
+            <li className={`accordion-list-item ${styles.listItem}`} key={id || slug}>
+              <h3 className={`accordion-row ${isGroup ? '' : styles.link}`}>
+                {!isGroup && <span>{label}</span>}
                 <button
+                  className="accordion-row"
                   sx={{ variant: 'buttons.unstyled' }}
                   type="button"
                   onClick={() => onClick(name)}
                 >
-                  {!path && <span sx={{ variant: 'text.accordionGroup' }}>{label}</span>}
+                  {isGroup && <span sx={{ variant: 'spans.accordionGroup' }}>{label}</span>}
                   <span>{icon}</span>
                 </button>
               </h3>
               {isOpen && (
                 <Accordion
                   allowMultipleOpen={allowMultipleOpen}
-                  allowTOC={allowTOC}
                   items={items}
-                  dropDown={false}
                   onClickLink={onClickLink}
-                  location={location}
+                  activeId={activeId}
                 />
               )}
             </li>
           )
           : (
-            <li key={id}>
-              <h3>{label}</h3>
+            <li className={`accordion-list-item ${styles.listItem}`} key={id}>
+              <h3 className="accordion-row">{label}</h3>
             </li>
           );
       })}
@@ -114,8 +121,7 @@ export default function Accordion({
 
 Accordion.propTypes = {
   allowMultipleOpen: PropTypes.bool.isRequired,
-  allowTOC: PropTypes.bool.isRequired,
   items: PropTypes.instanceOf(Array).isRequired,
   onClickLink: PropTypes.func.isRequired,
-  location: PropTypes.instanceOf(Object).isRequired,
+  activeId: PropTypes.string.isRequired,
 };

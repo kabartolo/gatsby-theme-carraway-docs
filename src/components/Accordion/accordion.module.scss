@@ -1,7 +1,7 @@
 .accordion {
 	margin: 0;
 	list-style: none;
-	li {
+	.list-item {
 		padding-bottom: 0;
 	}
 	.link,
@@ -10,6 +10,7 @@
 		display: flex;
 		justify-content: space-between;
 		width: 100%;
+		line-height: 1.61;
 		button {
 			width: auto;
 		}

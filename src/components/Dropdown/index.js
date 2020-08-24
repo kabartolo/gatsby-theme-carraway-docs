@@ -6,8 +6,11 @@ import React, {
   isValidElement,
   cloneElement,
   useState,
+  useRef,
 } from 'react';
 import PropTypes from 'prop-types';
+
+import { useClickOutside } from '../../hooks/useClickOutside';
 
 export default function Dropdown({
   children,
@@ -17,6 +20,7 @@ export default function Dropdown({
   themeUI,
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef();
 
   function onClick() {
     setIsOpen(!isOpen);
@@ -26,8 +30,12 @@ export default function Dropdown({
     setIsOpen(false);
   }
 
+  useClickOutside(ref, () => {
+    closeDropdown();
+  });
+
   return (
-    <>
+    <div ref={ref}>
       <button
         type="button"
         onClick={onClick}
@@ -46,7 +54,7 @@ export default function Dropdown({
           })}
         </div>
       )}
-    </>
+    </div>
   );
 }
 
