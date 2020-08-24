@@ -7,20 +7,24 @@ const typography = toTheme(noriegaTheme);
 
 export default merge(theme, {
   ...typography,
-  styles: {
-    a: {
-      color: 'primary',
-      textDecoration: 'none',
-    },
+  borders: {
+    main: '1px solid',
+    thick: '1.5px solid',
   },
-  breakpoints: ['45em', '62em', '82em'],
+  shadows: {
+    main: '0 0 2px rgba(0,0,0,0.05),0 1px 4px rgba(0,0,0,0.05)',
+    search: 'inset 0 1px 2px rgba(27,31,35,.075)',
+    searchFocus: 'inset 0 1px 2px #d1d5da, 0 0 0 .2em rgba(3,102,214,.3)',
+  },
   colors: {
     ...theme.colors,
     backgroundSecondary: '#fff',
+    border: '#e6e6e6',
     modes: {
       dark: {
         text: '#fff',
         background: '#000639',
+        border: '#454f5b',
         primary: '#47c1bf',
         secondary: '#f49342',
         highlight: '#b7ecec',
@@ -28,6 +32,24 @@ export default merge(theme, {
         gray: '#3e4155',
         backgroundSecondary: '#3e4155',
       },
+    },
+  },
+  // link styles
+  as: {
+    mainMenu: {
+      fontSize: '1.1rem',
+      color: 'primary',
+      textDecoration: 'none',
+      fontWeight: 'heading',
+    },
+    navLink: {
+      textDecoration: 'underline',
+      color: 'primary',
+    },
+    navLinkLabel: {
+      textDecoration: 'none',
+      fontWeight: 'heading',
+      color: 'text',
     },
   },
   buttons: {
@@ -40,16 +62,13 @@ export default merge(theme, {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
+      fontWeight: 'body',
     },
   },
   divs: {
-    header: {
-      borderBottom: '1.5px solid',
-      borderColor: 'muted',
-      backgroundColor: 'background',
-    },
     code: {
       backgroundColor: 'rgb(42, 39, 52)',
+      fontSize: '0.9rem',
     },
     codeNumber: {
       color: 'white',
@@ -67,11 +86,6 @@ export default merge(theme, {
         color: 'text',
       },
     },
-    dropdown: {
-      borderBottom: '1.5px solid',
-      borderColor: 'muted',
-      backgroundColor: 'background',
-    },
     highlightLine: {
       backgroundColor: 'rgb(2, 55, 81)',
     },
@@ -82,29 +96,55 @@ export default merge(theme, {
     },
     mobileMenu: {
       backgroundColor: 'backgroundSecondary',
-      borderBottom: '2px solid',
-      borderColor: 'muted',
-      boxShadow: '0 1px 2px rgba(0,0,0,0.05),0 1px 4px rgba(0,0,0,0.05)',
+      borderBottom: 'main',
+      borderColor: 'border',
+      boxShadowBottom: 'main',
       li: {
-        borderBottom: '1px solid',
-        borderColor: 'muted',
+        borderBottom: 'main',
+        borderColor: 'border',
         ':first-of-type': {
-          borderTop: '1px solid',
-          borderColor: 'muted',
+          borderTop: 'main',
+          borderColor: 'border',
         },
+      },
+    },
+    propertyTable: {
+      '.property-name': {
+        fontFamily: 'Monospace',
+      },
+      '.property-type': {
+        fontFamily: 'Monospace',
+        fontSize: '0.9rem',
+        fontWeight: 'bold',
+        color: 'grey',
+      },
+      '.property-info': {
+        fontStyle: 'italic',
+        fontSize: '0.9rem',
+      },
+      '.property-default': {
+        fontSize: '0.9rem',
+        fontWeight: 'bold',
+      },
+      '.property-default-value': {
+        fontFamily: 'Monospace',
+        fontSize: '0.8rem',
+      },
+      li: {
+        listStyle: 'none',
+        borderTop: 'main',
+        borderColor: 'border',
       },
     },
     resultContainer: {
       backgroundColor: 'backgroundSecondary',
+      borderBottom: 'main',
+      borderColor: 'border',
+      boxShadowBottom: 'main',
     },
-    searchResult: {
-      listStyle: 'none',
-      borderBottom: '1px solid',
-      borderColor: 'muted',
-      ':first-of-type': {
-        borderTop: '1px solid',
-        borderColor: 'muted',
-      },
+    sidebar: {
+      borderRight: 'main',
+      borderColor: 'border',
     },
   },
   icons: {
@@ -132,64 +172,92 @@ export default merge(theme, {
   },
   inputs: {
     searchbar: {
-      border: '1px solid',
-      borderColor: 'muted',
+      border: 'main',
+      borderColor: 'border',
       borderRadius: '3px',
       outline: 'none',
-      boxShadow: 'inset 0 1px 2px rgba(27,31,35,.075)',
+      boxShadow: 'search',
       ':focus': {
         borderColor: 'rgba(3,102,214,.3)',
-        boxShadow: 'inset 0 1px 2px #d1d5da, 0 0 0 .2em rgba(3,102,214,.3)',
+        boxShadow: 'searchFocus',
       },
     },
   },
-  links: {
-    accordion: {
-      textDecoration: 'none',
-      color: 'text',
-      fontWeight: 'heading',
+  // list item styles
+  lis: {
+    searchResult: {
+      listStyle: 'none',
+      borderBottom: 'main',
+      borderColor: 'border',
+      fontSize: '0.8em',
+      ':first-of-type': {
+        borderTop: 'main',
+        borderColor: 'border',
+      },
       ':hover': {
+        backgroundColor: 'muted',
+      },
+      mark: {
+        color: 'highlight',
+        backgroundColor: 'inherit',
+      },
+      a: {
+        color: 'text',
+        textDecoration: 'none',
+      },
+    },
+  },
+  navs: {
+    accordion: {
+      a: {
+        fontSize: '1rem',
+        textDecoration: 'none',
+        color: 'text',
+        fontWeight: 'body',
+        ':hover': {
+          color: 'primary',
+          textDecoration: 'underline',
+        },
+      },
+      'a.activePost': {
+        color: 'primary',
+        fontWeight: 'bold',
+      },
+      'a.active': {
         color: 'primary',
       },
-      ':visited': {
-        color: 'text',
+    },
+    toc: {
+      border: 'main',
+      borderColor: 'border',
+      boxShadow: 'main',
+      li: {
+        listStyle: 'none',
       },
-    },
-    current: {
-      color: 'primary',
-      textDecoration: 'underline',
-    },
-    mainMenu: {
-      fontSize: '1.1rem',
-      color: 'primary',
-      textDecoration: 'none',
-      fontWeight: 'heading',
-    },
-    searchResult: {
-      fontSize: '0.8em',
-      color: 'text',
-      textDecoration: 'none',
-      fontWeight: 'bold',
+      a: {
+        color: 'grey',
+        textDecoration: 'none',
+        ':hover': {
+          color: 'primary',
+          textDecoration: 'underline',
+        },
+      },
+      'a.active': {
+        color: 'primary',
+      },
     },
   },
   spans: {
-    full: {
-      width: '100%',
-    },
-    spaceBetween: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-  },
-  text: {
     accordionGroup: {
       textTransform: 'uppercase',
-      fontSize: '0.9rem',
+      color: 'text',
+      fontWeight: 'bold',
+      fontSize: '0.8rem',
     },
-    highlight: {
-      color: 'primary',
-      backgroundColor: 'backgroundSecondary',
+    header: {
+      borderBottom: 'thick',
+      borderColor: 'border',
+      backgroundColor: 'background',
     },
   },
 });

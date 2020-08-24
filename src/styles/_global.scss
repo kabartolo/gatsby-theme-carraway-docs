@@ -3,6 +3,7 @@ $current-group-background: #efefef;
 $top-bar-height: 2.5rem;
 
 $sidebar-width: 300px;
+$sidebar-width-tablet: 250px;
 $sidebar-padding: 16px;
 $sidebar-width-no-padding: calc(#{$sidebar-width} - calc(2 * #{$sidebar-padding}));
 
@@ -25,11 +26,11 @@ $article-title-line-height: 40px;
 $h2-margin: 1rem;
 
 @mixin for-mobile-only {
-	@media (max-width: 45em) { @content; }
+	@media (max-width: 52em) { @content; }
 }
 
 @mixin for-tablet-up {
-	@media (min-width: 45em) { @content; }
+	@media (min-width: 52em) { @content; }
 }
 
 @mixin for-tablet-under {
@@ -42,4 +43,8 @@ $h2-margin: 1rem;
 
 @mixin for-desktop-under {
 	@media (max-width: 82em) { @content; }
+}
+
+@mixin for-widescreen-up {
+	@media (min-width: 100em) { @content; }
 }
