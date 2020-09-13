@@ -1,9 +1,6 @@
-.container {
+.main {
 	position: relative;
 	z-index: 1;
-}
-
-.main {
 	@include for-desktop-under {
 		margin-left: $sidebar-width-tablet;
 	}

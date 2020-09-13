@@ -44,7 +44,6 @@
 		right: 0;
 		top: $header-main-height;
 		width: 100vw;
-		z-index: 2;
 	}
 	.scrollable {
 		width: 100%;
@@ -62,6 +61,6 @@
 		width: 100%;
 		padding: 0 $sidebar-padding;
 		font-size: 1.1rem;
-		z-index: 2;
+		z-index: 201;
 	}
 }

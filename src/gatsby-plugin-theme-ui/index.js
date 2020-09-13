@@ -1,12 +1,37 @@
 import theme from '@theme-ui/preset-polaris';
 import { toTheme } from '@theme-ui/typography';
-import noriegaTheme from 'typography-theme-noriega';
 import { merge } from 'theme-ui';
+
+import noriegaTheme from 'typography-theme-noriega';
+import nightOwl from 'prism-react-renderer/themes/nightOwl';
+import nightOwlLight from 'prism-react-renderer/themes/nightOwlLight';
 
 const typography = toTheme(noriegaTheme);
 
 export default merge(theme, {
   ...typography,
+  styles: {
+    pre: {
+      padding: 0,
+    },
+    table: {
+      margin: '1rem 0 2em 0',
+      width: '100%',
+      display: 'block',
+      overflow: 'auto',
+    },
+    th: {
+      padding: '1rem 2rem',
+    },
+    td: {
+      borderBottom: '1px solid',
+      padding: '1rem 2rem',
+    },
+  },
+  prism: {
+    dark: nightOwl,
+    default: nightOwlLight,
+  },
   borders: {
     main: '1px solid',
     thick: '1.5px solid',
@@ -19,7 +44,16 @@ export default merge(theme, {
   colors: {
     ...theme.colors,
     backgroundSecondary: '#fff',
+    highlight: '#d3d7f0',
     border: '#e6e6e6',
+    informationBackground: '#eef2fa',
+    informationBorder: '#89a7e0',
+    successBackground: '#edf9f0',
+    successBorder: '#5aca75',
+    warningBackground: '#fff4ec',
+    warningBorder: '#ff8f39',
+    errorBackground: '#feefef',
+    errorBorder: '#f48989',
     modes: {
       dark: {
         text: '#fff',
@@ -27,15 +61,41 @@ export default merge(theme, {
         border: '#454f5b',
         primary: '#47c1bf',
         secondary: '#f49342',
-        highlight: '#b7ecec',
+        highlight: '#023751',
         muted: '#454f5b',
         gray: '#3e4155',
         backgroundSecondary: '#3e4155',
+        informationBackground: '#2e5aac',
+        successBackground: '#287d3c',
+        warningBackground: '#b95000',
+        errorBackground: '#da1414',
       },
     },
   },
-  // link styles
-  as: {
+  // variants
+  alerts: {
+    information: {
+      bg: 'informationBackground',
+      borderLeft: '7px solid',
+      borderColor: 'informationBorder',
+    },
+    success: {
+      bg: 'successBackground',
+      borderLeft: '7px solid',
+      borderColor: 'successBorder',
+    },
+    warning: {
+      bg: 'warningBackground',
+      borderLeft: '7px solid',
+      borderColor: 'warningBorder',
+    },
+    error: {
+      bg: 'errorBackground',
+      borderLeft: '7px solid',
+      borderColor: 'errorBorder',
+    },
+  },
+  links: {
     mainMenu: {
       fontSize: '1.1rem',
       color: 'primary',
@@ -66,16 +126,12 @@ export default merge(theme, {
     },
   },
   divs: {
-    code: {
-      backgroundColor: 'rgb(42, 39, 52)',
-      fontSize: '0.9rem',
-    },
     codeNumber: {
       color: 'white',
       opacity: '0.6',
     },
     codeTop: {
-      backgroundColor: 'muted',
+      bg: 'muted',
       h3: {
         color: 'text',
       },
@@ -87,15 +143,19 @@ export default merge(theme, {
       },
     },
     highlightLine: {
-      backgroundColor: 'rgb(2, 55, 81)',
+      bg: 'highlight',
     },
     highlightNumber: {
-      backgroundColor: 'rgb(2, 155, 206)',
+      bg: 'highlight',
       opacity: '0.65',
-      borderLeft: '4px solid white',
+      borderLeft: '4px solid',
+      borderColor: 'highlight',
+    },
+    mobileSidebar: {
+      bg: 'background',
     },
     mobileMenu: {
-      backgroundColor: 'backgroundSecondary',
+      bg: 'backgroundSecondary',
       borderBottom: 'main',
       borderColor: 'border',
       boxShadowBottom: 'main',
@@ -108,27 +168,41 @@ export default merge(theme, {
         },
       },
     },
+    playground: {
+      borderTop: 'main',
+      borderColor: 'border',
+      '.live-preview': {
+        borderLeft: 'main',
+        borderRight: 'main',
+        borderColor: 'border',
+      },
+      '.live-editor': {
+        border: 'main',
+        borderColor: 'border',
+      },
+      '.live-error': {
+      },
+    },
     propertyTable: {
+      borderTop: '2px solid',
+      borderBottom: '2px solid',
+      borderColor: 'border',
       '.property-name': {
         fontFamily: 'Monospace',
       },
       '.property-type': {
-        fontFamily: 'Monospace',
-        fontSize: '0.9rem',
         fontWeight: 'bold',
         color: 'grey',
       },
       '.property-info': {
-        fontStyle: 'italic',
-        fontSize: '0.9rem',
+      },
+      '.property-description': {
+        fontSize: '1rem',
       },
       '.property-default': {
-        fontSize: '0.9rem',
         fontWeight: 'bold',
       },
       '.property-default-value': {
-        fontFamily: 'Monospace',
-        fontSize: '0.8rem',
       },
       li: {
         listStyle: 'none',
@@ -137,10 +211,12 @@ export default merge(theme, {
       },
     },
     resultContainer: {
-      backgroundColor: 'backgroundSecondary',
+      bg: 'backgroundSecondary',
       borderBottom: 'main',
       borderColor: 'border',
       boxShadowBottom: 'main',
+    },
+    section: {
     },
     sidebar: {
       borderRight: 'main',
@@ -195,11 +271,11 @@ export default merge(theme, {
         borderColor: 'border',
       },
       ':hover': {
-        backgroundColor: 'muted',
+        bg: 'muted',
       },
       mark: {
-        color: 'highlight',
-        backgroundColor: 'inherit',
+        color: 'secondary',
+        bg: 'inherit',
       },
       a: {
         color: 'text',
@@ -249,15 +325,13 @@ export default merge(theme, {
   },
   spans: {
     accordionGroup: {
-      textTransform: 'uppercase',
       color: 'text',
       fontWeight: 'bold',
-      fontSize: '0.8rem',
     },
     header: {
       borderBottom: 'thick',
       borderColor: 'border',
-      backgroundColor: 'background',
+      bg: 'background',
     },
   },
 });

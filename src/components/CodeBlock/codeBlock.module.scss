@@ -1,9 +1,4 @@
-pre {
-  margin: 0;
-}
-
 .gatsby-highlight {
-  font-size: 1rem;
   position: relative;
   -webkit-overflow-scrolling: touch;
   overflow: auto;
@@ -20,11 +15,12 @@ gatsby-highlight > code[class*="language-"],
 }
 
 .code-block {
+  font-size: 0.9rem;
   max-height: calc(80vh - 65px);
-  padding: 1em;
+  padding: 1em 0;
   border-radius: 3px;
   min-width: 300px;
-  max-width: 800PX;
+  max-width: 700px;
   .scroll-container {
     display: flex;
     position: relative;
@@ -57,7 +53,7 @@ gatsby-highlight > code[class*="language-"],
       word-spacing: normal;
       .line {
         padding-left: 1em;
-        min-width: 300px;
+        // min-width: 300px;
       }
     }
   }

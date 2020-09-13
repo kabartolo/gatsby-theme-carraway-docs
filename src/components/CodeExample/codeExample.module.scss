@@ -1,31 +1,39 @@
 .container {
 	border-radius: 7px;
-	margin-bottom: 12px;
+	margin: 1.5rem 0;
     min-width: 300px;
-	max-width: 800PX;
-}
-
-.top-bar {
-	display: flex;
-	border-radius: 7px 7px 0 0;
-	align-items: center;
-	justify-content: space-between;
-	height: $top-bar-height;
-	opacity: .7;
-	h3 {
-		margin: 0;
+	max-width: 700px;
+	.top-bar {
+		display: flex;
+		border-radius: 7px 7px 0 0;
+		align-items: center;
+		justify-content: space-between;
+		height: $top-bar-height;
+		opacity: .7;
+		h3 {
+			margin: 0;
+		}
 	}
-}
-
-.util {
-	display: flex;
-}
-
-.material-icons {
-	font-size: 1em;
-	font-weight: bold;
-	display: inline;
-	vertical-align: middle;
+	.util {
+		display: flex;
+		align-items: center;
+		.copy-button {
+			padding-left: 0;
+			height: 1em;
+		}
+		.copy-button,
+		.select {
+			background: transparent;
+			border: none;
+			cursor: pointer;
+		}
+		.divider {
+			border-left: 1px solid;
+			height: 1em;
+			opacity: .3;
+			margin: 0 0.5em;
+		}
+	}
 }
 
 .title {
@@ -34,29 +42,9 @@
 	padding-left: 15px;
 }
 
-.copy-button {
-	padding-left: 0;
-	display: flex;
-	align-items: center;
-}
-
-.copy-button,
-.select {
-	background: transparent;
-	border: none;
-	cursor: pointer;
-}
-
 .label,
 .select {
 	font-size: 1em;
-}
-
-.divider {
-	border-left: 1px solid;
-	height: 1rem;
-	opacity: .3;
-	margin: 0 0.5em;
 }
 
 .select-wrapper {

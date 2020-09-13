@@ -31,7 +31,8 @@
 	position: relative;
 	padding: 0 $main-padding;
 	padding-top: $main-margin-top;
-	@include for-tablet-under {    
+	@include for-tablet-under {
+		padding: 0 5vw;
 		padding-top: calc(#{$main-margin-top} + #{$post-dropdown-height});
    }
 	.page-header {
