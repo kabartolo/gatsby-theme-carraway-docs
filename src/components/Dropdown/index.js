@@ -9,6 +9,8 @@ import React, {
   useRef,
 } from 'react';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 import { useClickOutside } from '../../hooks/useClickOutside';
 
@@ -21,6 +23,9 @@ export default function Dropdown({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef();
+
+  const close = closeIcon || <FontAwesomeIcon icon={faChevronUp} />;
+  const open = openIcon || <FontAwesomeIcon icon={faChevronDown} />;
 
   function onClick() {
     setIsOpen(!isOpen);
@@ -42,7 +47,7 @@ export default function Dropdown({
         sx={{ variant: 'buttons.unstyled' }}
       >
         {label !== '' && <span>{label}</span>}
-        <span>{isOpen ? closeIcon : openIcon}</span>
+        <span>{isOpen ? close : open}</span>
       </button>
       {isOpen && (
         <div sx={themeUI}>
@@ -63,13 +68,15 @@ Dropdown.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]).isRequired,
+  openIcon: PropTypes.node,
+  closeIcon: PropTypes.node,
   label: PropTypes.string,
-  openIcon: PropTypes.node.isRequired,
-  closeIcon: PropTypes.node.isRequired,
   themeUI: PropTypes.instanceOf(Object),
 };
 
 Dropdown.defaultProps = {
   label: '',
   themeUI: {},
+  openIcon: null,
+  closeIcon: null,
 };
