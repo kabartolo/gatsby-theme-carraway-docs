@@ -114,10 +114,11 @@ export default function SearchResults({ results, query, closeDropdown }) {
 
 SearchResults.propTypes = {
   results: PropTypes.instanceOf(Array).isRequired,
-  query: PropTypes.string.isRequired,
+  query: PropTypes.string,
   closeDropdown: PropTypes.func,
 };
 
 SearchResults.defaultProps = {
   closeDropdown: () => null,
+  query: '',
 };

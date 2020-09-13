@@ -30,7 +30,7 @@ $search-icon-padding: calc(#{$icon-size} / 2 + 3px);
 				margin-top: $searchbar-padding;
 				padding: $searchbar-padding 2rem;
 				height: $searchbar-height;
-				min-width: calc(#{search-container-width} / 2);
+				min-width: calc(#{$search-container-width} / 2);
 			}
 		}
 	}

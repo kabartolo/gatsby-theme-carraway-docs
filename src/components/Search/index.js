@@ -12,10 +12,12 @@ import { navigate } from 'gatsby';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
-import { useClickOutside } from '../../hooks/useClickOutside';
-import { useEscape } from '../../hooks/useEscape';
-import useLocation from '../../hooks/useLocation';
-import useSearchIndex from '../../hooks/useSearchIndex';
+import {
+  useClickOutside,
+  useEscape,
+  useLocation,
+  useSearchIndex,
+} from '../../hooks';
 
 import styles from './search.module.scss';
 
@@ -71,7 +73,7 @@ export default function Search({ closeDropdown }) {
         .map(({ ref }) => index.documentStore.getDoc(ref));
       setResults(newResults);
     }
-  }, [location.search], searchQuery);
+  }, [location.search]);
 
   useEffect(() => {
     setIsOpen(!!results.length);
