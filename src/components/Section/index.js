@@ -1,3 +1,6 @@
+/** @jsx jsx */
+/* eslint-disable no-unused-vars */
+import { jsx } from 'theme-ui';
 import React, {
   useEffect,
   useRef,
@@ -13,7 +16,13 @@ import styles from './section.module.scss';
 
 export default function Section({ children }) {
   const uid = useUID();
-  const { height, width } = useWindowDimensions();
+  let height;
+  let width;
+  const dimensions = useWindowDimensions();
+  if (dimensions) {
+    height = dimensions.height;
+    width = dimensions.width;
+  }
   const blockMargin = 12;
   const sectionRef = useRef();
 
@@ -50,7 +59,7 @@ export default function Section({ children }) {
 
   useEffect(() => {
     const section = sectionRef.current;
-    const heading = section.querySelector('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
+    const heading = section && section.querySelector('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
     if (heading) {
       section.id = heading.getAttribute('id');
     }
@@ -72,7 +81,7 @@ export default function Section({ children }) {
   let rightColumn = [];
   let leftComplete = false;
   Children.toArray(children).forEach((child) => {
-    if (child.props.mdxType === 'hr') {
+    if (child.props && child.props.mdxType === 'hr') {
       leftComplete = true;
       return;
     }
@@ -83,7 +92,7 @@ export default function Section({ children }) {
   });
 
   return (
-    <section ref={sectionRef} className={styles.section}>
+    <section ref={sectionRef} className={styles.section} sx={{ variant: 'divs.section' }}>
       <div id={`left-column-${uid}`} className={rightColumn.length ? styles.leftColumn : ''}>
         {leftColumn}
       </div>
