@@ -1,4 +1,6 @@
 const { createFilePath } = require('gatsby-source-filesystem');
+const path = require('path');
+const fs = require('fs');
 const crypto = require('crypto');
 const mdx = require('@mdx-js/mdx');
 const grayMatter = require('gray-matter');
@@ -42,25 +44,25 @@ const getParagraphs = (AST) => {
   return paragraphs.filter((paragraph) => paragraph != null);
 };
 
-
 const getSidebarMenu = (menus, postPath) => {
   const sidebarMenu = menus.find((menu) => {
     const basePath = new RegExp(`^/${menu.slug}`, 'i');
-    return menu.slug !== '' && !!postPath.match(basePath);
+    return menu.slug && !!postPath.match(basePath);
   });
 
-  return sidebarMenu || menus.find((menu) => menu.slug === '');
+  return sidebarMenu || menus.find((menu) => !menu.slug);
 };
 
 const getGroupMenu = (sidebarMenu, postPath) => {
   return sidebarMenu.items.find((menuItem) => {
-    const path = new RegExp(`^/${sidebarMenu.slug}/${menuItem.slug}`, 'i');
+    const path = new RegExp(`^${sidebarMenu.path}${menuItem.slug}`, 'i');
     return menuItem.isGroup && !!postPath.match(path);
   })
 };
 
 const itemInterface = (item) => {
-  const slug = typeof item === 'string' ? item : item.slug;
+  let slug = typeof item === 'string' ? item : item.slug;
+  if (typeof slug === 'undefined') slug = '';
 
   return ({
     id: slug,
@@ -96,24 +98,26 @@ const appendToMenu = (
   postName,
   postPath,
 ) => {
+  let post;
   const newMenus = menuInterface.menus.slice();
   const sidebarMenu = getSidebarMenu(newMenus, postPath);
-  let post;
 
   if (sidebarMenu) {
-    sidebarMenu.path = sidebarMenu.slug === '' ? '/' : `/${sidebarMenu.slug}/`;
+    sidebarMenu.path = sidebarMenu.slug ? `/${sidebarMenu.slug}/` : '/';
+
     const groupMenu = getGroupMenu(sidebarMenu, postPath);
+
     if (groupMenu) {
-      if (postSlug === 'index' && !groupMenu.name) {
-        groupMenu.name = postName;
-      }
-      groupMenu.path = `${sidebarMenu.path}${groupMenu.slug}/`.replace(/\/\//, '/');
+      groupMenu.path = `${sidebarMenu.path}${groupMenu.slug}/`;
 
       post = groupMenu.items.find((item) => item.slug === postSlug);
-
       if (!post && postSlug !== 'index') {
         post = itemInterface(postSlug);
         groupMenu.items.push(post);
+      }
+
+      if (postSlug === 'index' && !groupMenu.name) {
+        groupMenu.name = postName;
       }
     }
 
@@ -343,9 +347,35 @@ exports.onCreateWebpackConfig = ({ actions, loaders, getConfig }) => {
   };
 }
 
-exports.createPages = async ({ graphql, actions }) => {
+exports.createPages = async ({ graphql, actions }, themeOptions) => {
   const { createPage } = actions;
-  const sidebarMenu = await graphql(`
+  const { sidebarAllowTOC } = themeOptions;
+
+  const flattenItem = ({ id, slug, path, name, items = [] }) => {
+    const isHeader = new RegExp('#', 'g');
+    return isHeader.test(path) ? null : [{ id, slug, path, name }, ...flattenMenu(items)];
+  };
+
+  const flattenMenu = (items = []) => (
+    items.flatMap((item) => flattenItem(item))
+  );
+
+  function getTOC(item, allTOC) {
+    const TOC = allTOC.find((node) => (
+      node.id === item.id
+    ));
+
+    if (!TOC || !TOC.items) return [];
+
+    return TOC.items.map((heading) => ({
+      id: heading.url,
+      name: heading.title,
+      type: heading.url,
+      path: `${item.path}${heading.url}`,
+    }));
+  }
+
+  const sidebarQuery = await graphql(`
     query {
       allSidebarMenu {
         nodes {
@@ -354,16 +384,19 @@ exports.createPages = async ({ graphql, actions }) => {
             name
             slug
             path
+            isGroup
             items {
               id
               name
               slug
               path
+              isGroup
               items {
                 id
                 name
                 slug
                 path
+                isGroup
               }
             }
           }
@@ -372,11 +405,11 @@ exports.createPages = async ({ graphql, actions }) => {
     }
   `);
 
-  if (sidebarMenu.errors) {
-    throw sidebarMenu.errors;
+  if (sidebarQuery.errors) {
+    throw sidebarQuery.errors;
   }
 
-  const result = await graphql(`
+  const postQuery = await graphql(`
     query {
       allPost {
         edges {
@@ -385,41 +418,42 @@ exports.createPages = async ({ graphql, actions }) => {
             path
             title
             label
+            parent {
+              ... on Mdx {
+                tableOfContents(maxDepth: 2)
+              }
+            }
           }
         }
       }
     }
   `);
 
-  if (result.errors) {
-    throw result.errors;
+  if (postQuery.errors) {
+    throw postQuery.errors;
   }
 
-  const flattenItem = ({ id, slug, path, name, items = [] }) => (
-    [{ id, slug, path, name }, ...flattenMenu(items)]
-  );
+  const posts = postQuery.data.allPost.edges;
 
-  const flattenMenu = (items = []) => (
-    items.flatMap((item) => flattenItem(item))
-  );
-
-  const posts = result.data.allPost.edges;
-
-  const { allSidebarMenu } = sidebarMenu.data;
+  const { allSidebarMenu } = sidebarQuery.data;
   if (!allSidebarMenu || !allSidebarMenu.nodes[0]) {
-    throw 'gatsby-theme-carraway-docs: Check for errors in your mdx files or gatsby-config.js, or try restarting the development server.';
+    throw new Error('Try running gatsby clean and trying again.');
   }
   
-  const menus = allSidebarMenu.nodes[0].menus;
+  const { menus } = allSidebarMenu.nodes[0];
+  const allTableOfContents = posts.map(({ node }) => ({
+    id: node.id,
+    items: node.parent.tableOfContents.items,
+  }));
 
   posts.forEach(({ node }) => {
+    const menu = getSidebarMenu(menus, node.path);
     let previous;
     let next;
     let breadcrumb;
-    const menu = getSidebarMenu(menus, node.path);
 
     if (menu) {
-      const flatMenu = flattenMenu([menu]);
+      const flatMenu = flattenMenu([menu]).filter((item) => item != null);
       breadcrumb = node.path
         .slice(1, -1)
         .split('/')
@@ -432,7 +466,7 @@ exports.createPages = async ({ graphql, actions }) => {
               name: menuItem.name,
             }
           : null;
-        });
+        }).filter((item) => item != null);
 
       let index = flatMenu.findIndex((item) => item.path === node.path);
       if (index !== -1) {
@@ -441,6 +475,19 @@ exports.createPages = async ({ graphql, actions }) => {
         previous = prevPath && posts.find((post) => post.node.path === prevPath);
         next = nextPath && posts.find((post) => post.node.path === nextPath);
       }
+
+      // Add TOC items to menu
+      if (sidebarAllowTOC) {
+        menu.items.forEach((item) => {
+          if (item.items && item.items.length) {
+            item.items.forEach((subItem) => {
+              subItem.items = getTOC(subItem, allTableOfContents);
+            });
+          } else {
+            item.items = getTOC(item, allTableOfContents);
+          }
+        });
+      }
     }
 
     createPage({
@@ -448,6 +495,7 @@ exports.createPages = async ({ graphql, actions }) => {
       component: require.resolve('./src/components/Post'),
       context: {
         id: node.id,
+        menu,
         breadcrumb,
         previous: previous && {
           path: previous.node.path,
@@ -459,5 +507,21 @@ exports.createPages = async ({ graphql, actions }) => {
         },
       },
     });
+  });
+}
+
+exports.onPreBootstrap = ({ store, reporter }) => {
+  const { program } = store.getState();
+  const dirs = [
+    path.join(program.directory, "src/pages"),
+    path.join(program.directory, "src/posts"),
+    path.join(program.directory, "src/assets"),
+  ]
+
+  dirs.forEach(dir => {
+    if (!fs.existsSync(dir)) {
+      reporter.log(`Creating the ${dir} directory`)
+      mkdirp.sync(dir)
+    }
   });
 }
