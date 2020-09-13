@@ -1,15 +1,23 @@
-module.exports = ({ postsPath }) => {
+module.exports = ({ postsPath, assetsPath }) => {
   return {
     plugins: [
       'gatsby-plugin-react-helmet',
       'gatsby-plugin-eslint',
       'gatsby-plugin-styled-components',
+      'gatsby-plugin-sharp',
+      'gatsby-remark-images',
       {
         resolve: 'gatsby-source-filesystem',
         options: {
           name: 'posts',
           path: postsPath,
         }
+      },
+      {
+        resolve: `gatsby-source-filesystem`,
+        options: {
+          path: assetsPath,
+        },
       },
       {
         resolve: 'gatsby-plugin-mdx',
@@ -21,6 +29,12 @@ module.exports = ({ postsPath }) => {
               options: {
                 elements: ['h2', 'h3', 'h4', 'h5', 'h6'],
                 
+              },
+            },
+            {
+              resolve: 'gatsby-remark-images',
+              options: {
+                maxWidth: 1200,
               },
             },
           ],
@@ -37,12 +51,7 @@ module.exports = ({ postsPath }) => {
         includePaths: [`${__dirname}/src/styles/`],
       },
       'gatsby-plugin-fontawesome-css',
-      {
-        resolve: 'gatsby-plugin-theme-ui',
-        options: {
-          prismPreset: 'night-owl',
-        },
-      },
+      'gatsby-plugin-theme-ui',
       {
         resolve: '@gatsby-contrib/gatsby-plugin-elasticlunr-search',
         options: {
