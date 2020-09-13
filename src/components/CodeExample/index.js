@@ -7,6 +7,7 @@ import { useUID } from 'react-uid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
+import usePrismTheme from '../../hooks/usePrismTheme';
 import styles from './codeExample.module.scss';
 
 export default function CodeExample({
@@ -18,6 +19,7 @@ export default function CodeExample({
   const childrenArray = Children.toArray(children);
   const codeBlocks = childrenArray.filter((child) => child.props.mdxType === 'pre');
   const uid = `code-example-${useUID()}`;
+  const { plain: theme } = usePrismTheme();
 
   useEffect(() => updateBlockHeight());
 
@@ -42,7 +44,7 @@ export default function CodeExample({
   }
 
   return (
-    <div id={uid} className={styles.container} sx={{ variant: 'divs.code' }}>
+    <div id={uid} className={styles.container} style={{ backgroundColor: theme.backgroundColor }}>
       <div className={styles.topBar} sx={{ variant: 'divs.codeTop' }}>
         <h3 className={styles.title}>{title}</h3>
         <span className={styles.util}>
@@ -63,7 +65,7 @@ export default function CodeExample({
               </span>
             )
             : <span className={styles.label}>{labels[0]}</span>}
-          <span className={styles.divider} />
+          {(labels.length > 0) && <span className={styles.divider} />}
           <CopyToClipboard text={getText(blockValue)}>
             <button
               type="button"
