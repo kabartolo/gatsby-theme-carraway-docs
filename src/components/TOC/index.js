@@ -1,15 +1,12 @@
 /** @jsx jsx */
-/* eslint-disable no-unused-vars */
 import { jsx } from 'theme-ui';
-import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
 
+import { getIds } from '../../utils/helpers';
 import styles from './toc.module.scss';
 
-import { useActiveId } from '../../hooks/useActiveId';
-import usePostContext from '../../hooks/usePostContext';
-import useTableOfContents from '../../hooks/useTableOfContents';
+import useActiveId from '../../hooks/useActiveId';
 
 function NestedList({
   items,
@@ -44,10 +41,9 @@ export default function TOC({
   title,
   className,
 }) {
-  const { postID } = usePostContext();
-  const themeTableOfContents = useTableOfContents(postID);
-  const tableOfContents = contents || themeTableOfContents.nested;
-  const activeId = useActiveId(tableOfContents);
+  const tableOfContents = contents;
+  const itemIds = getIds(tableOfContents.items, 6);
+  const activeId = useActiveId(itemIds, '');
 
   if (!tableOfContents || !tableOfContents.items) return null;
 

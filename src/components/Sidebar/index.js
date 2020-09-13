@@ -3,24 +3,18 @@
 import { jsx } from 'theme-ui';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
+import { getIds } from '../../utils/helpers';
 import styles from './sidebar.module.scss';
 
 import Accordion from '../Accordion';
 import Dropdown from '../Dropdown';
 
-import { useActiveId } from '../../hooks/useActiveId';
+import useActiveId from '../../hooks/useActiveId';
 import useLocation from '../../hooks/useLocation';
 import usePostContext from '../../hooks/usePostContext';
-import useThemeOptions from '../../hooks/useThemeOptions';
-import useSidebar from '../../hooks/useSidebar';
 import useTableOfContents from '../../hooks/useTableOfContents';
-
-/* Icons for main dropdown menu on mobile */
-const chevronUp = <FontAwesomeIcon icon={faChevronUp} />;
-const chevronDown = <FontAwesomeIcon icon={faChevronDown} />;
+import useThemeOptions from '../../hooks/useThemeOptions';
 
 function Menu({
   children,
@@ -44,43 +38,39 @@ function Menu({
   );
 }
 
+function checkIfOpen(item, currentId) {
+  return item.id === currentId || !!item.items.find((subItem) => subItem.id === currentId);
+}
+
+function findPost(menu, id) {
+  return menu.items
+    ? (menu.items.find((item) => item.id === id) || findPost(menu.items, id))
+    : null;
+}
+
 export default function Sidebar() {
+  const { menu, postId } = usePostContext();
   const location = useLocation();
-  const { postID } = usePostContext();
-  const { sidebarAllowTOC, sidebarAllowMultipleOpen } = useThemeOptions();
-  const allTableOfContents = useTableOfContents();
-  const currentTableOfContents = useTableOfContents(postID);
-  const activeId = useActiveId(currentTableOfContents.nested, 2);
-  const [_, basePath, slug] = location.pathname.split('/');
-  const menu = useSidebar(basePath);
+  const { sidebarAllowMultipleOpen } = useThemeOptions();
+
+  const tableOfContents = useTableOfContents(postId);
+  const itemIds = getIds(tableOfContents.nested && tableOfContents.nested.items, 2);
+  const activeId = useActiveId(itemIds, postId);
 
   if (!menu || !menu.items) return null;
 
-  function getTOC(item, allTOC) {
-    const TOC = allTOC.find((tableOfContents) => (
-      tableOfContents.id === item.id
-    ));
-    if (!TOC || !TOC.nested.items) return null;
-    return TOC.nested.items.map((heading) => ({
-      id: heading.url,
-      name: heading.title,
-      type: heading.url,
-      path: `${item.path}${heading.url}`,
-    }));
-  }
-
   menu.items.forEach((item) => {
-    if (sidebarAllowTOC) {
-      if (item.items && item.items.length) {
-        item.items.forEach((subItem) => {
-          subItem.items = getTOC(subItem, allTableOfContents);
-        });
-      } else {
-        item.items = getTOC(item, allTableOfContents);
-      }
+    let isOpen;
+    if (item.isGroup) {
+      isOpen = !!location.pathname.match(new RegExp(`^${item.path}`, 'i'));
+      item.items.forEach((subItem) => {
+        subItem.isOpen = checkIfOpen(subItem, postId);
+      });
+    } else {
+      isOpen = checkIfOpen(item, postId);
     }
-    item.isOpen = item.id === postID
-    || (item.items && item.items.find((subItem) => subItem.id === postID));
+
+    item.isOpen = isOpen;
   });
 
   return (
@@ -94,11 +84,9 @@ export default function Sidebar() {
           <h2>{menu.name}</h2>
         </Menu>
       </div>
-      <div className={styles.dropdown}>
+      <div sx={{ variant: 'divs.mobileSidebar' }} className={styles.dropdown}>
         <Dropdown
           label={menu.name}
-          openIcon={chevronDown}
-          closeIcon={chevronUp}
           themeUI={{ backgroundColor: 'background' }}
         >
           <Menu
