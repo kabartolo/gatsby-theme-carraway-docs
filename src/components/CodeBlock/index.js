@@ -1,10 +1,13 @@
-/* eslint-disable react/jsx-props-no-spreading, react/no-array-index-key, react/jsx-fragments */
+/* eslint-disable react/jsx-props-no-spreading, no-unused-vars, react/no-array-index-key */
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
-import { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Highlight, { defaultProps } from 'prism-react-renderer';
-// import nightOwl from 'prism-react-renderer/themes/nightOwl';
+
+import Playground from '../Playground';
+
+import { usePrismTheme } from '../../hooks';
 
 import styles from './codeBlock.module.scss';
 
@@ -27,7 +30,15 @@ const linesToHighlight = (metastring) => {
 
 export default function CodeBlock({ children, metastring, className: gatsbyClassName }) {
   const language = gatsbyClassName ? gatsbyClassName.replace(/language-/, '') : '';
+  const theme = usePrismTheme();
   const highlightLine = linesToHighlight(metastring);
+  const showNumbers = metastring.match(/num$/);
+
+  if (metastring === 'live') {
+    return (
+      <Playground code={children} />
+    );
+  }
 
   return (
     <div
@@ -35,7 +46,7 @@ export default function CodeBlock({ children, metastring, className: gatsbyClass
       sx={{ variant: 'divs.code' }}
     >
       <div className={styles.scrollContainer}>
-        <Highlight {... defaultProps} code={children} language={language}>
+        <Highlight {... defaultProps} code={children} language={language} theme={theme}>
           {({
             style,
             tokens,
@@ -43,23 +54,26 @@ export default function CodeBlock({ children, metastring, className: gatsbyClass
             getLineProps,
             getTokenProps,
           }) => (
-            <Fragment>
-              <div className={styles.numberColumn}>
-                {tokens.slice(0, -1).map((line, i) => (
-                  <div
-                    className={styles.number}
-                    sx={{
-                      variant: [
-                        'divs.codeNumber',
-                        highlightLine(i) && 'divs.highlightNumber',
-                      ],
-                    }}
-                    key={i}
-                  >
-                    {i + 1}
-                  </div>
-                ))}
-              </div>
+            <>
+              {showNumbers && (
+                <div className={styles.numberColumn}>
+                  {tokens.slice(0, -1).map((line, i) => (
+                    <div
+                      className={styles.number}
+                      style={{ color: theme.plain.color }}
+                      sx={{
+                        variant: [
+                          'divs.codeNumber',
+                          highlightLine(i) && 'divs.highlightNumber',
+                        ],
+                      }}
+                      key={i}
+                    >
+                      {i + 1}
+                    </div>
+                  ))}
+                </div>
+              )}
               <pre className={`${className} ${styles.prismCode}`} style={style}>
                 <code>
                   {tokens.slice(0, -1).map((line, i) => {
@@ -79,7 +93,7 @@ export default function CodeBlock({ children, metastring, className: gatsbyClass
                   })}
                 </code>
               </pre>
-            </Fragment>
+            </>
           )}
         </Highlight>
       </div>
