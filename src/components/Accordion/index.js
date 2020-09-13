@@ -7,7 +7,7 @@ import { Link } from 'gatsby';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 
-import useLocation from '../../hooks/useLocation';
+import { useLocation } from '../../hooks';
 
 import styles from './accordion.module.scss';
 
@@ -16,19 +16,21 @@ export default function Accordion({
   allowMultipleOpen,
   onClickLink,
   activeId,
+  outerOpenSections,
 }) {
-  const sections = parentItems.reduce((map, item) => {
-    if (item.isOpen) {
-      map[item.name] = true;
-    }
-    return map;
-  }, {});
-
   const location = useLocation();
   const activePost = parentItems.find((item) => (
     item.path === location.pathname
     && !item.path.match('#')
   ));
+
+  const sections = parentItems.reduce((map, item) => {
+    if (item.isOpen) {
+      map[item.name] = true;
+    }
+    return map;
+  }, outerOpenSections);
+
   const [openSections, setOpenSections] = useState(sections);
 
   function onClick(name, isLink) {
@@ -49,7 +51,6 @@ export default function Accordion({
   }
 
   return (
-
     <ul className={`accordion-list ${styles.accordion}`}>
       {parentItems.map((item) => {
         const {
@@ -60,7 +61,6 @@ export default function Accordion({
           isGroup,
           items,
         } = item;
-
         const currentLinkClass = item === activePost ? 'activePost' : '';
         const currentHeaderClass = (activeId && path && path.match(`#${activeId}`)) ? 'active' : '';
         const isOpen = openSections[name];
@@ -105,6 +105,7 @@ export default function Accordion({
                   items={items}
                   onClickLink={onClickLink}
                   activeId={activeId}
+                  outerOpenSections={openSections}
                 />
               )}
             </li>
@@ -124,4 +125,9 @@ Accordion.propTypes = {
   items: PropTypes.instanceOf(Array).isRequired,
   onClickLink: PropTypes.func.isRequired,
   activeId: PropTypes.string.isRequired,
+  outerOpenSections: PropTypes.instanceOf(Object),
+};
+
+Accordion.defaultProps = {
+  outerOpenSections: {},
 };
