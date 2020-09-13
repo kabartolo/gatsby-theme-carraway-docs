@@ -1,6 +1,6 @@
 import { graphql, useStaticQuery } from 'gatsby';
 
-export default function usePostData() {
+function usePostData() {
   const { allPost } = useStaticQuery(graphql`
     query {
       allPost {
@@ -20,3 +20,5 @@ export default function usePostData() {
 
   return allPost.nodes;
 }
+
+export { usePostData };

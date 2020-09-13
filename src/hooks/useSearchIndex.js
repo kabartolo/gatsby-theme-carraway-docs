@@ -1,6 +1,6 @@
 import { graphql, useStaticQuery } from 'gatsby';
 
-export default function useSearchIndex() {
+function useSearchIndex() {
   const { siteSearchIndex } = useStaticQuery(graphql`
     query {
       siteSearchIndex {
@@ -11,3 +11,5 @@ export default function useSearchIndex() {
 
   return siteSearchIndex.index;
 }
+
+export { useSearchIndex };

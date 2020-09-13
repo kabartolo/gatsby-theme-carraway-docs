@@ -1,6 +1,6 @@
 import { graphql, useStaticQuery } from 'gatsby';
 
-export default function useTableOfContents(postID) {
+function useTableOfContents(postID) {
   const { allPost } = useStaticQuery(graphql`
     query {
       allPost {
@@ -30,3 +30,5 @@ export default function useTableOfContents(postID) {
     ? result.find((node) => node.id === postID)
     : result;
 }
+
+export { useTableOfContents };

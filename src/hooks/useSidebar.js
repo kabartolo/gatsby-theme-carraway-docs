@@ -1,6 +1,6 @@
 import { graphql, useStaticQuery } from 'gatsby';
 
-export default function useSidebar(slug) {
+function useSidebar() {
   const { allSidebarMenu } = useStaticQuery(graphql`
     query {
       allSidebarMenu {
@@ -29,5 +29,7 @@ export default function useSidebar(slug) {
     }
   `);
 
-  return allSidebarMenu.nodes[0].menus.find((menu) => menu.slug === slug);
+  return allSidebarMenu.nodes[0].menus;
 }
+
+export { useSidebar };

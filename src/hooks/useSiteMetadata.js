@@ -1,6 +1,6 @@
 import { graphql, useStaticQuery } from 'gatsby';
 
-export default function useSiteMetadata() {
+function useSiteMetadata() {
   const data = useStaticQuery(graphql`
     {
       site {
@@ -13,6 +13,7 @@ export default function useSiteMetadata() {
           siteLanguage
           basePath
           footerText
+          githubURL
         }
       }
     }
@@ -20,3 +21,5 @@ export default function useSiteMetadata() {
 
   return data.site.siteMetadata;
 }
+
+export { useSiteMetadata };
