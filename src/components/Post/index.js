@@ -1,10 +1,10 @@
 /** @jsx jsx */
 /* eslint-disable no-unused-vars */
-import { jsx } from 'theme-ui';
+import { jsx, useColorMode } from 'theme-ui';
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import { graphql, Link } from 'gatsby';
+import { Link, graphql } from 'gatsby';
 import { MDXProvider } from '@mdx-js/react';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,13 +13,16 @@ import {
   faAngleDoubleRight,
 } from '@fortawesome/free-solid-svg-icons';
 
+import Alert from '../Alert';
 import Breadcrumb from './Breadcrumb';
-import NavLink from './NavLink';
 import CodeBlock from '../CodeBlock';
 import CodeExample from '../CodeExample';
+import NavLink from './NavLink';
+import Playground from '../Playground';
+import PostList from '../PostList';
+import PropertyTable from '../PropertyTable';
 import Section from '../Section';
 import TOC from '../TOC';
-import PropertyTable from '../PropertyTable';
 
 import themeComponents from '../../gatsby-plugin-theme-ui/components';
 
@@ -30,31 +33,43 @@ import useSiteMetadata from '../../hooks/useSiteMetadata';
 
 import styles from './post.module.scss';
 
+/* eslint-disable react/prop-types */
 const shortcodes = {
   ...themeComponents,
-  Link,
+  Alert,
   code: CodeBlock,
   CodeExample,
+  Link: ({ children, to }) => <Link to={to} sx={{ variant: 'styles.a' }}>{children}</Link>,
+  Playground,
+  PostList,
+  PropertyTable,
   Section,
   TOC,
-  PropertyTable,
 };
+/* eslint-enable react/prop-types */
 
 export default function Post({ data: { post }, pageContext }) {
   const {
-    setPostID,
+    setPostId,
+    setMenu,
   } = usePostContext();
   const { allowBreadCrumbs } = useThemeOptions();
   const { title: siteTitle } = useSiteMetadata();
-  const tableOfContents = useTableOfContents(post.id);
-  const { breadcrumb, previous, next } = pageContext;
+  const tableOfContents = useTableOfContents(post && post.id);
+  const {
+    menu,
+    breadcrumb,
+    previous,
+    next,
+  } = pageContext;
   const leftArrow = <FontAwesomeIcon icon={faAngleDoubleLeft} />;
   const rightArrow = <FontAwesomeIcon icon={faAngleDoubleRight} />;
 
   // Set post context
   useEffect(() => {
     if (post == null) return;
-    setPostID(post.id);
+    setPostId(post.id);
+    setMenu(menu);
   });
 
   // Add style to linked headers added by gatsby-remark-autolink-headers
@@ -67,11 +82,7 @@ export default function Post({ data: { post }, pageContext }) {
   });
 
   if (post == null) {
-    return (
-      <div id="post-container" className={styles.article}>
-        <p>Error: Post does not exist or may contain errors.</p>
-      </div>
-    );
+    throw new Error('Error: Post does not exist or might contain errors.');
   }
 
   const {

@@ -1,8 +1,15 @@
+.container {
+	margin: 2rem 0;
+}
+
 .property-table {
 	list-style: none;
 	padding-left: 0;
 	li {
 		padding: 1rem 0;
+		&:last-child {
+			padding-bottom: 0;
+		}
 	}
 	.header {
 		display: flex;
