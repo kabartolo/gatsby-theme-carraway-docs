@@ -1,58 +1,77 @@
 /** @jsx jsx */
-import { jsx, Styled } from 'theme-ui';
+import { jsx, useColorMode } from 'theme-ui';
 import PropTypes from 'prop-types';
-import { Link } from 'gatsby';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBars,
   faWindowClose,
+  faCloudMoon,
+  faSun,
 } from '@fortawesome/free-solid-svg-icons';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
+import useThemeOptions from '../../hooks/useThemeOptions';
 import useSiteMetadata from '../../hooks/useSiteMetadata';
 
 import styles from './header.module.scss';
 
 import Dropdown from '../Dropdown';
+import MainMenu from '../MainMenu';
 import Search from '../Search';
+import Toggle from '../Toggle';
 
 const menuIcon = <FontAwesomeIcon icon={faBars} />;
 const closeIcon = <FontAwesomeIcon icon={faWindowClose} />;
-
-function MainMenu({ closeDropdown, className, menu }) {
-  return (
-    <ul className={className}>
-      {menu.items.map((item) => (
-        <li key={item.name}>
-          <Styled.a
-            as={Link}
-            sx={{ variant: 'links.mainMenu' }}
-            to={item.path}
-            onClick={() => closeDropdown()}
-          >
-            {item.name}
-          </Styled.a>
-        </li>
-      ))}
-    </ul>
-  );
-}
+const sunIcon = <FontAwesomeIcon sx={{ variant: 'icons.sun' }} icon={faSun} />;
+const moonIcon = <FontAwesomeIcon sx={{ variant: 'icons.moon' }} icon={faCloudMoon} />;
+const githubIcon = <FontAwesomeIcon icon={faGithub} />;
 
 export default function Header({
   menu,
-  children,
 }) {
-  const { title } = useSiteMetadata();
+  const { title, githubURL } = useSiteMetadata();
+  const themeOptions = useThemeOptions();
+  const [mode, setMode] = useColorMode();
+
+  function toggleTheme() {
+    setMode(mode === 'dark' ? 'default' : 'dark');
+  }
+
+  function ThemeToggle() {
+    return (
+      <Toggle
+        onToggle={() => toggleTheme()}
+        icon1={mode === 'dark' ? sunIcon : moonIcon}
+        icon2={mode === 'dark' ? moonIcon : sunIcon}
+        name="theme-toggle"
+      />
+    );
+  }
+
+  function GithubLink() {
+    return (
+      <a
+        sx={{ variant: 'icons.github' }}
+        href={githubURL}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {githubIcon}
+      </a>
+    );
+  }
 
   return (
     <div id="header" className={styles.container}>
       <span className={styles.header} sx={{ variant: 'spans.header' }}>
         <h1>{title}</h1>
         <span className={styles.headerContent}>
-          <MainMenu className={styles.mainMenu} menu={menu} />
+          <MainMenu menu={menu} />
           <span className={styles.headerRight}>
             <Search />
             <div className={styles.icons}>
-              {children}
+              {githubURL && <GithubLink />}
+              {themeOptions.toggleTheme && <ThemeToggle />}
             </div>
           </span>
         </span>
@@ -63,10 +82,11 @@ export default function Header({
             themeUI={{ variant: 'divs.mobileMenu' }}
           >
             <div className={styles.icons}>
-              {children}
+              {githubURL && <GithubLink />}
+              {themeOptions.toggleTheme && <ThemeToggle />}
             </div>
             <Search />
-            <MainMenu className={styles.mainMenu} menu={menu} />
+            <MainMenu menu={menu} />
           </Dropdown>
         </span>
       </span>
@@ -75,26 +95,11 @@ export default function Header({
 }
 
 Header.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
-  menu: PropTypes.instanceOf(Object),
+  menu: PropTypes.shape({
+    items: PropTypes.instanceOf(Array).isRequired,
+  }),
 };
 
 Header.defaultProps = {
-  menu: {},
-  children: [],
-};
-
-MainMenu.propTypes = {
-  closeDropdown: PropTypes.func,
-  className: PropTypes.string,
-  menu: PropTypes.instanceOf(Object),
-};
-
-MainMenu.defaultProps = {
-  closeDropdown: () => null,
-  className: '',
-  menu: {},
+  menu: { items: [] },
 };
