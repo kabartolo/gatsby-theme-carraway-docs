@@ -261,6 +261,9 @@ export default merge(theme, {
   },
   // list item styles
   lis: {
+    postList: {
+      listStyle: 'none',
+    },
     searchResult: {
       listStyle: 'none',
       borderBottom: 'main',
