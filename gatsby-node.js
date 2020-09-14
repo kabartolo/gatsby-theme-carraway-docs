@@ -199,6 +199,7 @@ exports.sourceNodes = ({ actions, getNodes, schema }) => {
         path: { type: 'String' },
         slug: { type: 'String' },
         showTOC: { type: 'Boolean' },
+        showSidebar: { type: 'Boolean' },
         excerpt: {
           type: 'String!',
           resolve: async (source, args, context, info) => {
@@ -275,7 +276,7 @@ exports.onCreateNode = ({
       parent.sourceInstanceName === 'posts'
     ) {
 
-      let { title, showTOC } = node.frontmatter;
+      let { title, showTOC, showSidebar } = node.frontmatter;
       const label = node.frontmatter.label;
       if (!title) title = label || 'Untitled';
       showTOC = (typeof showTOC === 'undefined') ? alwaysShowTOC : showTOC;
@@ -314,6 +315,7 @@ exports.onCreateNode = ({
         path,
         slug,
         showTOC,
+        showSidebar,
         sections,
         headers,
         paragraphs,

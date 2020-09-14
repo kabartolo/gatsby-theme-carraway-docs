@@ -25,6 +25,7 @@ export default function Layout({
   const [menu, setMenu] = useState([]);
   const [location, setLocation] = useState(locationProp);
   const [themeOptions, setThemeOptions] = useState(options);
+  const [showSidebar, setShowSidebar] = useState();
 
   const { title } = useSiteMetadata();
 
@@ -53,6 +54,8 @@ export default function Layout({
             setPostId,
             menu,
             setMenu,
+            showSidebar,
+            setShowSidebar,
           }}
         >
           <>

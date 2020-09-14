@@ -1,6 +1,8 @@
 .main {
 	position: relative;
 	z-index: 1;
+	padding: 0 $main-padding;
+	padding-top: $main-margin-top;
 	@include for-desktop-under {
 		margin-left: $sidebar-width-tablet;
 	}

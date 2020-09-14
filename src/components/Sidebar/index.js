@@ -1,8 +1,9 @@
 /** @jsx jsx */
 /* eslint-disable no-unused-vars, no-param-reassign */
-import { jsx } from 'theme-ui';
+import { jsx, Styled } from 'theme-ui';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'gatsby';
 
 import { getIds } from '../../utils/helpers';
 import styles from './sidebar.module.scss';
@@ -51,7 +52,7 @@ function findPost(menu, id) {
 }
 
 export default function Sidebar() {
-  const { menu, postId } = usePostContext();
+  const { menu, postId, showSidebar } = usePostContext();
   const location = useLocation();
   const { sidebarAllowMultipleOpen } = useThemeOptions();
 
@@ -59,7 +60,7 @@ export default function Sidebar() {
   const itemIds = getIds(tableOfContents.nested && tableOfContents.nested.items, 2);
   const activeId = useActiveId(itemIds, postId);
 
-  if (!menu || !menu.items) return null;
+  if (showSidebar === false || !menu || !menu.items) return null;
 
   menu.items.forEach((item) => {
     let isOpen;
@@ -83,7 +84,13 @@ export default function Sidebar() {
           items={menu.items}
           activeId={activeId}
         >
-          <h2>{menu.name}</h2>
+          <Styled.a
+            as={Link}
+            to={menu.path}
+            sx={{ variants: 'links.sidebarLabel' }}
+          >
+            <h2>{menu.name}</h2>
+          </Styled.a>
         </Menu>
       </div>
       <div sx={{ variant: 'divs.mobileSidebar' }} className={styles.dropdown}>

@@ -5,4 +5,6 @@ export const PostContext = createContext({
   setPostId: () => {},
   menu: null,
   setMenu: () => {},
+  showSidebar: null,
+  setShowSidebar: () => {},
 });

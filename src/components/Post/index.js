@@ -54,6 +54,7 @@ export default function Post({ data: { post }, pageContext }) {
   const {
     setPostId,
     setMenu,
+    setShowSidebar,
   } = usePostContext();
   const { allowBreadCrumbs } = useThemeOptions();
   const { title: siteTitle } = useSiteMetadata();
@@ -72,6 +73,7 @@ export default function Post({ data: { post }, pageContext }) {
     if (post == null) return;
     setPostId(post.id);
     setMenu(menu);
+    setShowSidebar(post.showSidebar);
   });
 
   // Add style to linked headers added by gatsby-remark-autolink-headers
@@ -95,6 +97,7 @@ export default function Post({ data: { post }, pageContext }) {
     path,
     slug,
     showTOC,
+    showSidebar,
   } = post;
 
   const tocVisible = showTOC && !!tableOfContents.nested.items;
@@ -162,6 +165,7 @@ export const pageQuery = graphql`
       slug
       description
       showTOC
+      showSidebar
     }
   }
 `;
