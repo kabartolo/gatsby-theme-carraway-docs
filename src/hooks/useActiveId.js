@@ -14,7 +14,8 @@ function useActiveId(itemIds, postId) {
     }, { rootMargin: '0% 0% -80% 0%' });
 
     itemIds.forEach((id) => {
-      observer.observe(document.getElementById(id));
+      const element = document.getElementById(id);
+      if (element) observer.observe(element);
     });
 
     return () => {
