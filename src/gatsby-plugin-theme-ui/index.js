@@ -103,13 +103,28 @@ export default merge(theme, {
       fontWeight: 'heading',
     },
     navLink: {
-      textDecoration: 'underline',
-      color: 'primary',
-    },
-    navLinkLabel: {
-      textDecoration: 'none',
       fontWeight: 'heading',
-      color: 'text',
+      textDecoration: 'none',
+      color: 'secondary',
+      fontSize: '1.1rem',
+      ':hover': {
+        textDecoration: 'underline',
+        '.nav-link-title': {
+          color: 'secondary',
+        },
+      },
+      '.nav-link-label': {
+        color: 'secondary',
+      },
+      '.nav-link-title': {
+        color: 'text',
+      },
+    },
+    postList: {
+      textDecoration: 'none',
+      ':hover': {
+        textDecoration: 'underline',
+      },
     },
   },
   buttons: {

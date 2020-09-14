@@ -24,7 +24,13 @@ export default function PostList() {
     <ul className={styles.postList}>
       {currentMenu.items.map((post) => (
         <li key={post.id} sx={{ variant: 'lis.postList' }}>
-          <Styled.a as={Link} to={post.path}>{post.title || post.name}</Styled.a>
+          <Styled.a
+            as={Link}
+            to={post.path}
+            sx={{ variant: 'links.postList' }}
+          >
+            {post.title || post.name}
+          </Styled.a>
         </li>
       ))}
     </ul>

@@ -128,22 +128,22 @@ export default function Post({ data: { post }, pageContext }) {
         <span className={styles.previous}>
           {previous && (
             <NavLink path={previous.path}>
-              <div className={styles.navLinkLabel} sx={{ variant: 'as.navLinkLabel' }}>
+              <div className={`nav-link-label ${styles.navLinkLabel}`}>
                 {leftArrow}
                 <span>Previous</span>
               </div>
-              <span sx={{ variant: 'as.navLink' }}>{previous.label}</span>
+              <span className={`nav-link-title ${styles.title}`}>{previous.label}</span>
             </NavLink>
           )}
         </span>
         <span className={styles.next}>
           {next && (
             <NavLink path={next.path}>
-              <div className={styles.navLinkLabel} sx={{ variant: 'as.navLinkLabel' }}>
+              <div className={`nav-link-label ${styles.navLinkLabel}`}>
                 <span>Next</span>
                 {rightArrow}
               </div>
-              <span sx={{ variant: 'as.navLink' }}>{next.label}</span>
+              <span className={`nav-link-title ${styles.title}`}>{next.label}</span>
             </NavLink>
           )}
         </span>
