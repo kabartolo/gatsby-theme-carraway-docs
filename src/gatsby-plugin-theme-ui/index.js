@@ -120,11 +120,28 @@ export default merge(theme, {
         color: 'text',
       },
     },
+    pageTitle: {
+      color: 'text',
+      textDecoration: 'none',
+      ':hover': {
+        color: 'primary',
+      },
+      h1: {
+        fontWeight: 'body',
+        fontFamily: 'Raleway',
+        fontSize: '35px',
+        letterSpacing: '1px',
+      },
+    },
     postList: {
       textDecoration: 'none',
       ':hover': {
         textDecoration: 'underline',
       },
+    },
+    sidebarLabel: {
+      color: 'text',
+      textDecoration: 'none',
     },
   },
   buttons: {

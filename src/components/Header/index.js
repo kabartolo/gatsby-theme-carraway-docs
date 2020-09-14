@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, useColorMode } from 'theme-ui';
+import { jsx, Styled, useColorMode } from 'theme-ui';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -63,7 +63,9 @@ export default function Header({
   return (
     <div id="header" className={styles.container}>
       <span className={styles.header} sx={{ variant: 'spans.header' }}>
-        <h1>{title}</h1>
+        <Styled.a sx={{ variant: 'links.pageTitle' }} href="/">
+          <h1>{title}</h1>
+        </Styled.a>
         <span className={styles.headerContent}>
           <MainMenu menu={menu} />
           <span className={styles.headerRight}>

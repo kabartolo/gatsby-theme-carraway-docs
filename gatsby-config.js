@@ -7,6 +7,14 @@ module.exports = ({ postsPath, assetsPath }) => {
       'gatsby-plugin-sharp',
       'gatsby-remark-images',
       {
+        resolve: 'gatsby-plugin-google-fonts',
+        options: {
+          fonts: [
+            'Raleway',
+          ],
+        },
+      },      
+      {
         resolve: 'gatsby-source-filesystem',
         options: {
           name: 'posts',
@@ -14,7 +22,7 @@ module.exports = ({ postsPath, assetsPath }) => {
         }
       },
       {
-        resolve: `gatsby-source-filesystem`,
+        resolve: 'gatsby-source-filesystem',
         options: {
           path: assetsPath,
         },
