@@ -4,7 +4,7 @@ import { Styled } from 'theme-ui';
 import { Link } from 'gatsby';
 
 export default function Breadcrumb({ data }) {
-  if (!data.length) return null;
+  if (!data.length || data.length < 2) return null;
 
   const last = data.slice(-1)[0];
   const first = data.length > 1 ? data[0] : null;
