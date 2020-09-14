@@ -9,7 +9,7 @@ import styles from './layout.module.scss';
 
 import { SiteContext } from './site-context';
 import { PostContext } from './post-context';
-import useSiteMetadata from '../../hooks/useSiteMetadata';
+import { useSiteMetadata } from '../../hooks';
 
 import Header from '../Header';
 import Sidebar from '../Sidebar';

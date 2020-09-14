@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
-import { useClickOutside } from '../../hooks/useClickOutside';
+import { useClickOutside } from '../../hooks';
 
 export default function Dropdown({
   children,

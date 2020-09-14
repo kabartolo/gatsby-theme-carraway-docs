@@ -10,8 +10,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
-import useThemeOptions from '../../hooks/useThemeOptions';
-import useSiteMetadata from '../../hooks/useSiteMetadata';
+import { useThemeOptions, useSiteMetadata } from '../../hooks';
 
 import styles from './header.module.scss';
 

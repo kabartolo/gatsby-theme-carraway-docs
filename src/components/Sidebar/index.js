@@ -10,11 +10,13 @@ import styles from './sidebar.module.scss';
 import Accordion from '../Accordion';
 import Dropdown from '../Dropdown';
 
-import useActiveId from '../../hooks/useActiveId';
-import useLocation from '../../hooks/useLocation';
-import usePostContext from '../../hooks/usePostContext';
-import useTableOfContents from '../../hooks/useTableOfContents';
-import useThemeOptions from '../../hooks/useThemeOptions';
+import {
+  useActiveId,
+  useLocation,
+  usePostContext,
+  useTableOfContents,
+  useThemeOptions,
+} from '../../hooks';
 
 function Menu({
   children,

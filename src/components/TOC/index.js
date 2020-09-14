@@ -6,7 +6,7 @@ import { Link } from 'gatsby';
 import { getIds } from '../../utils/helpers';
 import styles from './toc.module.scss';
 
-import useActiveId from '../../hooks/useActiveId';
+import { useActiveId } from '../../hooks';
 
 function NestedList({
   items,

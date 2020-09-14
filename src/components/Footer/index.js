@@ -1,6 +1,6 @@
 import React from 'react';
 
-import useSiteMetadata from '../../hooks/useSiteMetadata';
+import { useSiteMetadata } from '../../hooks';
 
 import styles from './footer.module.scss';
 

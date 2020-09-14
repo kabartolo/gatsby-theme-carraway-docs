@@ -26,10 +26,12 @@ import TOC from '../TOC';
 
 import themeComponents from '../../gatsby-plugin-theme-ui/components';
 
-import usePostContext from '../../hooks/usePostContext';
-import useTableOfContents from '../../hooks/useTableOfContents';
-import useThemeOptions from '../../hooks/useThemeOptions';
-import useSiteMetadata from '../../hooks/useSiteMetadata';
+import {
+  usePostContext,
+  useTableOfContents,
+  useThemeOptions,
+  useSiteMetadata,
+} from '../../hooks';
 
 import styles from './post.module.scss';
 

@@ -11,7 +11,7 @@ import React, {
 import PropTypes from 'prop-types';
 import { useUID } from 'react-uid';
 
-import useWindowDimensions from '../../hooks/useWindowDimensions';
+import { useWindowDimensions } from '../../hooks/useWindowDimensions';
 import styles from './section.module.scss';
 
 export default function Section({ children }) {

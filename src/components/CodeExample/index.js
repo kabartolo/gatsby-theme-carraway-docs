@@ -7,7 +7,7 @@ import { useUID } from 'react-uid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
-import usePrismTheme from '../../hooks/usePrismTheme';
+import { usePrismTheme } from '../../hooks';
 import styles from './codeExample.module.scss';
 
 export default function CodeExample({
