@@ -17,6 +17,7 @@ import Alert from '../Alert';
 import Breadcrumb from './Breadcrumb';
 import CodeBlock from '../CodeBlock';
 import CodeExample from '../CodeExample';
+import Image from '../Image';
 import NavLink from './NavLink';
 import Playground from '../Playground';
 import PostList from '../PostList';
@@ -41,6 +42,8 @@ const shortcodes = {
   Alert,
   code: CodeBlock,
   CodeExample,
+  img: Image,
+  Image,
   Link: ({ children, to }) => <Link to={to} sx={{ variant: 'styles.a' }}>{children}</Link>,
   Playground,
   PostList,
@@ -100,7 +103,7 @@ export default function Post({ data: { post }, pageContext }) {
     showSidebar,
   } = post;
 
-  const tocVisible = showTOC && !!tableOfContents.nested.items;
+  const tocVisible = showTOC && !!(tableOfContents.nested && tableOfContents.nested.items);
 
   return (
     <article id={slug} className={styles.article}>

@@ -11,7 +11,7 @@ import React, {
 import PropTypes from 'prop-types';
 import { useUID } from 'react-uid';
 
-import { useWindowDimensions } from '../../hooks/useWindowDimensions';
+import { useWindowDimensions } from '../../hooks';
 import styles from './section.module.scss';
 
 export default function Section({ children }) {
@@ -93,7 +93,7 @@ export default function Section({ children }) {
 
   return (
     <section ref={sectionRef} className={styles.section} sx={{ variant: 'divs.section' }}>
-      <div id={`left-column-${uid}`} className={rightColumn.length ? styles.leftColumn : ''}>
+      <div id={`left-column-${uid}`} className={rightColumn.length ? styles.leftColumn : styles.noColumns}>
         {leftColumn}
       </div>
       <div id={`right-column-${uid}`} className={rightColumn.length ? styles.rightColumn : ''}>

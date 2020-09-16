@@ -4,8 +4,15 @@ module.exports = ({ postsPath, assetsPath }) => {
       'gatsby-plugin-react-helmet',
       'gatsby-plugin-eslint',
       'gatsby-plugin-styled-components',
+      'gatsby-image',
       'gatsby-plugin-sharp',
       'gatsby-remark-images',
+      {
+        resolve: 'gatsby-transformer-sharp',
+        options: {
+          checkSupportedExtensions: false,
+        },
+      },
       {
         resolve: 'gatsby-plugin-google-fonts',
         options: {
@@ -24,6 +31,7 @@ module.exports = ({ postsPath, assetsPath }) => {
       {
         resolve: 'gatsby-source-filesystem',
         options: {
+          name: 'assets',
           path: assetsPath,
         },
       },

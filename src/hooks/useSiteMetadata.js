@@ -14,6 +14,7 @@ function useSiteMetadata() {
           basePath
           footerText
           githubURL
+          logoFilename
         }
       }
     }

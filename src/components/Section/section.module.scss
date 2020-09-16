@@ -9,6 +9,9 @@ $example-margin-top: calc(#{$h2-margin} + #{$h2-margin} + #{$topic-line-height})
 		margin: $h2-margin 0;
 		line-height: $topic-line-height;
 	}
+	.no-columns {
+		width: 100%; // required for images to render correctly
+	}
 	.left-column {
 	    flex: 50%;
 		align-self: flex-start;

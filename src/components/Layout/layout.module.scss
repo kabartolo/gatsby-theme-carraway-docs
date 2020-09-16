@@ -5,12 +5,15 @@
 	padding-top: $main-margin-top;
 	@include for-desktop-under {
 		margin-left: $sidebar-width-tablet;
+		max-width: calc(100vw - #{$sidebar-width-tablet});
 	}
 	@include for-mobile-only {
 		margin-left: 0;
+		max-width: 100vw;
 	}
 	@include for-desktop-up {
 		margin-left: $sidebar-width;
+		max-width: calc(100vw - #{$sidebar-width});
 	}
 }
 
