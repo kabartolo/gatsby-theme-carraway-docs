@@ -17,13 +17,14 @@ export default function ResultLink({
 }) {
   return (
     <li
-      sx={{ variant: 'lis.searchResult' }}
+      sx={{ variant: 'listItems.searchResult' }}
       className={styles.resultContainer}
     >
       <Styled.a
         as={Link}
         to={path}
         onClick={onClick}
+        sx={{ variant: 'links.searchResult' }}
       >
         <h3>
           <span>

@@ -1,6 +1,6 @@
 /** @jsx jsx */
 /* eslint-disable no-param-reassign */
-import { jsx } from 'theme-ui';
+import { jsx, Styled } from 'theme-ui';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
@@ -62,21 +62,23 @@ export default function Accordion({
           items,
         } = item;
         const currentLinkClass = item === activePost ? 'activePost' : '';
-        const currentHeaderClass = (activeId && path && path.match(`#${activeId}`)) ? 'active' : '';
+        const currentHeaderClass = (activeId && path && path.match(`#${activeId}`)) ? 'activeHeader' : '';
         const isOpen = openSections[name];
 
         const label = path
           ? (
-            <Link
-              className={currentLinkClass || currentHeaderClass}
+            <Styled.a
+              as={Link}
               to={path}
+              className={currentLinkClass || currentHeaderClass}
+              sx={{ variant: ['links.accordion', isGroup ? 'links.accordionGroup' : ''] }}
               onClick={() => {
                 onClickLink();
                 onClick(name, true);
               }}
             >
               {name}
-            </Link>
+            </Styled.a>
           )
           : name;
 
@@ -95,7 +97,7 @@ export default function Accordion({
                   type="button"
                   onClick={() => onClick(name)}
                 >
-                  {isGroup && <span sx={{ variant: 'spans.accordionGroup' }}>{label}</span>}
+                  {isGroup && <span>{label}</span>}
                   <span>{icon}</span>
                 </button>
               </h3>

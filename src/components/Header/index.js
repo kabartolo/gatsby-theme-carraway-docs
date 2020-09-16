@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx, Styled, useColorMode } from 'theme-ui';
 import PropTypes from 'prop-types';
+import { Link } from 'gatsby';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBars,
@@ -15,6 +16,7 @@ import { useThemeOptions, useSiteMetadata } from '../../hooks';
 import styles from './header.module.scss';
 
 import Dropdown from '../Dropdown';
+import Image from '../Image';
 import MainMenu from '../MainMenu';
 import Search from '../Search';
 import Toggle from '../Toggle';
@@ -28,8 +30,8 @@ const githubIcon = <FontAwesomeIcon icon={faGithub} />;
 export default function Header({
   menu,
 }) {
-  const { title, githubURL } = useSiteMetadata();
-  const themeOptions = useThemeOptions();
+  const { title, githubURL, logoFilename } = useSiteMetadata();
+  const { toggleTheme: useThemeToggle } = useThemeOptions();
   const [mode, setMode] = useColorMode();
 
   function toggleTheme() {
@@ -61,18 +63,29 @@ export default function Header({
   }
 
   return (
-    <div id="header" className={styles.container}>
-      <span className={styles.header} sx={{ variant: 'spans.header' }}>
-        <Styled.a sx={{ variant: 'links.pageTitle' }} href="/">
-          <h1>{title}</h1>
+    <div
+      id="header"
+      className={styles.container}
+      sx={{ variant: 'divs.header' }}
+    >
+      <span className={styles.header}>
+        <Styled.a as={Link} sx={{ variant: 'links.pageTitle' }} to="/">
+          <span>
+            {logoFilename && <Image src={logoFilename} />}
+            <h1>{title}</h1>
+          </span>
         </Styled.a>
         <span className={styles.headerContent}>
-          <MainMenu menu={menu} />
+          <MainMenu
+            menu={menu}
+            linkVariant="links.mainMenu"
+            listItemVariant="listItems.mainMenu"
+          />
           <span className={styles.headerRight}>
             <Search />
             <div className={styles.icons}>
               {githubURL && <GithubLink />}
-              {themeOptions.toggleTheme && <ThemeToggle />}
+              {useThemeToggle && <ThemeToggle />}
             </div>
           </span>
         </span>
@@ -84,10 +97,14 @@ export default function Header({
           >
             <div className={styles.icons}>
               {githubURL && <GithubLink />}
-              {themeOptions.toggleTheme && <ThemeToggle />}
+              {useThemeToggle && <ThemeToggle />}
             </div>
             <Search />
-            <MainMenu menu={menu} />
+            <MainMenu
+              menu={menu}
+              linkVariant="links.dropdown"
+              listItemVariant="listItems.dropdown"
+            />
           </Dropdown>
         </span>
       </span>

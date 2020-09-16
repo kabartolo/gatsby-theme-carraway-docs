@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
+import { jsx, Styled } from 'theme-ui';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
 
@@ -17,10 +17,18 @@ function NestedList({
   return (
     <ol>
       {items.map((item) => (
-        <li key={item.url}>
-          <Link to={item.url} className={(item.url === `#${activeId}`) ? 'active' : ''}>
+        <li
+          key={item.url}
+          sx={{ variant: 'listItems.toc' }}
+        >
+          <Styled.a
+            as={Link}
+            to={item.url}
+            className={(item.url === `#${activeId}`) ? 'activeHeader' : ''}
+            sx={{ variant: 'links.toc' }}
+          >
             {item.title}
-          </Link>
+          </Styled.a>
           {(count <= depth && item.items) && (
             <NestedList
               items={item.items}
@@ -51,10 +59,10 @@ export default function TOC({
     <div
       className={`toc-container ${className}`}
       id="toc-container"
+      sx={{ variant: 'divs.toc' }}
     >
       <nav
         className={styles.scroll}
-        sx={{ variant: 'navs.toc' }}
       >
         <h2>{title}</h2>
         <NestedList

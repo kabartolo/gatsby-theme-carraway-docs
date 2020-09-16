@@ -27,7 +27,7 @@ function Menu({
   activeId,
 }) {
   return (
-    <nav className={styles.scrollable} sx={{ variant: 'navs.accordion' }}>
+    <nav className={styles.scrollable}>
       {children}
       <div className={styles.accordion}>
         <Accordion
@@ -87,7 +87,7 @@ export default function Sidebar() {
           <Styled.a
             as={Link}
             to={menu.path}
-            sx={{ variants: 'links.sidebarLabel' }}
+            sx={{ variant: 'links.sidebarLabel' }}
           >
             <h2>{menu.name}</h2>
           </Styled.a>

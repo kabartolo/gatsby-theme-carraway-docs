@@ -7,7 +7,7 @@ import reactStringReplace from 'react-string-replace';
 
 import ResultLink from './resultLink';
 
-import useTableOfContents from '../../hooks/useTableOfContents';
+import { useTableOfContents } from '../../hooks';
 
 import styles from './search.module.scss';
 
