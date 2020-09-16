@@ -9,7 +9,7 @@ import {
   LivePreview,
 } from 'react-live';
 
-import usePrismTheme from '../../hooks/usePrismTheme';
+import { usePrismTheme } from '../../hooks';
 
 import styles from './playground.module.scss';
 
