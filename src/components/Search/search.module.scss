@@ -1,5 +1,4 @@
-$icon-size: 0.9rem;
-$search-icon-padding: calc(#{$icon-size} / 2 + 3px);
+@import '../../styles/_global.scss';
 
 .wrapper {
 	position: relative;
@@ -22,7 +21,6 @@ $search-icon-padding: calc(#{$icon-size} / 2 + 3px);
 			}
 			.close-icon {
 				right: $search-icon-padding;
-				cursor: pointer;
 			}
 			.search-input {
 				position: relative;
@@ -31,6 +29,12 @@ $search-icon-padding: calc(#{$icon-size} / 2 + 3px);
 				padding: $searchbar-padding 2rem;
 				height: $searchbar-height;
 				min-width: calc(#{$search-container-width} / 2);
+			}
+			.button {
+			    padding: 0;
+			    display: flex;
+			    align-items: center;
+			    justify-content: center;
 			}
 		}
 	}

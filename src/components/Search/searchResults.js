@@ -2,12 +2,14 @@
 /* eslint-disable no-unused-vars, no-return-assign */
 import { jsx, Styled } from 'theme-ui';
 import React from 'react';
+/* eslint-enable no-unused-vars */
 import PropTypes from 'prop-types';
 import reactStringReplace from 'react-string-replace';
 
 import ResultLink from './resultLink';
 
 import { useTableOfContents } from '../../hooks';
+// import { useLocation } from '../../hooks';
 
 import styles from './search.module.scss';
 
@@ -29,8 +31,13 @@ function addEllipses(excerpt) {
   return excerpt.concat(ellipses);
 }
 
-export default function SearchResults({ results, query, closeDropdown }) {
+export default function SearchResults({
+  results,
+  query,
+  closeDropdown,
+}) {
   const tableOfContents = useTableOfContents();
+
   const tokens = query.split(' ');
   const primaryResults = [];
   let otherResults = [];
@@ -106,19 +113,29 @@ export default function SearchResults({ results, query, closeDropdown }) {
   });
 
   return (
-    <ol>
-      {primaryResults.concat(otherResults)}
-    </ol>
+    <div
+      sx={{ variant: 'divs.resultContainer' }}
+      className={`${styles.container} ${styles.open}`}
+    >
+      {!!results && query.length > 2 && (
+        <section className={`${styles.searchResults} ${results.length ? styles.open : ''}`}>
+          <ol>
+            {primaryResults.concat(otherResults)}
+          </ol>
+        </section>
+      )}
+    </div>
   );
 }
 
 SearchResults.propTypes = {
-  results: PropTypes.instanceOf(Array).isRequired,
+  results: PropTypes.instanceOf(Array),
   query: PropTypes.string,
   closeDropdown: PropTypes.func,
 };
 
 SearchResults.defaultProps = {
-  closeDropdown: () => null,
+  results: [],
   query: '',
+  closeDropdown: () => null,
 };
