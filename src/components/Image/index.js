@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { graphql, useStaticQuery } from 'gatsby';
 import Img from 'gatsby-image';
 
-export default function Image({ src, alt }) {
-  const { allFile } = useStaticQuery(graphql`
+export default function Image({ src, alt, data }) {
+  let queryData = useStaticQuery(graphql`
     query {
       allFile {
         nodes {
@@ -20,12 +20,16 @@ export default function Image({ src, alt }) {
     }
   `);
 
-  const image = allFile.nodes.find((node) => node.relativePath === src);
+  if (Object.keys(data).length) queryData = data;
+
+  const image = queryData.allFile.nodes.find((node) => node.relativePath === src);
+  const { fluid, fixed } = image.childImageSharp;
   if (!image) return null;
 
   return (
     <Img
-      fluid={image.childImageSharp.fluid}
+      fluid={fluid}
+      fixed={fixed}
       alt={alt}
     />
   );
@@ -34,8 +38,10 @@ export default function Image({ src, alt }) {
 Image.propTypes = {
   src: PropTypes.string.isRequired,
   alt: PropTypes.string,
+  data: PropTypes.instanceOf(Object),
 };
 
 Image.defaultProps = {
   alt: '',
+  data: {},
 };
