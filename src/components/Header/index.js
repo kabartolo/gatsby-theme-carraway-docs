@@ -16,7 +16,7 @@ import { useThemeOptions, useSiteMetadata } from '../../hooks';
 import styles from './header.module.scss';
 
 import Dropdown from '../Dropdown';
-import Image from '../Image';
+import Logo from './Logo';
 import MainMenu from '../MainMenu';
 import Search from '../Search';
 import Toggle from '../Toggle';
@@ -30,7 +30,7 @@ const githubIcon = <FontAwesomeIcon icon={faGithub} />;
 export default function Header({
   menu,
 }) {
-  const { title, githubURL, logoFilename } = useSiteMetadata();
+  const { siteTitle, githubURL, siteLogo } = useSiteMetadata();
   const { toggleTheme: useThemeToggle } = useThemeOptions();
   const [mode, setMode] = useColorMode();
 
@@ -69,11 +69,11 @@ export default function Header({
       sx={{ variant: 'divs.header' }}
     >
       <span className={styles.header}>
-        <Styled.a as={Link} sx={{ variant: 'links.pageTitle' }} to="/">
-          <span>
-            {logoFilename && <Image src={logoFilename} />}
-            <h1>{title}</h1>
-          </span>
+        <Styled.a as={Link} sx={{ variant: 'links.siteTitle' }} to="/">
+          <h1 className={styles.siteTitle}>
+            {siteLogo && <Logo src={siteLogo} />}
+            {siteTitle}
+          </h1>
         </Styled.a>
         <span className={styles.headerContent}>
           <MainMenu
