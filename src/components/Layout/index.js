@@ -3,16 +3,15 @@
 import { jsx } from 'theme-ui';
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Helmet } from 'react-helmet';
 
 import styles from './layout.module.scss';
 
 import { SiteContext } from './site-context';
 import { PostContext } from './post-context';
-import { useSiteMetadata } from '../../hooks';
 
 import Header from '../Header';
 import Sidebar from '../Sidebar';
+import SEO from '../Post/SEO';
 import Footer from '../Footer';
 
 export default function Layout({
@@ -26,8 +25,6 @@ export default function Layout({
   const [location, setLocation] = useState(locationProp);
   const [themeOptions, setThemeOptions] = useState(options);
   const [showSidebar, setShowSidebar] = useState();
-
-  const { title } = useSiteMetadata();
 
   useEffect(() => {
     setLocation(locationProp);
@@ -43,10 +40,7 @@ export default function Layout({
         setThemeOptions,
       }}
     >
-      <Helmet>
-        <title>{title}</title>
-      </Helmet>
-
+      <SEO />
       <div className={styles.wrapper}>
         <PostContext.Provider
           value={{

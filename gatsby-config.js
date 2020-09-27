@@ -1,4 +1,8 @@
-module.exports = ({ postsPath, assetsPath }) => {
+const withDefault = require('./src/utils/with-default');
+
+module.exports = (options) => {
+  const { postsPath, assetsPath } = withDefault(options);
+
   return {
     plugins: [
       'gatsby-plugin-react-helmet',
@@ -56,16 +60,7 @@ module.exports = ({ postsPath, assetsPath }) => {
           ],
         },
       },
-      {
-        resolve: 'gatsby-plugin-sass',
-        options: {
-          data: `@import "${__dirname}/src/styles/global";`,
-          cssLoaderOptions: {
-            camelCase: true,
-          }
-        },
-        includePaths: [`${__dirname}/src/styles/`],
-      },
+      'gatsby-plugin-sass',
       'gatsby-plugin-fontawesome-css',
       'gatsby-plugin-theme-ui',
       {

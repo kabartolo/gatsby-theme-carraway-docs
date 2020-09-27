@@ -5,16 +5,12 @@ function useSiteMetadata() {
     {
       site {
         siteMetadata {
-          title
-          defaultTitle
-          siteTitleShort
+          siteTitle
           siteDescription
-          siteAuthor
+          siteUrl
+          siteLogo
           siteLanguage
-          basePath
-          footerText
           githubURL
-          logoFilename
         }
       }
     }

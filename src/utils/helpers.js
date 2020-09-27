@@ -3,7 +3,7 @@ export function getIds(tableOfContents, depth, currentDepth = 2) {
 
   return tableOfContents.reduce((list, item) => {
     if (item.url) {
-      list.push(item.url.slice(1));
+      list.push(item.url.slice(1)); // remove starting '#'
     }
     if (item.items && currentDepth < depth) {
       list.push(...getIds(item.items, depth, currentDepth + 1));

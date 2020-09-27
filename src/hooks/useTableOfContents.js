@@ -1,6 +1,6 @@
 import { graphql, useStaticQuery } from 'gatsby';
 
-function useTableOfContents(postID) {
+function useTableOfContents(postId) {
   const { allPost } = useStaticQuery(graphql`
     query {
       allPost {
@@ -26,8 +26,8 @@ function useTableOfContents(postID) {
     flatMap: node.headerFlatMap,
   }));
 
-  return postID
-    ? result.find((node) => node.id === postID)
+  return postId
+    ? result.find((node) => node.id === postId)
     : result;
 }
 

@@ -5,6 +5,8 @@ const crypto = require('crypto');
 const mdx = require('@mdx-js/mdx');
 const grayMatter = require('gray-matter');
 
+const withDefault = require('./src/utils/with-default');
+
 const SIDEBAR_MENU_ID = 'SidebarMenu < Site';
 const SIDEBAR_MENU_TYPE = 'SidebarMenu';
 
@@ -76,7 +78,6 @@ const itemInterface = (item) => {
 
 const createSidebarMenuInterface = (menus) => {
   const sidebarMenus = menus.map((menu) => itemInterface(menu));
-
   return ({
     id: SIDEBAR_MENU_ID,
     parent: '___SOURCE___',
@@ -199,6 +200,7 @@ exports.sourceNodes = ({ actions, getNodes, schema }) => {
         path: { type: 'String' },
         slug: { type: 'String' },
         showTOC: { type: 'Boolean' },
+        showPostNav: { type: 'Boolean' },
         showSidebar: { type: 'Boolean' },
         excerpt: {
           type: 'String!',
@@ -256,7 +258,6 @@ exports.onCreateNode = ({
   node,
   actions,
   getNode,
-  getNodesByType,
   createNodeId,
 }, themeOptions) => {
   const {
@@ -265,7 +266,13 @@ exports.onCreateNode = ({
     createParentChildLink,
   } = actions;
 
-  const { menus, alwaysShowTOC } = themeOptions;
+  const {
+    menus,
+    alwaysShowTOC,
+    allowSiteSearch,
+    basePath,
+  } = withDefault(themeOptions);
+  const menuNode = getNode(SIDEBAR_MENU_ID);
 
   if (node.internal.type === 'Mdx') {
     const { frontmatter } = node;
@@ -276,30 +283,43 @@ exports.onCreateNode = ({
       parent.sourceInstanceName === 'posts'
     ) {
 
-      let { title, showTOC, showSidebar } = node.frontmatter;
+      let {
+        title,
+        showTOC,
+        showSidebar,
+        showPostNav,
+      } = node.frontmatter;
       const label = node.frontmatter.label;
       if (!title) title = label || 'Untitled';
       showTOC = (typeof showTOC === 'undefined') ? alwaysShowTOC : showTOC;
+      showPostNav = (typeof showPostNav === 'undefined') ? true : showPostNav;
 
       const description = node.frontmatter.description;
-      const path = createFilePath({ node, getNode });
+      const path = createFilePath({ node, getNode, basePath });
       const slug = parent.name;
       const id = createNodeId(`${node.id} >>> Post`);
 
       // AST used to build search index
-      const compiler = mdx.createMdxAstCompiler({ remarkPlugins: [] });
-      const { content } = grayMatter(node.rawBody);
-      const AST = compiler.parse(content);
-      const sections = getParagraphs(AST);
-      const paragraphs = sections.map((paragraph) => paragraph.content);
-      const headers = sections
-        .map((paragraph) => paragraph.heading)
-        .filter((heading, index, self) => (
-          self.indexOf(heading) === index
-        ));
+      let paragraphs;
+      let headers;
+      let sections;
+      if (allowSiteSearch) {
+        const compiler = mdx.createMdxAstCompiler({ remarkPlugins: [] });
+        const { content } = grayMatter(node.rawBody);
+        const AST = compiler.parse(content);
+        sections = getParagraphs(AST);
+        paragraphs = sections.map((paragraph) => paragraph.content);
+        headers = sections
+          .map((paragraph) => paragraph.heading)
+          .filter((heading, index, self) => (
+            self.indexOf(heading) === index
+          ));
+      }
 
+      // Add post to sidebar menu
       const sidebarMenus = getNode(SIDEBAR_MENU_ID)
         || createSidebarMenuInterface(menus.sidebar);
+
       createNode(appendToMenu(
           sidebarMenus,
           id,
@@ -308,6 +328,7 @@ exports.onCreateNode = ({
           path,
       ));
 
+      // Create post node
       const postData = {
         title,
         label,
@@ -316,6 +337,7 @@ exports.onCreateNode = ({
         slug,
         showTOC,
         showSidebar,
+        showPostNav,
         sections,
         headers,
         paragraphs,
@@ -338,7 +360,7 @@ exports.onCreateNode = ({
         parent: parent,
         child: node,
       });
-    } 
+    }
   }
 };
 
@@ -349,9 +371,9 @@ exports.onCreateWebpackConfig = ({ actions, loaders, getConfig }) => {
   };
 }
 
-exports.createPages = async ({ graphql, actions }, themeOptions) => {
-  const { createPage } = actions;
-  const { sidebarAllowTOC } = themeOptions;
+exports.createPages = async ({ graphql, actions, cache }, themeOptions) => {
+  const { createPage, createNode } = actions;
+  const { sidebarAllowTOC } = withDefault(themeOptions);
 
   const flattenItem = ({ id, slug, path, name, items = [] }) => {
     const isHeader = new RegExp('#', 'g');
@@ -437,12 +459,15 @@ exports.createPages = async ({ graphql, actions }, themeOptions) => {
 
   const posts = postQuery.data.allPost.edges;
 
+  let menus;
   const { allSidebarMenu } = sidebarQuery.data;
   if (!allSidebarMenu || !allSidebarMenu.nodes[0]) {
-    throw new Error('Try running gatsby clean and trying again.');
+    menus = await cache.get(SIDEBAR_MENU_ID);
+  } else {
+    menus = allSidebarMenu.nodes[0].menus;
+    await cache.set(SIDEBAR_MENU_ID, menus);
   }
-  
-  const { menus } = allSidebarMenu.nodes[0];
+
   const allTableOfContents = posts.map(({ node }) => ({
     id: node.id,
     items: node.parent.tableOfContents.items,

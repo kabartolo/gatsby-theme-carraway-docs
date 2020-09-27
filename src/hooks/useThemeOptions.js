@@ -1,8 +1,12 @@
 import { useContext } from 'react';
 import { SiteContext } from '../components/Layout/site-context';
 
+import withDefault from '../utils/with-default';
+
 function useThemeOptions() {
-  return useContext(SiteContext).themeOptions;
+  const { themeOptions } = useContext(SiteContext);
+
+  return withDefault(themeOptions);
 }
 
 export { useThemeOptions };
