@@ -14,6 +14,8 @@ import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 import { useClickOutside } from '../../hooks';
 
+import styles from './dropdown.module.scss';
+
 export default function Dropdown({
   children,
   label,
@@ -40,13 +42,14 @@ export default function Dropdown({
   });
 
   return (
-    <div ref={ref}>
+    <div ref={ref} className={styles.dropdown}>
       <button
         type="button"
         onClick={onClick}
-        sx={{ variant: 'buttons.unstyled' }}
+        className={styles.button}
+        sx={{ variant: 'buttons.dropdown' }}
       >
-        {label !== '' && <span>{label}</span>}
+        {label !== '' && <span className="dropdown-label">{label}</span>}
         <span>{isOpen ? close : open}</span>
       </button>
       {isOpen && (

@@ -1,14 +1,26 @@
-$example-margin-top: calc(#{$h2-margin} + #{$h2-margin} + #{$topic-line-height});
+@import '../../styles/_global.scss';
 
-.section {
+.oneColumn,
+.twoColumns {
 	display: flex;
+	margin-bottom: 2.5rem;
+	h2,
+	h3,
+	h4,
+	h5,
+	h6  {
+		margin: $header-margin 0;
+		line-height: $header-line-height;
+	}	
+}
+
+.oneColumn {
+	flex-direction: column;
+}
+
+.twoColumns {
 	align-items: center;
 	justify-content: space-between;
-	margin-bottom: 2.5rem;
-	h2  {
-		margin: $h2-margin 0;
-		line-height: $topic-line-height;
-	}
 	.no-columns {
 		width: 100%; // required for images to render correctly
 	}
@@ -24,6 +36,6 @@ $example-margin-top: calc(#{$h2-margin} + #{$h2-margin} + #{$topic-line-height})
 		position: sticky;
 		align-self: flex-start;
 		top: 0;
-		padding-top: $example-margin-top;
+		padding-top: $right-column-margin-top;
 	}
 }

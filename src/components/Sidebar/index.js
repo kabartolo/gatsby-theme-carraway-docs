@@ -97,6 +97,7 @@ export default function Sidebar() {
         <Dropdown
           label={menu.name}
           themeUI={{ backgroundColor: 'background' }}
+          className="mobile-sidebar"
         >
           <Menu
             allowMultipleOpen={sidebarAllowMultipleOpen}

@@ -3,6 +3,8 @@ import { jsx } from 'theme-ui';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
+import styles from './toggle.module.scss';
+
 export default function Toggle({
   onToggle,
   onClick,
@@ -23,7 +25,8 @@ export default function Toggle({
       type="button"
       name={name}
       id={name}
-      sx={{ variant: 'buttons.unstyled' }}
+      className={styles.button}
+      sx={{ variant: 'buttons.toggle' }}
       onClick={(event) => click(event)}
     >
       {icon}

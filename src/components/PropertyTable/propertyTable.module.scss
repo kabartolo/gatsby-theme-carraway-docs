@@ -1,5 +1,9 @@
+@import '../../styles/_global.scss';
+
 .container {
 	margin: 2rem 0;
+	max-height: calc(100vh - #{$header-main-height});
+	overflow-y: auto;	
 }
 
 .property-table {

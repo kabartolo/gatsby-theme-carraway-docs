@@ -62,7 +62,8 @@ export default function Accordion({
           items,
         } = item;
         const currentLinkClass = item === activePost ? 'activePost' : '';
-        const currentHeaderClass = (activeId && path && path.match(`#${activeId}`)) ? 'activeHeader' : '';
+        const activeIdMatches = activeId && path && path.match(`#${activeId}`);
+        const currentHeaderClass = path.match(location.pathname) && activeIdMatches ? 'activeHeader' : '';
         const isOpen = openSections[name];
 
         const label = path
@@ -88,17 +89,20 @@ export default function Accordion({
 
         return items && items.length
           ? (
-            <li className={`accordion-list-item ${styles.listItem}`} key={id || slug}>
-              <h3 className={`accordion-row ${isGroup ? '' : styles.link}`}>
-                {!isGroup && <span>{label}</span>}
+            <li
+              className={`accordion-list-item ${styles.listItem}`}
+              sx={{ variant: 'listItems.accordion' }}
+              key={id || slug}
+            >
+              <h3 className={`accordion-row ${styles.link}`}>
+                <span className={styles.label}>{label}</span>
                 <button
-                  className="accordion-row"
-                  sx={{ variant: 'buttons.unstyled' }}
+                  className={`accordion-row ${styles.button}`}
+                  sx={{ variant: 'buttons.accordion' }}
                   type="button"
                   onClick={() => onClick(name)}
                 >
-                  {isGroup && <span>{label}</span>}
-                  <span>{icon}</span>
+                  {icon}
                 </button>
               </h3>
               {isOpen && (
@@ -113,7 +117,11 @@ export default function Accordion({
             </li>
           )
           : (
-            <li className={`accordion-list-item ${styles.listItem}`} key={id}>
+            <li
+              className={`accordion-list-item ${styles.listItem}`}
+              key={id}
+              sx={{ variant: 'listItems.accordion' }}
+            >
               <h3 className="accordion-row">{label}</h3>
             </li>
           );

@@ -1,13 +1,30 @@
 export const buttons = {
-  unstyled: {
+  accordion: {
+    border: 'none',
+    bg: 'inherit',
+    outline: 'none',
+    fontWeight: 'body',
+  },
+  dropdown: {
+    border: 'none',
+    bg: 'inherit',
+    outline: 'none',
+    '.dropdown-label': {
+      textTransform: 'uppercase',
+      fontSize: '0.9rem',
+    },
+  },
+  searchIcon: {
     border: 'none',
     background: 'inherit',
-    padding: 0,
     outline: 'none',
     cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    fontWeight: 'body',
+  },
+  toggle: {
+    border: 'none',
+    bg: 'inherit',
+    outline: 'none',
     fontWeight: 'body',
   },
 };

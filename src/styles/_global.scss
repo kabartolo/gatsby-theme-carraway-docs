@@ -1,30 +1,34 @@
-$current-group-background: #efefef;
-
-$top-bar-height: 2.5rem;
-
+/* Sidebar */
 $sidebar-width: 300px;
 $sidebar-width-tablet: 250px;
 $sidebar-padding: 16px;
-$sidebar-width-no-padding: calc(#{$sidebar-width} - calc(2 * #{$sidebar-padding}));
 
+/* Search */
 $searchbar-height: 35px;
 $searchbar-padding: 15px;
 $search-container-width: 40vw;
 $search-container-maxwidth: 400px;
-$input-border-color: #d1d5da;
-$input-border-color-focus: rgba(3,102,214,.3);
+$icon-size: 0.9rem;
+$search-icon-padding: calc(#{$icon-size} / 2 + 3px);
 
-$layout-border:  1.5px solid #f0f0f2;
-$main-padding: 15vh;
-
+/* Header */
 $header-main-height: calc(#{$searchbar-height} + calc(2 * #{$searchbar-padding}));
-$main-margin-top: calc(#{$header-main-height} + 40px);
+
+/* Post */
+$main-padding: 15vh;
+$main-padding-top: calc(#{$header-main-height} + 40px);
 $post-dropdown-height: 2em;
 $post-dropdown-top: calc(#{$header-main-height} + #{$post-dropdown-height});
-$topic-line-height: 40px;
-$article-title-line-height: 40px;
-$h2-margin: 1rem;
 
+/* CodeExample */
+$top-bar-height: 2.5rem;
+
+/* Section */
+$header-line-height: 40px;
+$header-margin: 1rem;
+$right-column-margin-top: calc(#{$header-margin} + #{$header-margin} + #{$header-line-height});
+
+/* Breakpoints */
 @mixin for-mobile-only {
 	@media (max-width: 52em) { @content; }
 }

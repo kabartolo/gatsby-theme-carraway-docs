@@ -5,15 +5,15 @@ export const links = {
     color: 'text',
     fontWeight: 'body',
     ':hover': {
-      color: 'primary',
+      color: 'secondary',
       textDecoration: 'underline',
     },
     '&.activePost': {
-      color: 'primary',
+      color: 'secondary',
       fontWeight: 'bold',
     },
     '&.activeHeader': {
-      color: 'primary',
+      color: 'secondary',
     },
   },
   accordionGroup: {
@@ -29,36 +29,26 @@ export const links = {
     color: 'primary',
     textDecoration: 'none',
     fontWeight: 'heading',
-  },
-  navLink: {
-    fontWeight: 'heading',
-    textDecoration: 'none',
-    color: 'secondary',
-    fontSize: '1.1rem',
     ':hover': {
       textDecoration: 'underline',
-      '.nav-link-title': {
-        color: 'secondary',
+    },
+  },
+  navLink: {
+    textDecoration: 'none',
+    color: 'primary',
+    ':hover': {
+      textDecoration: 'underline',
+      '.nav-link-label': {
+        color: 'primary',
+        fontWeight: 'heading',
       },
     },
     '.nav-link-label': {
-      color: 'secondary',
-    },
-    '.nav-link-title': {
       color: 'text',
     },
-  },
-  pageTitle: {
-    color: 'text',
-    textDecoration: 'none',
-    ':hover': {
+    '.nav-link-title': {
       color: 'primary',
-    },
-    h1: {
-      fontWeight: 'body',
-      fontFamily: 'Raleway',
-      fontSize: '25px',
-      letterSpacing: '1px',
+      fontWeight: 'heading',
     },
   },
   postList: {
@@ -72,21 +62,33 @@ export const links = {
     textDecoration: 'none',
   },
   sidebarLabel: {
-    color: 'text',
+    color: 'secondary',
     textDecoration: 'none',
     h2: {
-      fontSize: '1.3rem',
+      fontSize: '1.2rem',
+    },
+  },
+  siteTitle: {
+    color: 'siteTitle',
+    textDecoration: 'none',
+    ':hover': {
+      color: 'siteTitleHover',
+    },
+    h1: {
+      fontFamily: 'Raleway',
+      fontSize: ['20px', '36px', '25px'],
+      letterSpacing: '1px',
     },
   },
   toc: {
     color: 'grey',
     textDecoration: 'none',
     ':hover': {
-      color: 'primary',
+      color: 'secondary',
       textDecoration: 'underline',
     },
     '&.activeHeader': {
-      color: 'primary',
+      color: 'secondary',
     },
   },
 };

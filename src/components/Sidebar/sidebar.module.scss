@@ -1,3 +1,5 @@
+@import '../../styles/_global.scss';
+
 .sidebar,
 .dropdown {
 	position: fixed;
@@ -49,8 +51,12 @@
 		width: 100%;
 		height: calc(100vh - #{$post-dropdown-top});
 		overflow-y: auto;
+		padding-right: 1.1rem;
 		.accordion {
 			padding: 0;
+			h3 {
+				margin: 0;
+			}
 		}
 	}
 	button {
@@ -59,8 +65,8 @@
 		height: $post-dropdown-height;
 		justify-content: space-between;
 		width: 100%;
-		padding: 0 $sidebar-padding;
-		font-size: 1.1rem;
+		padding: 0 1.1rem;
+		font-size: 1.2rem;
 		z-index: 201;
 	}
 }

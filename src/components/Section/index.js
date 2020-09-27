@@ -14,6 +14,9 @@ import { useUID } from 'react-uid';
 import { useWindowDimensions } from '../../hooks';
 import styles from './section.module.scss';
 
+const SECTION_BREAKPOINT = 1350;
+const blockMargin = 12;
+
 export default function Section({ children }) {
   const uid = useUID();
   let height;
@@ -23,7 +26,6 @@ export default function Section({ children }) {
     height = dimensions.height;
     width = dimensions.width;
   }
-  const blockMargin = 12;
   const sectionRef = useRef();
 
   function getBlocks() {
@@ -32,6 +34,7 @@ export default function Section({ children }) {
     return Array.from(container.children);
   }
 
+  /* Adjust height of elements in right column */
   function updateBlockHeight() {
     const rightColumnBlocks = getBlocks();
     if (!rightColumnBlocks) return;
@@ -66,16 +69,8 @@ export default function Section({ children }) {
   });
 
   useEffect(() => {
-    if (width >= 850) updateBlockHeight();
+    if (width >= SECTION_BREAKPOINT) updateBlockHeight();
   });
-
-  if (width < 850) {
-    return (
-      <div>
-        {children}
-      </div>
-    );
-  }
 
   let leftColumn = [];
   let rightColumn = [];
@@ -92,7 +87,11 @@ export default function Section({ children }) {
   });
 
   return (
-    <section ref={sectionRef} className={styles.section} sx={{ variant: 'divs.section' }}>
+    <section
+      ref={sectionRef}
+      className={width < SECTION_BREAKPOINT ? styles.oneColumn : styles.twoColumns}
+      sx={{ variant: 'divs.section' }}
+    >
       <div id={`left-column-${uid}`} className={rightColumn.length ? styles.leftColumn : styles.noColumns}>
         {leftColumn}
       </div>

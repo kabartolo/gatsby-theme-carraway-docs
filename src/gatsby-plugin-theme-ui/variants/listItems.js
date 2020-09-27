@@ -1,4 +1,7 @@
 export const listItems = {
+  accordion: {
+    listStyle: 'none',
+  },
   dropdown: {
     borderBottom: 'main',
     borderColor: 'border',

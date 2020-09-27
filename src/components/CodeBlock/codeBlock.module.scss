@@ -1,3 +1,5 @@
+@import '../../styles/_global.scss';
+
 .gatsby-highlight {
   position: relative;
   -webkit-overflow-scrolling: touch;
@@ -53,7 +55,6 @@ gatsby-highlight > code[class*="language-"],
       word-spacing: normal;
       .line {
         padding-left: 1em;
-        // min-width: 300px;
       }
     }
   }
