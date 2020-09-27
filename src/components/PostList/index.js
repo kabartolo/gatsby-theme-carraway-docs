@@ -16,8 +16,8 @@ export default function PostList() {
 
   const endSlash = location.pathname.match(/\/$/);
   const path = `${location.pathname}${endSlash ? '' : '/'}`;
-  const isMenuIndex = menu.path === path;
-  const groupIndex = menu.items && menu.items.find((item) => item.path === path);
+  const isMenuIndex = menu && menu.path === path;
+  const groupIndex = menu && menu.items && menu.items.find((item) => item.path === path);
   const currentMenu = isMenuIndex ? menu : groupIndex;
 
   if (!currentMenu) return null;
