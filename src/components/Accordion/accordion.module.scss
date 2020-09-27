@@ -13,7 +13,7 @@
 			width: 100%;
 			line-height: 1.61;
 			.label {
-
+				flex-shrink: 0;
 			}
 			.button {
 				flex-grow: 1;
@@ -21,6 +21,7 @@
 				justify-content: flex-end;
 				align-items: center;
 				cursor: pointer;
+				padding-right: 0;
 			}
 		}
 	}
