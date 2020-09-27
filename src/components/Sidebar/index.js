@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars, no-param-reassign */
 import { jsx, Styled } from 'theme-ui';
 import React from 'react';
+/* eslint-enable no-unused-vars */
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
 
@@ -43,12 +44,6 @@ function Menu({
 
 function checkIfOpen(item, currentId) {
   return item.id === currentId || !!item.items.find((subItem) => subItem.id === currentId);
-}
-
-function findPost(menu, id) {
-  return menu.items
-    ? (menu.items.find((item) => item.id === id) || findPost(menu.items, id))
-    : null;
 }
 
 export default function Sidebar() {
