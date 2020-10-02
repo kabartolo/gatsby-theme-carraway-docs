@@ -40,6 +40,7 @@
 		"@gatsby-contrib/gatsby-plugin-elasticlunr-search": "^2.4.2",
 		"@mdx-js/mdx": "^1.6.6",
 		"@mdx-js/react": "^1.6.6",
+		"@reach/skip-nav": "^0.11.2",
 		"@theme-ui/preset-polaris": "^0.3.0",
 		"@theme-ui/typography": "^0.3.0",
 		"babel-plugin-styled-components": "^1.11.1",

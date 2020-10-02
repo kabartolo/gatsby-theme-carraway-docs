@@ -3,16 +3,17 @@
 import { jsx } from 'theme-ui';
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { SkipNavLink, SkipNavContent } from '@reach/skip-nav';
 
-import styles from './layout.module.scss';
-
-import { SiteContext } from './site-context';
 import { PostContext } from './post-context';
+import { SiteContext } from './site-context';
 
+import SEO from '../SEO';
 import Header from '../Header';
 import Sidebar from '../Sidebar';
-import SEO from '../Post/SEO';
 import Footer from '../Footer';
+
+import styles from './layout.module.scss';
 
 export default function Layout({
   children,
@@ -40,6 +41,7 @@ export default function Layout({
         setThemeOptions,
       }}
     >
+      <SkipNavLink style={{ zIndex: 100 }} />
       <SEO />
       <div className={styles.wrapper}>
         <PostContext.Provider
@@ -56,6 +58,7 @@ export default function Layout({
             <Header menu={menus.main} />
             <Sidebar />
           </>
+          <SkipNavContent />
           <main id="main" className={styles.main}>
             {children}
             <Footer />
