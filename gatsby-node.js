@@ -347,21 +347,6 @@ exports.onCreateNode = ({
 
       // AST used to build search index
       const [paragraphs, headers, sections] = buildAST(node.rawBody, allowSiteSearch);
-      // let paragraphs;
-      // let headers;
-      // let sections;
-      // if (allowSiteSearch) {
-      //   const compiler = mdx.createMdxAstCompiler({ remarkPlugins: [] });
-      //   const { content } = grayMatter(node.rawBody);
-      //   const AST = compiler.parse(content);
-      //   sections = getParagraphs(AST);
-      //   paragraphs = sections.map((paragraph) => paragraph.content);
-      //   headers = sections
-      //     .map((paragraph) => paragraph.heading)
-      //     .filter((heading, index, self) => (
-      //       self.indexOf(heading) === index
-      //     ));
-      // }
 
       // Add post to sidebar menu
       const sidebarMenus = getNode(SIDEBAR_MENU_ID)
