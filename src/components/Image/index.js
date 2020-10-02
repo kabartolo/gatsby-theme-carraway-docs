@@ -31,6 +31,7 @@ export default function Image({ src, alt, data }) {
       fluid={fluid}
       fixed={fixed}
       alt={alt}
+      title={alt}
     />
   );
 }
