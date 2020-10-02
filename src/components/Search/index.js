@@ -13,10 +13,10 @@ import { Index } from 'elasticlunr';
 
 import { useSearchIndex } from '../../hooks';
 
-import styles from './search.module.scss';
-
 import SearchInput from './searchInput';
 import SearchResults from './searchResults';
+
+import styles from './search.module.scss';
 
 export default function Search({ closeDropdown }) {
   const searchIndexData = useSearchIndex();
@@ -43,8 +43,9 @@ export default function Search({ closeDropdown }) {
           },
         }).map(({ ref }) => searchIndex.documentStore.getDoc(ref));
       setResults(newResults);
+      setFocus(true); // ensures results show on mobile
     }
-  }, [query]);
+  }, [query, searchIndex]);
 
   if (!searchIndexData) return null;
 

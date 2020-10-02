@@ -55,7 +55,7 @@ export default function SearchInput({
 
   useEffect(() => {
     setFocus(document.getElementById('search-input') === document.activeElement);
-  }, [query]);
+  }, [query, setFocus]);
 
   return (
     <div className={`${styles.searchGroup} ${focus ? styles.expanded : ''}`}>

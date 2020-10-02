@@ -6,6 +6,7 @@ module.exports = (options) => {
   const githubUrl = options.githubUrl || '';
   const allowBreadCrumbs = options.allowBreadCrumbs || true;
   const allowSiteSearch = options.allowSiteSearch || true;
+  const primaryResultsOnly = options.primaryResultsOnly || false;
   const alwaysShowTOC = options.alwaysShowTOC || true;
   const sidebarAllowTOC = options.sidebarAllowTOC || true;
   const sidebarAllowMultipleOpen = options.sidebarAllowMultipleOpen || true;
@@ -21,6 +22,7 @@ module.exports = (options) => {
     githubUrl,
     allowBreadCrumbs,
     allowSiteSearch,
+    primaryResultsOnly,
     alwaysShowTOC,
     sidebarAllowTOC,
     sidebarAllowMultipleOpen,

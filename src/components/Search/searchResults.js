@@ -8,25 +8,22 @@ import reactStringReplace from 'react-string-replace';
 
 import ResultLink from './resultLink';
 
-import { useTableOfContents } from '../../hooks';
-// import { useLocation } from '../../hooks';
+import withDefault from '../../utils/with-default';
+
+import { useTableOfContents, useThemeOptions } from '../../hooks';
 
 import styles from './search.module.scss';
 
 export const EXCERPT_LENGTH = 250;
 
 function markText(text, words) {
-  let result = text;
-  words.forEach((word) => {
-    result = reactStringReplace(result, word, (match, i) => (
-      <mark key={i}>{match}</mark>
-    ));
-  });
-  return result;
+  return reactStringReplace(text, words, (match, i) => (
+    <mark key={i}>{match}</mark>
+  ));
 }
 
 function addEllipses(excerpt) {
-  if (!excerpt.length) return null;
+  if (!excerpt.length) return [];
   const ellipses = (excerpt.join('').length > EXCERPT_LENGTH) && '...';
   return excerpt.concat(ellipses);
 }
@@ -37,11 +34,11 @@ export default function SearchResults({
   closeDropdown,
 }) {
   const tableOfContents = useTableOfContents();
-
-  const tokens = query.split(' ');
+  const { primaryResultsOnly } = withDefault(useThemeOptions());
   const primaryResults = [];
   let otherResults = [];
 
+  /* Each result is a full post */
   results.forEach((post) => {
     const {
       id,
@@ -52,13 +49,13 @@ export default function SearchResults({
       headers,
     } = post;
     const { flatMap } = tableOfContents.find((node) => node.id === id);
-    const markedTitle = markText(title, tokens);
-    const markedDescription = markText(description, tokens);
-
+    const markedTitle = markText(title, query);
+    const markedDescription = markText(description, query);
     const titleMatches = markedTitle.length > 1;
     const descriptionMatches = markedDescription.length > 1;
+    const hasPrimaryResult = titleMatches || descriptionMatches;
 
-    if (titleMatches || descriptionMatches) {
+    if (hasPrimaryResult) {
       const element = (
         <ResultLink
           title={markedTitle}
@@ -72,39 +69,59 @@ export default function SearchResults({
       primaryResults.push(element);
     }
 
-    headers.forEach((header) => {
+    const headerMatches = headers.map((header) => {
+      const paragraphs = sections.filter((section) => section.heading === header);
+      const paragraphMatch = paragraphs.find((para) => markText(para.content, query).length > 1);
+      const markedHeader = markText(header, query);
       const headerData = flatMap && flatMap.find((data) => data.title === header);
       const slug = headerData ? headerData.url : '';
-      const paragraphs = sections.filter((section) => section.heading === header);
-      const markedHeader = markText(header, tokens);
-      const headerMatches = markedHeader.length > 1;
-      const excerpt = paragraphs.length
-        ? markText(paragraphs[0].content.slice(0, EXCERPT_LENGTH), tokens)
-        : [];
+      return ({
+        original: header,
+        paragraphs,
+        paragraphMatch,
+        markedHeader,
+        slug,
+      });
+    }).filter(({
+      markedHeader,
+      paragraphMatch,
+    }) => markedHeader.length > 1 || (!primaryResultsOnly && paragraphMatch));
 
-      if (header !== '' && headerMatches) {
+    headerMatches.forEach((header) => {
+      const {
+        original,
+        paragraphs,
+        paragraphMatch,
+        markedHeader,
+        slug,
+      } = header;
+      if (original !== '') {
+        const excerpt = (!primaryResultsOnly && paragraphMatch)
+          ? markText(paragraphMatch.content.slice(0, EXCERPT_LENGTH), query)
+          : '';
         const element = (
           <ResultLink
             title={markedTitle}
-            heading={markedHeader}
+            heading={markedHeader.length > 1 ? markedHeader : [original]}
             excerpt={addEllipses(excerpt)}
             path={path.replace(/\/$/, slug)}
             onClick={closeDropdown}
-            key={paragraphs[0].id}
+            key={paragraphMatch ? paragraphMatch.id : slug}
           />
         );
+
         primaryResults.push(element);
-      } else if (header === '') {
+      } else if (!primaryResultsOnly && !hasPrimaryResult) {
         const paragraphMatches = paragraphs
-          .filter((paragraph) => markText(paragraph.content, tokens).length > 1)
-          .map((paragraph) => (
+          .filter((para) => markText(para.content, query).length > 1)
+          .map((para) => (
             <ResultLink
               title={markedTitle}
               heading={[]}
-              excerpt={addEllipses(markText(paragraph.content.slice(0, EXCERPT_LENGTH), tokens))}
+              excerpt={addEllipses(markText(para.content.slice(0, EXCERPT_LENGTH), query))}
               path={`${path}${slug}`}
               onClick={closeDropdown}
-              key={paragraph.id}
+              key={para.id}
             />
           ));
         otherResults = otherResults.concat(paragraphMatches);
@@ -112,15 +129,17 @@ export default function SearchResults({
     });
   });
 
+  const newResults = primaryResults.concat(otherResults);
+
   return (
     <div
       sx={{ variant: 'divs.resultContainer' }}
       className={`${styles.container} ${styles.open}`}
     >
-      {!!results && query.length > 2 && (
+      {newResults.length && query.length > 2 && (
         <section className={`${styles.searchResults} ${results.length ? styles.open : ''}`}>
           <ol>
-            {primaryResults.concat(otherResults)}
+            {newResults}
           </ol>
         </section>
       )}
