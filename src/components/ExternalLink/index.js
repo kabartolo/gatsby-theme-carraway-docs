@@ -24,6 +24,9 @@ export default function ExternalLink({ href, children }) {
 }
 
 ExternalLink.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
   href: PropTypes.string.isRequired,
-  children: PropTypes.string.isRequired,
 };
