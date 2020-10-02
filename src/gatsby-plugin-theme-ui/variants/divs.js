@@ -55,9 +55,13 @@ export const divs = {
     },
   },
   propertyTable: {
-    borderTop: '2px solid',
     borderBottom: '2px solid',
     borderColor: 'border',
+    '.property-table-cell': {
+      listStyle: 'none',
+      borderTop: 'main',
+      borderColor: 'border',
+    },
     '.property-name': {
       fontFamily: 'Monospace',
     },

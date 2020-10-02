@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 import { usePrismTheme } from '../../hooks';
+
 import styles from './codeExample.module.scss';
 
 export default function CodeExample({
@@ -24,8 +25,9 @@ export default function CodeExample({
   useEffect(() => updateBlockHeight());
 
   /* eslint-disable no-param-reassign */
-  const blocksByLang = codeBlocks.reduce((map, block) => {
-    map[block.props.children.props.className.replace(/language-/, '')] = block;
+  const blocksByLang = codeBlocks.reduce((map, block, index) => {
+    const { className } = block.props.children.props;
+    map[className ? className.replace(/language-/, '') : index] = block;
     return map;
   }, {});
   /* eslint-enable no-param-reassign */

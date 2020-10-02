@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
 
 import { getIds } from '../../utils/helpers';
-import styles from './toc.module.scss';
 
 import { useActiveId } from '../../hooks';
+
+import styles from './toc.module.scss';
 
 function NestedList({
   items,

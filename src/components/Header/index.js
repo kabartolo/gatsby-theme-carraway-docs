@@ -13,13 +13,13 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 import { useThemeOptions, useSiteMetadata } from '../../hooks';
 
-import styles from './header.module.scss';
-
 import Dropdown from '../Dropdown';
 import Logo from './Logo';
 import MainMenu from '../MainMenu';
 import Search from '../Search';
 import Toggle from '../Toggle';
+
+import styles from './header.module.scss';
 
 const menuIcon = <FontAwesomeIcon icon={faBars} />;
 const closeIcon = <FontAwesomeIcon icon={faWindowClose} />;
@@ -45,6 +45,7 @@ export default function Header({
         icon1={mode === 'dark' ? sunIcon : moonIcon}
         icon2={mode === 'dark' ? moonIcon : sunIcon}
         name="theme-toggle"
+        tooltip="Toggle dark/light mode"
       />
     );
   }
@@ -70,9 +71,9 @@ export default function Header({
     >
       <span className={styles.header}>
         <Styled.a as={Link} sx={{ variant: 'links.siteTitle' }} to="/">
-          <h1 className={styles.siteTitle}>
+          <h1 className={styles.siteTitle} title={siteTitle}>
             {siteLogo && <Logo src={siteLogo} />}
-            {siteTitle}
+            <span className={styles.siteTitleText}>{siteTitle}</span>
           </h1>
         </Styled.a>
         <span className={styles.headerContent}>

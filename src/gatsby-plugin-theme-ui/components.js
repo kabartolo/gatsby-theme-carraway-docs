@@ -1,5 +1,4 @@
-/* eslint-disable */
-import { Styled } from 'theme-ui';
+/* eslint-disable import/no-extraneous-dependencies */
 import * as components from '@theme-ui/components';
 
 export default {

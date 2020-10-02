@@ -1,11 +1,14 @@
 @import '../../styles/_global.scss';
 
 .scroll {
-	padding-right: 2rem;
-	max-height: calc(100vh - #{$header-main-height});
+	padding-right: $toc-padding;
+	max-height: calc(100vh - #{$header-main-height} - #{$toc-top});
 	overflow-y: auto;
 	ol,
 	h2 {
-		padding-left: 2rem;
+		padding-left: $toc-padding;
+	}
+	h2 {
+		padding-top: $toc-padding;
 	}
 }

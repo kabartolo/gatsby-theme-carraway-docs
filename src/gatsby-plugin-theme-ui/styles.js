@@ -1,6 +1,9 @@
 export const styles = {
   pre: {
-    padding: 0,
+    marginTop: 0,
+  },
+  inlineCode: {
+    bg: 'highlight',
   },
   table: {
     margin: '1rem 0 2em 0',

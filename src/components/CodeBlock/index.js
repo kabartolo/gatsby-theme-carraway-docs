@@ -2,6 +2,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 import React from 'react';
+/* eslint-enable no-unused-vars */
 import PropTypes from 'prop-types';
 import Highlight, { defaultProps } from 'prism-react-renderer';
 
@@ -32,7 +33,7 @@ export default function CodeBlock({ children, metastring, className: gatsbyClass
   const language = gatsbyClassName ? gatsbyClassName.replace(/language-/, '') : '';
   const theme = usePrismTheme();
   const highlightLine = linesToHighlight(metastring);
-  const showNumbers = metastring.match(/num$/);
+  const showNumbers = metastring.match(/num/);
 
   if (metastring === 'live') {
     return (

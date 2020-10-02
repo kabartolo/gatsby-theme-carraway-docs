@@ -11,6 +11,7 @@ export default function Toggle({
   icon1,
   icon2,
   name,
+  tooltip,
 }) {
   const [icon, setIcon] = useState(icon1);
 
@@ -24,6 +25,7 @@ export default function Toggle({
     <button
       type="button"
       name={name}
+      title={tooltip}
       id={name}
       className={styles.button}
       sx={{ variant: 'buttons.toggle' }}
@@ -40,8 +42,10 @@ Toggle.propTypes = {
   icon1: PropTypes.node.isRequired,
   icon2: PropTypes.node.isRequired,
   name: PropTypes.string.isRequired,
+  tooltip: PropTypes.string,
 };
 
 Toggle.defaultProps = {
   onClick: () => null,
+  tooltip: null,
 };

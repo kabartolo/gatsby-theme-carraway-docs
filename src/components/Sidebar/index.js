@@ -7,10 +7,11 @@ import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
 
 import { getIds } from '../../utils/helpers';
-import styles from './sidebar.module.scss';
 
 import Accordion from '../Accordion';
 import Dropdown from '../Dropdown';
+
+import styles from './sidebar.module.scss';
 
 import {
   useActiveId,

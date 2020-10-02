@@ -27,8 +27,17 @@
 		.site-title {
 			display: flex;
 			align-items: center;
+			// gatsby-image creates a div for this image
 			div {
 				margin-right: 0.6rem;
+			}
+			.site-title-text {
+				@include for-tablet-under {
+					display: none;
+				}
+				@include for-mobile-only {
+					display: inline-block;
+				}
 			}
 		}
 		.header-content {

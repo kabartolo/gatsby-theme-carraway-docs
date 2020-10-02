@@ -76,7 +76,8 @@ export const links = {
     },
     h1: {
       fontFamily: 'Raleway',
-      fontSize: ['20px', '36px', '25px'],
+      fontSize: '16px',
+      fontWeight: 'heading',
       letterSpacing: '1px',
     },
   },

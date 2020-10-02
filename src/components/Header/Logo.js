@@ -12,7 +12,7 @@ export default function Logo({ src }) {
           relativePath
           name
           childImageSharp {
-            fixed(height: 45) {
+            fixed(height: 30) {
               ...GatsbyImageSharpFixed
             }
           }

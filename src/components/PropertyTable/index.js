@@ -47,7 +47,7 @@ export default function PropertyTable({ children, title }) {
       <h3 className="title">{title}</h3>
       <ul className={styles.propertyTable}>
         {properties.map((property) => (
-          <li key={property.name} sx={{ variant: 'listItems.propertyTable' }}>
+          <li key={property.name} className="property-table-cell">
             <div className={styles.header}>
               <h4 className={`property-name ${styles.name}`}>{property.name}</h4>
               {property.type && <span className="property-type">{property.type}</span>}

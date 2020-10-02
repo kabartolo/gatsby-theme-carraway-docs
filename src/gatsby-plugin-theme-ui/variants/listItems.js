@@ -15,11 +15,6 @@ export const listItems = {
   postList: {
     listStyle: 'none',
   },
-  propertyTable: {
-    listStyle: 'none',
-    borderTop: 'main',
-    borderColor: 'border',
-  },
   searchResult: {
     listStyle: 'none',
     borderBottom: 'main',

@@ -32,6 +32,8 @@
 	.right-column {
 	    flex: 50%;
 	    max-width: 50%;
+	    display: flex;
+	    justify-content: center;
 		position: -webkit-sticky;
 		position: sticky;
 		align-self: flex-start;

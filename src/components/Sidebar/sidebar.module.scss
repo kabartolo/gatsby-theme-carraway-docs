@@ -17,6 +17,9 @@
 		width: $sidebar-width;
 	}
 	padding: $sidebar-padding;
+	h2 {
+		margin-top: 0;
+	}
 	.scrollable {
 		height: calc(100vh - #{$header-main-height} - calc(2 * #{$sidebar-padding}));
 		overflow-y: auto;

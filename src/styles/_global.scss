@@ -15,10 +15,14 @@ $search-icon-padding: calc(#{$icon-size} / 2 + 3px);
 $header-main-height: calc(#{$searchbar-height} + calc(2 * #{$searchbar-padding}));
 
 /* Post */
-$main-padding: 15vh;
-$main-padding-top: calc(#{$header-main-height} + 40px);
+$main-padding: 3em;
+$main-padding-top: calc(#{$header-main-height} + #{$main-padding});
 $post-dropdown-height: 2em;
 $post-dropdown-top: calc(#{$header-main-height} + #{$post-dropdown-height});
+
+/* TOC */
+$toc-padding: 2rem;
+$toc-top: calc(#{$header-main-height} + 3em);
 
 /* CodeExample */
 $top-bar-height: 2.5rem;
@@ -26,7 +30,7 @@ $top-bar-height: 2.5rem;
 /* Section */
 $header-line-height: 40px;
 $header-margin: 1rem;
-$right-column-margin-top: calc(#{$header-margin} + #{$header-margin} + #{$header-line-height});
+$right-column-margin-top: calc(calc(2 * #{$header-margin}) + #{$header-line-height});
 
 /* Breakpoints */
 @mixin for-mobile-only {

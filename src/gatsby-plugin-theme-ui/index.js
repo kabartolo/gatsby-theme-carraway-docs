@@ -32,7 +32,7 @@ export default merge(theme, {
     main: '1px solid',
     thick: '1.5px solid',
   },
-  breakpoints: [52, 62, 82],
+  breakpoints: ['52em', '62em', '82em'],
   shadows: {
     main: '0 0 2px rgba(0,0,0,0.05),0 1px 4px rgba(0,0,0,0.05)',
     search: 'inset 0 1px 2px rgba(27,31,35,.075)',

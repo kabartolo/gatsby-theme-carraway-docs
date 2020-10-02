@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 import { useUID } from 'react-uid';
 
 import { useWindowDimensions } from '../../hooks';
+
 import styles from './section.module.scss';
 
 const SECTION_BREAKPOINT = 1350;
