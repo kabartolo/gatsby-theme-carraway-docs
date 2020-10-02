@@ -4,7 +4,7 @@ import { jsx, useColorMode } from 'theme-ui';
 import React, { useEffect } from 'react';
 /* eslint-enable no-unused-vars */
 import PropTypes from 'prop-types';
-import { Link, graphql } from 'gatsby';
+import { graphql } from 'gatsby';
 import { MDXProvider } from '@mdx-js/react';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,48 +13,21 @@ import {
   faAngleDoubleRight,
 } from '@fortawesome/free-solid-svg-icons';
 
-import Alert from '../Alert';
-import Breadcrumb from './Breadcrumb';
-import CodeBlock from '../CodeBlock';
-import CodeExample from '../CodeExample';
-import Image from '../Image';
-import ExternalLink from '../ExternalLink';
-import NavLink from './NavLink';
-import Playground from '../Playground';
-import PostList from '../PostList';
-import PropertyTable from '../PropertyTable';
-import Section from '../Section';
-import SEO from './SEO';
-import TOC from '../TOC';
-
-import themeComponents from '../../gatsby-plugin-theme-ui/components';
-
 import {
   usePostContext,
   usePrismTheme,
   useTableOfContents,
   useThemeOptions,
-} from '../../hooks';
+} from '../../../hooks';
+
+import Breadcrumb from './Breadcrumb';
+import NavLink from './NavLink';
+import SEO from '../../SEO';
+import TOC from '../../TOC';
 
 import styles from './post.module.scss';
 
-/* eslint-disable react/prop-types */
-const shortcodes = {
-  ...themeComponents,
-  Alert,
-  code: CodeBlock,
-  CodeExample,
-  ExternalLink,
-  img: Image,
-  Image,
-  Link: ({ children, to }) => <Link to={to} sx={{ variant: 'styles.a' }}>{children}</Link>,
-  Playground,
-  PostList,
-  PropertyTable,
-  Section,
-  TOC,
-};
-/* eslint-enable react/prop-types */
+import { shortcodes } from '../../shortcodes';
 
 export default function Post({ data: { post }, pageContext }) {
   const {
@@ -62,6 +35,7 @@ export default function Post({ data: { post }, pageContext }) {
     setMenu,
     setShowSidebar,
   } = usePostContext();
+
   const { allowBreadCrumbs } = useThemeOptions();
   const tableOfContents = useTableOfContents(post && post.id);
   const {
@@ -127,9 +101,9 @@ export default function Post({ data: { post }, pageContext }) {
       <header className={styles.pageHeader}>
         <h1>{title}</h1>
       </header>
-      <div id="article-main" className={`article-main ${styles.main} ${tocVisible ? styles.withToc : ''}`}>
+      <div className={`article-main ${styles.main} ${tocVisible ? styles.withToc : ''}`}>
         {tocVisible && <TOC contents={tableOfContents.nested} className={styles.tocContainer} />}
-        <div id="article-content" className={styles.articleContent}>
+        <div className={`article-content ${styles.articleContent}`}>
           <MDXProvider components={shortcodes}>
             <MDXRenderer>{body}</MDXRenderer>
           </MDXProvider>

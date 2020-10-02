@@ -1,0 +1,25 @@
+@import '../../../styles/_global.scss';
+
+.container {
+	margin: 0 auto;
+	max-width: 60%;
+	padding: 0 calc(2 * #{$main-padding});
+	padding-top: $main-padding-top;
+	@include for-desktop-under {
+		padding: 10vw;
+		padding-top: $main-padding-top;
+	}
+	@include for-mobile-only {
+		padding: 5vw;
+		padding-top: calc(#{$main-padding-top} + 5vw);
+	}
+	.page-header {
+	}
+	.main {
+		position: relative;
+		z-index: 1;
+		.page-content {
+
+		}
+	}
+}

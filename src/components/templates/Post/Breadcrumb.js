@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Styled } from 'theme-ui';
 import { Link } from 'gatsby';
 
+import styles from './post.module.scss';
+
 export default function Breadcrumb({ data }) {
   if (!data.length || data.length < 2) return null;
 
@@ -11,7 +13,7 @@ export default function Breadcrumb({ data }) {
   const middle = data.length > 2 ? data.slice(1, -1) : null;
 
   return (
-    <nav>
+    <nav className={styles.breadcrumb}>
       {first && (
         <span key={first.path}>
           <Styled.a as={Link} to={first.path}>

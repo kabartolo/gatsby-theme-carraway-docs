@@ -1,7 +1,7 @@
 const withDefault = require('./src/utils/with-default');
 
 module.exports = (options) => {
-  const { postsPath, assetsPath } = withDefault(options);
+  const { postsPath, pagesPath, assetsPath } = withDefault(options);
 
   return {
     plugins: [
@@ -24,12 +24,19 @@ module.exports = (options) => {
             'Raleway',
           ],
         },
-      },      
+      },
       {
         resolve: 'gatsby-source-filesystem',
         options: {
           name: 'posts',
           path: postsPath,
+        }
+      },
+      {
+        resolve: 'gatsby-source-filesystem',
+        options: {
+          name: 'pages',
+          path: pagesPath,
         }
       },
       {
@@ -48,7 +55,6 @@ module.exports = (options) => {
               resolve: 'gatsby-remark-autolink-headers',
               options: {
                 elements: ['h2', 'h3', 'h4', 'h5', 'h6'],
-                
               },
             },
             {

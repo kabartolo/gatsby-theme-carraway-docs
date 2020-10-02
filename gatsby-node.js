@@ -28,14 +28,24 @@ const flattenTOC = (items = []) => (
 const getParagraphs = (AST) => {
   let nearestHeading = '';
 
+  const formatParts = (parts) => {
+    const str = parts
+      .map((part) => (
+        part.children ?
+          part.children.map((child) => child.value).join('') :
+          part.value
+      )).join('');
+    return str.replace(/<[^>]*>/g, ''); // remove any html/jsx tags
+  };
+
   const paragraphs = AST.children.map((child) => {
-    if (child.type === 'heading') {
-      nearestHeading = child.children.map((part) => part.value).join('');
+    if (child.type === 'heading' && child.depth === 2) {
+      nearestHeading = formatParts(child.children);
       return null;
     } else if (child.type === 'paragraph') {
       return {
         heading: nearestHeading,
-        content: child.children.map((part) => part.value).join(''),
+        content: formatParts(child.children),
         id: Math.floor(Math.random() * 100000),
       };
     }
@@ -45,6 +55,26 @@ const getParagraphs = (AST) => {
 
   return paragraphs.filter((paragraph) => paragraph != null);
 };
+
+const buildAST = (body, allowSiteSearch) => {
+  let paragraphs;
+  let headers;
+  let sections;
+  if (allowSiteSearch) {
+    const compiler = mdx.createMdxAstCompiler({ remarkPlugins: [] });
+    const { content } = grayMatter(body);
+    const AST = compiler.parse(content);
+    sections = getParagraphs(AST);
+    paragraphs = sections.map((paragraph) => paragraph.content);
+    headers = sections
+      .map((paragraph) => paragraph.heading)
+      .filter((heading, index, self) => (
+        self.indexOf(heading) === index
+      ));
+  }
+
+  return [paragraphs, headers, sections];
+}
 
 const getSidebarMenu = (menus, postPath) => {
   const sidebarMenu = menus.find((menu) => {
@@ -146,14 +176,7 @@ const appendToMenu = (
 }
 
 exports.sourceNodes = ({ actions, getNodes, schema }) => {
-  const { createTypes, touchNode } = actions;
-
-  // Prevent custom nodes from being garbage collected
-  const nodes = getNodes().filter((node) => (
-    node.internal.owner === 'gatsby-theme-carraway-docs'
-  ));
-  nodes.forEach((node) => touchNode(node));
-
+  const { createTypes } = actions;
   createTypes([
     schema.buildObjectType({
       name: 'Menu',
@@ -251,6 +274,30 @@ exports.sourceNodes = ({ actions, getNodes, schema }) => {
         },
       },
     }),
+    schema.buildObjectType({
+      interfaces: ['Node'],
+      name: 'Page',
+      fields: {
+        id: { type: 'ID!' },
+        title: { type: 'String!' },
+        description: { type: 'String' },
+        path: { type: 'String' },
+        slug: { type: 'String' },
+        body: {
+          type: 'String!',
+          resolve(source, args, context, info) {
+            const type = info.schema.getType('Mdx');
+            const mdxNode = context.nodeModel.getNodeById({
+              id: source.parent,
+            });
+            const resolver = type.getFields()['body'].resolve;
+            return resolver(mdxNode, {}, context, {
+              fieldName: 'body',
+            });
+          },
+        },
+      },
+    }),
   ]);
 }
 
@@ -289,32 +336,32 @@ exports.onCreateNode = ({
         showSidebar,
         showPostNav,
       } = node.frontmatter;
-      const label = node.frontmatter.label;
+      const { label, description } = node.frontmatter;
       if (!title) title = label || 'Untitled';
       showTOC = (typeof showTOC === 'undefined') ? alwaysShowTOC : showTOC;
       showPostNav = (typeof showPostNav === 'undefined') ? true : showPostNav;
 
-      const description = node.frontmatter.description;
       const path = createFilePath({ node, getNode, basePath });
       const slug = parent.name;
       const id = createNodeId(`${node.id} >>> Post`);
 
       // AST used to build search index
-      let paragraphs;
-      let headers;
-      let sections;
-      if (allowSiteSearch) {
-        const compiler = mdx.createMdxAstCompiler({ remarkPlugins: [] });
-        const { content } = grayMatter(node.rawBody);
-        const AST = compiler.parse(content);
-        sections = getParagraphs(AST);
-        paragraphs = sections.map((paragraph) => paragraph.content);
-        headers = sections
-          .map((paragraph) => paragraph.heading)
-          .filter((heading, index, self) => (
-            self.indexOf(heading) === index
-          ));
-      }
+      const [paragraphs, headers, sections] = buildAST(node.rawBody, allowSiteSearch);
+      // let paragraphs;
+      // let headers;
+      // let sections;
+      // if (allowSiteSearch) {
+      //   const compiler = mdx.createMdxAstCompiler({ remarkPlugins: [] });
+      //   const { content } = grayMatter(node.rawBody);
+      //   const AST = compiler.parse(content);
+      //   sections = getParagraphs(AST);
+      //   paragraphs = sections.map((paragraph) => paragraph.content);
+      //   headers = sections
+      //     .map((paragraph) => paragraph.heading)
+      //     .filter((heading, index, self) => (
+      //       self.indexOf(heading) === index
+      //     ));
+      // }
 
       // Add post to sidebar menu
       const sidebarMenus = getNode(SIDEBAR_MENU_ID)
@@ -360,6 +407,43 @@ exports.onCreateNode = ({
         parent: parent,
         child: node,
       });
+    } else if (
+      parent.internal.type === 'File' &&
+      parent.sourceInstanceName === 'pages'
+    ) {
+      const title = node.frontmatter.title || '';
+      const { description, showTitle } = node.frontmatter;
+
+      const path = createFilePath({ node, getNode, basePath });
+      const slug = parent.name;
+      const id = createNodeId(`${node.id} >>> Page`);
+
+      // Create page node
+      const pageData = {
+        title,
+        description,
+        path,
+        slug,
+        showTitle,
+      };
+
+      createNode({
+        ...pageData,
+        id,
+        parent: node.id,
+        children: [],
+        internal: {
+          type: 'Page',
+          contentDigest: createContentDigest(pageData),
+          content: JSON.stringify(pageData),
+          description: 'Carraway Docs page',
+        },
+      });
+
+      createParentChildLink({
+        parent: parent,
+        child: node,
+      });
     }
   }
 };
@@ -371,9 +455,15 @@ exports.onCreateWebpackConfig = ({ actions, loaders, getConfig }) => {
   };
 }
 
-exports.createPages = async ({ graphql, actions, cache }, themeOptions) => {
-  const { createPage, createNode } = actions;
+exports.createPages = async ({ graphql, actions, getNodes, cache }, themeOptions) => {
+  const { createPage, createNode, touchNode } = actions;
   const { sidebarAllowTOC } = withDefault(themeOptions);
+
+  const nodes = getNodes().filter((node) => (
+    node.internal.owner === 'gatsby-theme-carraway-docs' && node.internal.type === SIDEBAR_MENU_TYPE
+  ));
+
+  nodes.forEach((node) => touchNode(node));
 
   const flattenItem = ({ id, slug, path, name, items = [] }) => {
     const isHeader = new RegExp('#', 'g');
@@ -457,10 +547,30 @@ exports.createPages = async ({ graphql, actions, cache }, themeOptions) => {
     throw postQuery.errors;
   }
 
+  const pageQuery = await graphql(`
+    query {
+      allPage {
+        edges {
+          node {
+            id
+            path
+          }
+        }
+      }
+
+    }
+  `);
+
+  if (pageQuery.errors) {
+    throw pageQuery.errors;
+  }
+
   const posts = postQuery.data.allPost.edges;
+  const pages = pageQuery.data.allPage.edges;
+
+  const { allSidebarMenu } = sidebarQuery.data;
 
   let menus;
-  const { allSidebarMenu } = sidebarQuery.data;
   if (!allSidebarMenu || !allSidebarMenu.nodes[0]) {
     menus = await cache.get(SIDEBAR_MENU_ID);
   } else {
@@ -472,6 +582,16 @@ exports.createPages = async ({ graphql, actions, cache }, themeOptions) => {
     id: node.id,
     items: node.parent.tableOfContents.items,
   }));
+
+  pages.forEach(({ node }) => {
+    createPage({
+      path: node.path,
+      component: require.resolve('./src/components/templates/Page'),
+      context: {
+        id: node.id,
+      },
+    });
+  });
 
   posts.forEach(({ node }) => {
     const menu = getSidebarMenu(menus, node.path);
@@ -519,7 +639,7 @@ exports.createPages = async ({ graphql, actions, cache }, themeOptions) => {
 
     createPage({
       path: node.path,
-      component: require.resolve('./src/components/Post'),
+      component: require.resolve('./src/components/templates/Post'),
       context: {
         id: node.id,
         menu,

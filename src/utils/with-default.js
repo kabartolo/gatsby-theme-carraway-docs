@@ -1,5 +1,6 @@
 module.exports = (options) => {
   const postsPath = options.postsPath || 'src/posts';
+  const pagesPath = options.pagesPath || 'src/mdxPages';
   const assetsPath = options.assetsPath || 'src/assets';
   const basePath = options.basePath || '';
   const githubUrl = options.githubUrl || '';
@@ -14,6 +15,7 @@ module.exports = (options) => {
 
   return {
     postsPath,
+    pagesPath,
     assetsPath,
     basePath,
     githubUrl,
