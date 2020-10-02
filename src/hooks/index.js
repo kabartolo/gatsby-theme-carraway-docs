@@ -6,7 +6,6 @@ export { usePostContext } from './usePostContext';
 export { usePostData } from './usePostData';
 export { usePrismTheme } from './usePrismTheme';
 export { useSearchIndex } from './useSearchIndex';
-export { useSidebar } from './useSidebar';
 export { useSiteMetadata } from './useSiteMetadata';
 export { useTableOfContents } from './useTableOfContents';
 export { useThemeOptions } from './useThemeOptions';
