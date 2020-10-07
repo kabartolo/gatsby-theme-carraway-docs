@@ -1,4 +1,4 @@
-@import '../../styles/_global.scss';
+@import '../../../styles/_global.scss';
 
 .container {
 	position: fixed;
@@ -27,8 +27,7 @@
 		.site-title {
 			display: flex;
 			align-items: center;
-			// gatsby-image creates a div for this image
-			div {
+			:global(.gatsby-image-wrapper) {
 				margin-right: 0.6rem;
 			}
 			.site-title-text {
@@ -59,17 +58,20 @@
 			align-self: flex-start;
 			height: 100%;
 		}
-		.mobile-menu > div > button {
+		.mobile-menu :global(.dropdown-button) {
 			font-size: 1.5em;
 			height: 100%;
 			padding-right: $sidebar-padding;
 		}
-		.mobile-menu > div > div {
+		.mobile-menu :global(.dropdown-content) {
 			position: absolute;
 			right: 0;
 			top: calc(#{$header-main-height} - 2px);
 			width: 100%;
 			padding: $sidebar-padding;
+			.icons {
+				height: $header-mobile-icon-height;
+			}
 		}
 	}
 }

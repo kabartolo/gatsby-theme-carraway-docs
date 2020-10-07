@@ -1,5 +1,4 @@
 /** @jsx jsx */
-/* eslint-disable no-param-reassign */
 import { jsx, Styled } from 'theme-ui';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
@@ -7,29 +6,31 @@ import { Link } from 'gatsby';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 
-import { useLocation } from '../../hooks';
+import { useLocation, useThemeOptions } from '../../../hooks';
 
 import styles from './accordion.module.scss';
 
 export default function Accordion({
-  items: parentItems,
-  allowMultipleOpen,
-  onClickLink,
   activeId,
+  items: parentItems,
+  onClickLink,
   outerOpenSections,
 }) {
+  const { sidebarAllowMultipleOpen: allowMultipleOpen } = useThemeOptions();
   const location = useLocation();
   const activePost = parentItems.find((item) => (
     item.path === location.pathname
     && !item.path.match('#')
   ));
 
+  /* eslint-disable no-param-reassign */
   const sections = parentItems.reduce((map, item) => {
     if (item.isOpen) {
       map[item.name] = true;
     }
     return map;
   }, outerOpenSections);
+  /* eslint-enable no-param-reassign */
 
   const [openSections, setOpenSections] = useState(sections);
 
@@ -71,12 +72,12 @@ export default function Accordion({
             <Styled.a
               as={Link}
               to={path}
-              className={currentLinkClass || currentHeaderClass}
-              sx={{ variant: ['links.accordion', isGroup ? 'links.accordionGroup' : ''] }}
               onClick={() => {
                 onClickLink();
                 onClick(name, true);
               }}
+              className={`accordion-link ${currentLinkClass || currentHeaderClass}`}
+              sx={{ variant: ['links.accordion', isGroup ? 'links.accordionGroup' : ''] }}
             >
               {name}
             </Styled.a>
@@ -90,27 +91,26 @@ export default function Accordion({
         return items && items.length
           ? (
             <li
+              key={id || slug}
               className={`accordion-list-item ${styles.listItem}`}
               sx={{ variant: 'listItems.accordion' }}
-              key={id || slug}
             >
               <h3 className={`accordion-row ${styles.link}`}>
-                <span className={styles.label}>{label}</span>
+                <span className={`accordion-row-label ${styles.label}`}>{label}</span>
                 <button
-                  className={`accordion-row ${styles.button}`}
-                  sx={{ variant: 'buttons.accordion' }}
                   type="button"
                   onClick={() => onClick(name)}
+                  className={`accordion-row-button ${styles.button}`}
+                  sx={{ variant: 'buttons.accordion' }}
                 >
                   {icon}
                 </button>
               </h3>
               {isOpen && (
                 <Accordion
-                  allowMultipleOpen={allowMultipleOpen}
+                  activeId={activeId}
                   items={items}
                   onClickLink={onClickLink}
-                  activeId={activeId}
                   outerOpenSections={openSections}
                 />
               )}
@@ -118,8 +118,8 @@ export default function Accordion({
           )
           : (
             <li
-              className={`accordion-list-item ${styles.listItem}`}
               key={id}
+              className={`accordion-list-item ${styles.listItem}`}
               sx={{ variant: 'listItems.accordion' }}
             >
               <h3 className="accordion-row">{label}</h3>
@@ -131,10 +131,9 @@ export default function Accordion({
 }
 
 Accordion.propTypes = {
-  allowMultipleOpen: PropTypes.bool.isRequired,
+  activeId: PropTypes.string.isRequired,
   items: PropTypes.instanceOf(Array).isRequired,
   onClickLink: PropTypes.func.isRequired,
-  activeId: PropTypes.string.isRequired,
   outerOpenSections: PropTypes.instanceOf(Object),
 };
 

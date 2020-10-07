@@ -3,24 +3,29 @@ import { jsx, Styled } from 'theme-ui';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
 
-import styles from './mainmenu.module.scss';
+import styles from './main-menu.module.scss';
 
 export default function MainMenu({
   closeDropdown,
-  menu,
-  linkVariant,
   listItemVariant,
+  linkVariant,
+  menu,
 }) {
   return (
-    <nav>
-      <ul className={styles.mainMenu}>
-        {menu.items.map((item) => (
-          <li key={item.name} sx={{ variant: listItemVariant }}>
+    <nav className="main-menu">
+      <ul className={`main-menu-list ${styles.mainMenu}`}>
+        {menu.map((item) => (
+          <li
+            key={item.name}
+            className={`main-menu-list-item ${styles.listItem}`}
+            sx={{ variant: listItemVariant }}
+          >
             <Styled.a
               as={Link}
-              sx={{ variant: linkVariant }}
               to={item.path}
               onClick={() => closeDropdown()}
+              className={`main-menu-link ${styles.link}`}
+              sx={{ variant: linkVariant }}
             >
               {item.name}
             </Styled.a>
@@ -33,15 +38,13 @@ export default function MainMenu({
 
 MainMenu.propTypes = {
   closeDropdown: PropTypes.func,
-  menu: PropTypes.shape({
-    items: PropTypes.instanceOf(Array).isRequired,
-  }).isRequired,
-  linkVariant: PropTypes.string,
   listItemVariant: PropTypes.string,
+  linkVariant: PropTypes.string,
+  menu: PropTypes.instanceOf(Array).isRequired,
 };
 
 MainMenu.defaultProps = {
   closeDropdown: () => null,
-  linkVariant: '',
   listItemVariant: '',
+  linkVariant: '',
 };

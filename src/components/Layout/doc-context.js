@@ -1,8 +1,8 @@
 import { createContext } from 'react';
 
-export const PostContext = createContext({
-  postId: null,
-  setPostId: () => {},
+export const DocContext = createContext({
+  docId: null,
+  setDocId: () => {},
   menu: null,
   setMenu: () => {},
   showSidebar: null,

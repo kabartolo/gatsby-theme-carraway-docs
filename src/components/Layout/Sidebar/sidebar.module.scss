@@ -1,4 +1,4 @@
-@import '../../styles/_global.scss';
+@import '../../../styles/_global.scss';
 
 .sidebar,
 .dropdown {
@@ -17,21 +17,21 @@
 		width: $sidebar-width;
 	}
 	padding: $sidebar-padding;
-	h2 {
+	.header {
 		margin-top: 0;
 	}
 	.scrollable {
 		height: calc(100vh - #{$header-main-height} - calc(2 * #{$sidebar-padding}));
 		overflow-y: auto;
 		.accordion {		
-			h3 {
+			:global(.accordion-row) {
 				margin: 0;
 			}
-			ul {
+			:global(.accordion-list) {
 				padding-left: 1rem;
 			}
 		}
-		.accordion > ul {
+		.accordion > :global(.accordion-list) {
 			padding-left: 0;
 		}
 	}
@@ -44,7 +44,7 @@
 	@include for-tablet-up {
 		display: none;
 	}
-	.dropdown > div {
+	.dropdown :global(.dropdown-container) {
 		position: absolute;
 		right: 0;
 		top: $header-main-height;
@@ -52,12 +52,13 @@
 	}
 	.scrollable {
 		width: 100%;
-		height: calc(100vh - #{$post-dropdown-top});
+		height: calc(100vh - #{$post-dropdown-top} - #{$sidebar-padding});
 		overflow-y: auto;
 		padding-right: 1.1rem;
 		.accordion {
 			padding: 0;
-			h3 {
+			padding-bottom: $sidebar-padding;
+			:global(.accordion-row) {
 				margin: 0;
 			}
 		}

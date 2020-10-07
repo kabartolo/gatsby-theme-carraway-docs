@@ -2,52 +2,55 @@
 /* eslint-disable no-unused-vars */
 import { jsx } from 'theme-ui';
 import React, { useState, useEffect } from 'react';
+/* eslint-enable no-unused-vars */
 import PropTypes from 'prop-types';
 import { SkipNavLink, SkipNavContent } from '@reach/skip-nav';
 
-import { PostContext } from './post-context';
+import { DocContext } from './doc-context';
 import { SiteContext } from './site-context';
 
+import Footer from './Footer';
+import Header from './Header';
 import SEO from '../SEO';
-import Header from '../Header';
-import Sidebar from '../Sidebar';
-import Footer from '../Footer';
+import Sidebar from './Sidebar';
 
 import styles from './layout.module.scss';
 
-export default function Layout({
-  children,
-  menus,
-  options,
-  location: locationProp,
-}) {
-  const [postId, setPostId] = useState('');
-  const [menu, setMenu] = useState([]);
+export function Wrapper({ children, location: locationProp }) {
   const [location, setLocation] = useState(locationProp);
-  const [themeOptions, setThemeOptions] = useState(options);
-  const [showSidebar, setShowSidebar] = useState();
 
   useEffect(() => {
     setLocation(locationProp);
-    setThemeOptions(options);
-  }, [locationProp, options]);
+  }, [locationProp]);
 
   return (
     <SiteContext.Provider
       value={{
         location,
         setLocation,
-        themeOptions,
-        setThemeOptions,
       }}
     >
+      <Layout>
+        {children}
+      </Layout>
+    </SiteContext.Provider>
+  );
+}
+
+export default function Layout({ children }) {
+  const [docId, setDocId] = useState('');
+  const [showSidebar, setShowSidebar] = useState();
+  const [menu, setMenu] = useState([]);
+
+  return (
+    <div className="layout-container">
       <SkipNavLink style={{ zIndex: 100 }} />
       <SEO />
-      <div className={styles.wrapper}>
-        <PostContext.Provider
+      <div className={`layout-wrapper ${styles.wrapper}`}>
+        <DocContext.Provider
           value={{
-            postId,
-            setPostId,
+            docId,
+            setDocId,
             menu,
             setMenu,
             showSidebar,
@@ -55,30 +58,31 @@ export default function Layout({
           }}
         >
           <>
-            <Header menu={menus.main} />
+            <Header />
             <Sidebar />
           </>
           <SkipNavContent />
-          <main id="main" className={styles.main}>
+          <main id="main" className={`layout-main ${styles.main}`}>
             {children}
             <Footer />
           </main>
-        </PostContext.Provider>
+        </DocContext.Provider>
       </div>
-    </SiteContext.Provider>
+    </div>
   );
 }
+
+Wrapper.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]).isRequired,
+  location: PropTypes.instanceOf(Object).isRequired,
+};
 
 Layout.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]).isRequired,
-  menus: PropTypes.instanceOf(Object),
-  location: PropTypes.instanceOf(Object).isRequired,
-  options: PropTypes.instanceOf(Object).isRequired,
-};
-
-Layout.defaultProps = {
-  menus: { main: {}, sidebar: {} },
 };

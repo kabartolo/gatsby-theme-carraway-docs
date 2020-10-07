@@ -6,11 +6,11 @@ import PropTypes from 'prop-types';
 import styles from './toggle.module.scss';
 
 export default function Toggle({
-  onToggle,
-  onClick,
   icon1,
   icon2,
   name,
+  onClick,
+  onToggle,
   tooltip,
 }) {
   const [icon, setIcon] = useState(icon1);
@@ -23,13 +23,13 @@ export default function Toggle({
 
   return (
     <button
-      type="button"
+      id={name}
       name={name}
       title={tooltip}
-      id={name}
-      className={styles.button}
-      sx={{ variant: 'buttons.toggle' }}
+      type="button"
       onClick={(event) => click(event)}
+      className={`toggle-button ${styles.button}`}
+      sx={{ variant: 'buttons.toggle' }}
     >
       {icon}
     </button>
@@ -37,11 +37,11 @@ export default function Toggle({
 }
 
 Toggle.propTypes = {
-  onToggle: PropTypes.func.isRequired,
-  onClick: PropTypes.func,
   icon1: PropTypes.node.isRequired,
   icon2: PropTypes.node.isRequired,
   name: PropTypes.string.isRequired,
+  onClick: PropTypes.func,
+  onToggle: PropTypes.func.isRequired,
   tooltip: PropTypes.string,
 };
 

@@ -1,14 +1,14 @@
-@import '../../styles/_global.scss';
+@import '../../../styles/_global.scss';
 
 .main-menu {
 	@include for-mobile-only {
 		padding-left: 0;
-		li {
+		.list-item {
 			display: flex;
 			align-items: center;
 			list-style: none;
 			height: 3em;
-			a {
+			.link {
 				width: 100%;
 			}
 		}
@@ -18,7 +18,7 @@
 		align-items: center;
 		margin: 0;
 		height: 100%;
-		li {
+		.list-item {
 			list-style: none;
 			margin: 0 1em;
 		}

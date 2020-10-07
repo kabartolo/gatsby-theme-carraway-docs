@@ -1,104 +1,112 @@
 /** @jsx jsx */
-/* eslint-disable no-unused-vars, no-param-reassign */
+/* eslint-disable no-unused-vars */
 import { jsx, Styled } from 'theme-ui';
 import React from 'react';
 /* eslint-enable no-unused-vars */
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
 
-import { getIds } from '../../utils/helpers';
+import getIds from '../../../utils/get-ids';
 
 import Accordion from '../Accordion';
 import Dropdown from '../Dropdown';
 
-import styles from './sidebar.module.scss';
-
 import {
   useActiveId,
+  useDocContext,
   useLocation,
-  usePostContext,
   useTableOfContents,
-  useThemeOptions,
-} from '../../hooks';
+} from '../../../hooks';
+
+import styles from './sidebar.module.scss';
 
 function Menu({
+  activeId,
   children,
   closeDropdown,
-  allowMultipleOpen,
   items,
-  activeId,
 }) {
   return (
-    <nav className={styles.scrollable}>
+    <nav className={`sidebar-scrollable ${styles.scrollable}`}>
       {children}
-      <div className={styles.accordion}>
+      <div className={`sidebar-accordion-container ${styles.accordion}`}>
         <Accordion
-          allowMultipleOpen={allowMultipleOpen}
+          activeId={activeId}
           items={items}
           onClickLink={closeDropdown}
-          activeId={activeId}
         />
       </div>
     </nav>
   );
 }
 
-function checkIfOpen(item, currentId) {
-  return item.id === currentId || !!item.items.find((subItem) => subItem.id === currentId);
-}
-
 export default function Sidebar() {
-  const { menu, postId, showSidebar } = usePostContext();
+  const {
+    docId,
+    menu,
+    showSidebar,
+  } = useDocContext();
   const location = useLocation();
-  const { sidebarAllowMultipleOpen } = useThemeOptions();
 
-  const tableOfContents = useTableOfContents(postId);
+  const tableOfContents = useTableOfContents(docId);
   const itemIds = getIds(tableOfContents.nested && tableOfContents.nested.items, 2);
-  const activeId = useActiveId(itemIds, postId);
+  const activeId = useActiveId(itemIds, docId);
+
+  function checkIfOpen(item, currentId) {
+    return item.id === currentId || !!item.items.find((subItem) => subItem.id === currentId);
+  }
 
   if (showSidebar === false || !menu || !menu.items) return null;
 
+  /* eslint-disable no-param-reassign */
   menu.items.forEach((item) => {
     let isOpen;
     if (item.isGroup) {
       isOpen = !!location.pathname.match(new RegExp(`^${item.path}`, 'i'));
       item.items.forEach((subItem) => {
-        subItem.isOpen = checkIfOpen(subItem, postId);
+        subItem.isOpen = checkIfOpen(subItem, docId);
       });
     } else {
-      isOpen = checkIfOpen(item, postId);
+      isOpen = checkIfOpen(item, docId);
     }
 
     item.isOpen = isOpen;
   });
+  /* eslint-enable no-param-reassign */
 
   return (
     <>
-      <div id="sidebar-container" sx={{ variant: 'divs.sidebar' }} className={styles.sidebar}>
+      <div
+        className={`sidebar-container ${styles.sidebar}`}
+        id="sidebar-container"
+        sx={{ variant: 'divs.sidebar' }}
+      >
         <Menu
-          allowMultipleOpen={sidebarAllowMultipleOpen}
-          items={menu.items}
           activeId={activeId}
+          items={menu.items}
         >
           <Styled.a
             as={Link}
             to={menu.path}
+            className="sidebar-label-link"
             sx={{ variant: 'links.sidebarLabel' }}
           >
-            <h2>{menu.name}</h2>
+            <h2 className={`sidebar-label-header ${styles.header}`}>{menu.name}</h2>
           </Styled.a>
         </Menu>
       </div>
-      <div sx={{ variant: 'divs.mobileSidebar' }} className={styles.dropdown}>
+      <div
+        className={`sidebar-dropdown-container ${styles.dropdown}`}
+        sx={{ variant: 'divs.mobileSidebar' }}
+      >
         <Dropdown
+          className="mobile-sidebar"
           label={menu.name}
           themeUI={{ backgroundColor: 'background' }}
-          className="mobile-sidebar"
         >
           <Menu
-            allowMultipleOpen={sidebarAllowMultipleOpen}
-            items={menu.items}
             activeId={activeId}
+            items={menu.items}
           />
         </Dropdown>
       </div>
@@ -107,19 +115,17 @@ export default function Sidebar() {
 }
 
 Menu.propTypes = {
+  activeId: PropTypes.string.isRequired,
   children: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]),
   closeDropdown: PropTypes.func,
-  allowMultipleOpen: PropTypes.bool,
   items: PropTypes.instanceOf(Object).isRequired,
-  activeId: PropTypes.string.isRequired,
 };
 
 Menu.defaultProps = {
   children: null,
   closeDropdown: () => {},
-  allowMultipleOpen: true,
 };

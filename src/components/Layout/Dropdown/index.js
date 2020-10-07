@@ -2,25 +2,26 @@
 /* eslint-disable no-unused-vars */
 import { jsx } from 'theme-ui';
 import React, {
+/* eslint-enable no-unused-vars */
+  cloneElement,
   Children,
   isValidElement,
-  cloneElement,
-  useState,
   useRef,
+  useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
-import { useClickOutside } from '../../hooks';
+import { useClickOutside } from '../../../hooks';
 
 import styles from './dropdown.module.scss';
 
 export default function Dropdown({
   children,
-  label,
-  openIcon,
   closeIcon,
+  openIcon,
+  label,
   themeUI,
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,18 +43,21 @@ export default function Dropdown({
   });
 
   return (
-    <div ref={ref} className={styles.dropdown}>
+    <div ref={ref} className={`dropdown-container ${styles.dropdown}`}>
       <button
         type="button"
         onClick={onClick}
-        className={styles.button}
+        className={`dropdown-button ${styles.button}`}
         sx={{ variant: 'buttons.dropdown' }}
       >
         {label !== '' && <span className="dropdown-label">{label}</span>}
         <span>{isOpen ? close : open}</span>
       </button>
       {isOpen && (
-        <div sx={themeUI}>
+        <div
+          className="dropdown-content"
+          sx={themeUI}
+        >
           {Children.map(children, (child) => {
             if (isValidElement(child)) {
               return cloneElement(child, { closeDropdown });
@@ -71,15 +75,15 @@ Dropdown.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]).isRequired,
-  openIcon: PropTypes.node,
   closeIcon: PropTypes.node,
+  openIcon: PropTypes.node,
   label: PropTypes.string,
   themeUI: PropTypes.instanceOf(Object),
 };
 
 Dropdown.defaultProps = {
+  closeIcon: null,
+  openIcon: null,
   label: '',
   themeUI: {},
-  openIcon: null,
-  closeIcon: null,
 };

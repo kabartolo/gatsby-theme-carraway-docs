@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, useStaticQuery } from 'gatsby';
 
-import Image from '../Image';
+import Image from '../../image';
 
 export default function Logo({ src }) {
   const data = useStaticQuery(graphql`
@@ -13,7 +13,7 @@ export default function Logo({ src }) {
           name
           childImageSharp {
             fixed(height: 30) {
-              ...GatsbyImageSharpFixed
+              ...GatsbyImageSharpFixed_noBase64
             }
           }
         }
