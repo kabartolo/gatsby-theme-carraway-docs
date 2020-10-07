@@ -10,7 +10,7 @@ import Playground from '../Playground';
 
 import { usePrismTheme } from '../../hooks';
 
-import styles from './codeBlock.module.scss';
+import styles from './code-block.module.scss';
 
 const linesToHighlight = (metastring) => {
   const regex = /{([\d,-]+)}/;
@@ -43,10 +43,11 @@ export default function CodeBlock({ children, metastring, className: gatsbyClass
 
   return (
     <div
-      className={styles.codeBlock}
+      className={`code-block ${styles.codeBlock}`}
       sx={{ variant: 'divs.code' }}
+      style={{ backgroundColor: theme.plain.backgroundColor }}
     >
-      <div className={styles.scrollContainer}>
+      <div className={`code-block-scroll ${styles.scrollContainer}`}>
         <Highlight {... defaultProps} code={children} language={language} theme={theme}>
           {({
             style,
@@ -57,10 +58,11 @@ export default function CodeBlock({ children, metastring, className: gatsbyClass
           }) => (
             <>
               {showNumbers && (
-                <div className={styles.numberColumn}>
+                <div className={`code-block-num-column ${styles.numberColumn}`}>
                   {tokens.slice(0, -1).map((line, i) => (
                     <div
-                      className={styles.number}
+                      key={i}
+                      className={`code-block-num ${styles.number}`}
                       style={{ color: theme.plain.color }}
                       sx={{
                         variant: [
@@ -68,25 +70,31 @@ export default function CodeBlock({ children, metastring, className: gatsbyClass
                           highlightLine(i) && 'divs.highlightNumber',
                         ],
                       }}
-                      key={i}
                     >
                       {i + 1}
                     </div>
                   ))}
                 </div>
               )}
-              <pre className={`${className} ${styles.prismCode}`} style={style}>
-                <code>
+              <pre className={`code-block-pre ${className} ${styles.prismCode}`} style={style}>
+                <code className={`code-block-code ${styles.code}`}>
                   {tokens.slice(0, -1).map((line, i) => {
                     const lineProps = getLineProps({ line, key: i });
-                    lineProps.className = `${lineProps.className} ${styles.line}`;
+                    lineProps.className = `code-block-line-container ${lineProps.className} ${styles.line}`;
                     lineProps.sx = { variant: highlightLine(i) && 'divs.highlightLine' };
 
                     return (
-                      <div key={i} {...lineProps}>
-                        <span>
+                      <div
+                        key={i}
+                        {...lineProps}
+                      >
+                        <span className="code-block-line">
                           {line.map((token, key) => (
-                            <span key={key} {...getTokenProps({ token, key })} />
+                            <span
+                              key={key}
+                              className="code-block-line-token"
+                              {...getTokenProps({ token, key })}
+                            />
                           ))}
                         </span>
                       </div>

@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
-import { useState, useEffect, Children } from 'react';
+import { Children, useState } from 'react';
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useUID } from 'react-uid';
@@ -9,20 +9,17 @@ import { faCopy, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 import { usePrismTheme } from '../../hooks';
 
-import styles from './codeExample.module.scss';
+import styles from './code-example.module.scss';
 
 export default function CodeExample({
   children,
-  title,
   labels,
-  updateBlockHeight,
+  title,
 }) {
   const childrenArray = Children.toArray(children);
   const codeBlocks = childrenArray.filter((child) => child.props.mdxType === 'pre');
   const uid = `code-example-${useUID()}`;
   const { plain: theme } = usePrismTheme();
-
-  useEffect(() => updateBlockHeight());
 
   /* eslint-disable no-param-reassign */
   const blocksByLang = codeBlocks.reduce((map, block, index) => {
@@ -46,40 +43,56 @@ export default function CodeExample({
   }
 
   return (
-    <div id={uid} className={styles.container} style={{ backgroundColor: theme.backgroundColor }}>
-      <div className={styles.topBar} sx={{ variant: 'divs.codeTop' }}>
-        <h3 className={styles.title}>{title}</h3>
-        <span className={styles.util}>
+    <div
+      id={uid}
+      className={`code-example-container ${styles.container}`}
+      style={{ backgroundColor: theme.backgroundColor }}
+    >
+      <div
+        className={`code-example-top-bar ${styles.topBar}`}
+        sx={{ variant: 'divs.codeTop' }}
+      >
+        <h3 className={`code-example-title ${styles.title}`}>{title}</h3>
+        <span className={`code-example-util ${styles.util}`}>
           {(labels.length > 1)
             ? (
-              <span className={styles.selectWrapper}>
+              <span className={`code-example-select-wrapper ${styles.selectWrapper}`}>
                 <select
                   name="select-language"
-                  className={styles.select}
+                  className={`code-example-select ${styles.select}`}
                   onChange={onChange}
                   onBlur={onChange}
                 >
                   {languages.map((lang, i) => (
-                    <option key={lang} value={lang}>{labels[i]}</option>
+                    <option
+                      key={lang}
+                      value={lang}
+                      className="code-example-option"
+                    >
+                      {labels[i]}
+                    </option>
                   ))}
                 </select>
-                <FontAwesomeIcon icon={faChevronDown} className={styles.selectArrow} />
+                <FontAwesomeIcon
+                  icon={faChevronDown}
+                  className={`code-example-select-arrow ${styles.selectArrow}`}
+                />
               </span>
             )
-            : <span className={styles.label}>{labels[0]}</span>}
-          {(labels.length > 0) && <span className={styles.divider} />}
+            : <span className={`code-example-label ${styles.label}`}>{labels[0]}</span>}
+          {(labels.length > 0) && <span className={`code-example-divider ${styles.divider}`} />}
           <CopyToClipboard text={getText(blockValue)}>
             <button
               type="button"
               title="Click to copy"
-              className={styles.copyButton}
+              className={`code-example-copy-button ${styles.copyButton}`}
             >
               <FontAwesomeIcon icon={faCopy} />
             </button>
           </CopyToClipboard>
         </span>
       </div>
-      <div className={styles.codeBody}>
+      <div className={`code-example-code-container ${styles.codeBody}`}>
         {blockValue}
       </div>
     </div>
@@ -91,13 +104,11 @@ CodeExample.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]).isRequired,
-  title: PropTypes.string,
   labels: PropTypes.arrayOf(String),
-  updateBlockHeight: PropTypes.func,
+  title: PropTypes.string,
 };
 
 CodeExample.defaultProps = {
-  title: '',
-  updateBlockHeight: () => {},
   labels: [],
+  title: '',
 };

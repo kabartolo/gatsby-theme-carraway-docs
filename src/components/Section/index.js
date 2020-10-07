@@ -2,12 +2,13 @@
 /* eslint-disable no-unused-vars */
 import { jsx } from 'theme-ui';
 import React, {
+  Children,
+  cloneElement,
+  isValidElement,
   useEffect,
   useRef,
-  Children,
-  isValidElement,
-  cloneElement,
 } from 'react';
+/* eslint-enable no-unused-vars */
 import PropTypes from 'prop-types';
 import { useUID } from 'react-uid';
 
@@ -16,7 +17,7 @@ import { useWindowDimensions } from '../../hooks';
 import styles from './section.module.scss';
 
 const SECTION_BREAKPOINT = 1350;
-const blockMargin = 12;
+const { sectionCodeBlockMargin } = styles;
 
 export default function Section({ children }) {
   const uid = useUID();
@@ -41,37 +42,27 @@ export default function Section({ children }) {
     if (!rightColumnBlocks) return;
 
     /* eslint-disable no-param-reassign */
-    const totalBlockHeights = rightColumnBlocks.reduce((sum, block) => (
-      sum + block.offsetHeight + blockMargin
+    const totalBlockHeight = rightColumnBlocks.reduce((sum, block) => (
+      sum + block.offsetHeight
     ), 0);
-
-    const parent = document.getElementById(`right-column-${uid}`);
-    const padding = parseInt(window.getComputedStyle(parent).paddingTop, 10);
+    const rightColumn = document.getElementById(`right-column-${uid}`);
+    const padding = parseInt(window.getComputedStyle(rightColumn).paddingTop, 10);
     const numBlocks = rightColumnBlocks.length;
 
-    const areaHeight = height - (padding * 2) + blockMargin;
+    const screenHeight = height - padding;
+    const areaHeight = screenHeight - ((numBlocks + 1) * sectionCodeBlockMargin);
+    if (totalBlockHeight <= areaHeight) return;
+
     const blockHeight = areaHeight / numBlocks;
-
-    if (totalBlockHeights <= areaHeight) return;
-
     rightColumnBlocks.forEach((block) => {
-      block.style.marginBottom = `${blockMargin}px`;
-      block.style.maxHeight = `${blockHeight - blockMargin}px`;
+      const maxHeight = `${blockHeight - sectionCodeBlockMargin}px`;
+      block.style.marginBottom = `${sectionCodeBlockMargin}px`;
+      block.tagName === 'PRE'
+        ? block.style.maxHeight = maxHeight
+        : block.querySelector('PRE').style.maxHeight = maxHeight;
     });
     /* eslint-enable no-param-reassign */
   }
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    const heading = section && section.querySelector('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
-    if (heading) {
-      section.id = heading.getAttribute('id');
-    }
-  });
-
-  useEffect(() => {
-    if (width >= SECTION_BREAKPOINT) updateBlockHeight();
-  });
 
   let leftColumn = [];
   let rightColumn = [];
@@ -87,17 +78,37 @@ export default function Section({ children }) {
       : leftColumn = leftColumn.concat(child);
   });
 
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    if (width >= SECTION_BREAKPOINT) updateBlockHeight();
+  }, [width]);
+  /* eslint-enable react-hooks/exhaustive-deps */
+
+  const divideColumns = width > SECTION_BREAKPOINT && rightColumn.length;
+
+  const columnClass = divideColumns ? styles.twoColumns : styles.oneColumn;
+  const leftColumnClass = divideColumns ? `section-left-column ${styles.leftColumn}` : '';
+  const rightColumnClass = divideColumns ? `section-right-column ${styles.rightColumn}` : '';
   return (
     <section
       ref={sectionRef}
-      className={width < SECTION_BREAKPOINT ? styles.oneColumn : styles.twoColumns}
+      className={`section-container ${columnClass}`}
       sx={{ variant: 'divs.section' }}
     >
-      <div id={`left-column-${uid}`} className={rightColumn.length ? styles.leftColumn : styles.noColumns}>
+      <div
+        id={`left-column-${uid}`}
+        className={leftColumnClass}
+      >
         {leftColumn}
       </div>
-      <div id={`right-column-${uid}`} className={rightColumn.length ? styles.rightColumn : ''}>
-        <div id={`block-container-${uid}`} className={styles.blocks}>
+      <div
+        id={`right-column-${uid}`}
+        className={rightColumnClass}
+      >
+        <div
+          id={`block-container-${uid}`}
+          className={`block-container ${styles.blocks}`}
+        >
           {Children.map(rightColumn, (child) => {
             if (isValidElement(child) && child.props.mdxType === 'CodeExample') {
               return cloneElement(child, { updateBlockHeight });

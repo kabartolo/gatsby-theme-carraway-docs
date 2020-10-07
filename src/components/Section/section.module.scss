@@ -16,6 +16,15 @@
 
 .oneColumn {
 	flex-direction: column;
+	.blocks {
+		width: 100%;
+		:global(.code-block) {
+			max-width: 100%;
+			:global(.code-block-code) {
+				width: auto;
+			}
+		}
+	}
 }
 
 .twoColumns {
@@ -33,11 +42,25 @@
 	    flex: 50%;
 	    max-width: 50%;
 	    display: flex;
+	    flex-direction: column;
 	    justify-content: center;
 		position: -webkit-sticky;
 		position: sticky;
 		align-self: flex-start;
 		top: 0;
-		padding-top: $right-column-margin-top;
+		padding-top: $right-column-padding-top;
+		.blocks {
+			width: 100%;
+			max-height: calc(100vh - #{$header-main-height});
+			:global(.code-block) {
+				max-width: 100%;
+				:global(.code-block-scroll) {
+					max-height: 100%;
+				}
+				:global(.code-block-code) {
+					width: auto;
+				}
+			}
+		}
 	}
 }

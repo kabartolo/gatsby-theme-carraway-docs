@@ -4,7 +4,15 @@
 	border-radius: 7px;
 	margin: 1.5rem 0;
     min-width: 300px;
-	max-width: 700px;
+	@include for-tablet-up {
+		max-width: 750px;
+		:global(.code-block) {
+			max-width: 100%;
+			:global(.code-block-code) {
+			    min-width: 100%;
+			}
+		}
+	}
 	.top-bar {
 		display: flex;
 		border-radius: 7px 7px 0 0;
@@ -12,7 +20,7 @@
 		justify-content: space-between;
 		height: $top-bar-height;
 		opacity: .7;
-		h3 {
+		.title {
 			margin: 0;
 		}
 	}
