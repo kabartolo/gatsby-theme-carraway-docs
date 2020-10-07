@@ -7,15 +7,16 @@ import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
-import styles from './search.module.scss';
 import { useEscape, useClickOutside } from '../../hooks';
+
+import styles from './search.module.scss';
 
 export default function SearchInput({
   clickOutsideRef,
-  query,
-  setQuery,
   focus,
   setFocus,
+  query,
+  setQuery,
 }) {
   const escapeRef = useRef();
 
@@ -58,37 +59,39 @@ export default function SearchInput({
   }, [query, setFocus]);
 
   return (
-    <div className={`${styles.searchGroup} ${focus ? styles.expanded : ''}`}>
+    <div
+      className={`search-input-group ${styles.searchGroup} ${focus ? styles.expanded : ''}`}
+    >
       <FontAwesomeIcon
         icon={faSearch}
-        className={styles.searchIcon}
+        className={`search-icon ${styles.searchIcon}`}
         sx={{ variant: 'icons.search' }}
       />
       <input
-        type="search"
-        ref={escapeRef}
         id="search-input"
         name="query"
-        value={query}
-        placeholder="Search"
         onFocus={() => setFocus(true)}
         onChange={handleChange}
-        sx={{ variant: 'inputs.searchbar' }}
+        placeholder="Search"
+        ref={escapeRef}
+        type="search"
+        value={query}
         className={`searchbar ${styles.searchInput} ${focus ? styles.expanded : ''}`}
+        sx={{ variant: 'inputs.searchbar' }}
       />
       {query && (
         <button
-          type="button"
-          className={styles.button}
-          sx={{ variant: 'buttons.searchIcon' }}
           onClick={() => {
             clearSearch();
             if (focus) focusInput();
           }}
+          type="button"
+          className={`search-close-button ${styles.button}`}
+          sx={{ variant: 'buttons.clearSearch' }}
         >
           <FontAwesomeIcon
+            className={`search-close-icon ${styles.closeIcon}`}
             icon={faTimesCircle}
-            className={styles.closeIcon}
             sx={{ variant: 'icons.clearSearch' }}
           />
         </button>
@@ -98,14 +101,14 @@ export default function SearchInput({
 }
 
 SearchInput.propTypes = {
-  query: PropTypes.string,
-  setQuery: PropTypes.func.isRequired,
+  clickOutsideRef: PropTypes.instanceOf(Object).isRequired,
   focus: PropTypes.bool,
   setFocus: PropTypes.func.isRequired,
-  clickOutsideRef: PropTypes.instanceOf(Object).isRequired,
+  query: PropTypes.string,
+  setQuery: PropTypes.func.isRequired,
 };
 
 SearchInput.defaultProps = {
-  query: '',
   focus: false,
+  query: '',
 };

@@ -3,39 +3,40 @@ import { jsx, Styled } from 'theme-ui';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
 
-import { getIds } from '../../utils/helpers';
+import getIds from '../../utils/get-ids';
 
-import { useActiveId } from '../../hooks';
+import { useActiveId, useDocContext, useTableOfContents } from '../../hooks';
 
 import styles from './toc.module.scss';
 
 function NestedList({
-  items,
+  activeId,
   count,
   depth,
-  activeId,
+  items,
 }) {
   return (
-    <ol>
+    <ol className="toc-nested-list">
       {items.map((item) => (
         <li
           key={item.url}
+          className="toc-nested-list-item"
           sx={{ variant: 'listItems.toc' }}
         >
           <Styled.a
             as={Link}
             to={item.url}
-            className={(item.url === `#${activeId}`) ? 'activeHeader' : ''}
+            className={`toc-nested-link ${(item.url === `#${activeId}`) ? 'activeHeader' : ''}`}
             sx={{ variant: 'links.toc' }}
           >
             {item.title}
           </Styled.a>
           {(count <= depth && item.items) && (
             <NestedList
-              items={item.items}
+              activeId={activeId}
               count={count + 1}
               depth={depth}
-              activeId={activeId}
+              items={item.items}
             />
           )}
         </li>
@@ -45,12 +46,14 @@ function NestedList({
 }
 
 export default function TOC({
+  className,
   contents,
   depth,
   title,
-  className,
 }) {
-  const tableOfContents = contents;
+  const { docId } = useDocContext();
+  const storedTOC = useTableOfContents(docId);
+  const tableOfContents = contents || storedTOC.nested;
   const itemIds = getIds(tableOfContents.items, 6);
   const activeId = useActiveId(itemIds, '');
 
@@ -63,14 +66,14 @@ export default function TOC({
       sx={{ variant: 'divs.toc' }}
     >
       <nav
-        className={styles.scroll}
+        className={`toc-scroll ${styles.scroll}`}
       >
-        <h2>{title}</h2>
+        <h2 className="toc-title">{title}</h2>
         <NestedList
-          items={tableOfContents.items}
+          activeId={activeId}
           count={0}
           depth={depth}
-          activeId={activeId}
+          items={tableOfContents.items}
         />
       </nav>
     </div>
@@ -78,6 +81,7 @@ export default function TOC({
 }
 
 TOC.propTypes = {
+  className: PropTypes.string,
   contents: PropTypes.shape({
     items: PropTypes.arrayOf(
       PropTypes.shape({
@@ -88,24 +92,23 @@ TOC.propTypes = {
   }),
   depth: PropTypes.number,
   title: PropTypes.string,
-  className: PropTypes.string,
 };
 
 TOC.defaultProps = {
+  className: '',
   contents: null,
   depth: 2,
   title: 'Table of Contents',
-  className: '',
 };
 
 NestedList.propTypes = {
+  activeId: PropTypes.string.isRequired,
+  count: PropTypes.number.isRequired,
+  depth: PropTypes.number.isRequired,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
       url: PropTypes.string.isRequired,
     }),
   ).isRequired,
-  count: PropTypes.number.isRequired,
-  depth: PropTypes.number.isRequired,
-  activeId: PropTypes.string.isRequired,
 };

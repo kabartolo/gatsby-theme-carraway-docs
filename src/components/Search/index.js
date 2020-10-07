@@ -2,24 +2,32 @@
 /* eslint-disable no-unused-vars */
 import { jsx, Styled } from 'theme-ui';
 import React, {
-  useState,
   useEffect,
   useRef,
+  useState,
   useMemo,
 } from 'react';
 /* eslint-enable no-unused-vars */
 import PropTypes from 'prop-types';
 import { Index } from 'elasticlunr';
+import { graphql, useStaticQuery } from 'gatsby';
 
-import { useSearchIndex } from '../../hooks';
-
-import SearchInput from './searchInput';
-import SearchResults from './searchResults';
+import SearchInput from './search-input';
+import SearchResults from './search-results';
 
 import styles from './search.module.scss';
 
+/* Ensure `allowSiteSearch` is `true` in the `gatsby-theme-carraway-docs` theme options
+    before using this component */
 export default function Search({ closeDropdown }) {
-  const searchIndexData = useSearchIndex();
+  const { siteSearchIndex } = useStaticQuery(graphql`
+    query {
+      siteSearchIndex {
+        index
+      }
+    }
+  `);
+  const searchIndexData = siteSearchIndex.index;
   const searchIndex = useMemo(() => Index.load(searchIndexData), [searchIndexData]);
 
   const [query, setQuery] = useState('');
@@ -51,26 +59,26 @@ export default function Search({ closeDropdown }) {
 
   return (
     <>
-      <div ref={clickOutsideRef} className={styles.wrapper}>
-        <form className={styles.searchForm} role="search" method="GET">
+      <div ref={clickOutsideRef} className={`search-container ${styles.searchContainer}`}>
+        <form className={`search-form ${styles.searchForm}`} role="search" method="GET">
           <SearchInput
             clickOutsideRef={clickOutsideRef}
-            query={query}
-            setQuery={setQuery}
             focus={focus}
             setFocus={setFocus}
+            query={query}
+            setQuery={setQuery}
           />
         </form>
         {focus && (
           <SearchResults
-            results={results}
-            query={query}
-            focus={focus}
             closeDropdown={closeDropdown}
+            focus={focus}
+            query={query}
+            results={results}
           />
         )}
       </div>
-      <div id="search-overlay" className={styles.searchOverlay} />
+      <div id="search-overlay" className={`search-overlay ${styles.searchOverlay}`} />
     </>
   );
 }

@@ -15,6 +15,11 @@ export const divs = {
       color: 'text',
     },
   },
+  footer: {
+    borderTop: 'thick',
+    borderColor: 'border',
+    bg: 'background',
+  },
   header: {
     borderBottom: 'thick',
     borderColor: 'border',
@@ -30,12 +35,14 @@ export const divs = {
     borderColor: 'highlight',
   },
   mobileSidebar: {
+    borderBottom: 'thick',
+    borderColor: 'border',
     bg: 'background',
   },
   // dropdown mobile menu in Header component
   mobileMenu: {
     bg: 'backgroundSecondary',
-    borderBottom: 'main',
+    borderBottom: 'thick',
     borderColor: 'border',
     boxShadowBottom: 'main',
   },
@@ -55,8 +62,12 @@ export const divs = {
     },
   },
   propertyTable: {
+    borderTop: '2px solid',
     borderBottom: '2px solid',
     borderColor: 'border',
+    '.property-table-title': {
+      color: 'grey',
+    },
     '.property-table-cell': {
       listStyle: 'none',
       borderTop: 'main',
@@ -64,6 +75,7 @@ export const divs = {
     },
     '.property-name': {
       fontFamily: 'Monospace',
+      fontSize: '1.1rem',
     },
     '.property-type': {
       fontWeight: 'bold',
@@ -80,7 +92,7 @@ export const divs = {
     '.property-default-value': {
     },
   },
-  resultContainer: {
+  resultsContainer: {
     bg: 'backgroundSecondary',
     borderBottom: 'main',
     borderColor: 'border',

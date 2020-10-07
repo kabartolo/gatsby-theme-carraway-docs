@@ -1,6 +1,6 @@
 @import '../../styles/_global.scss';
 
-.wrapper {
+.search-container {
 	position: relative;
 	z-index: 4;
 	.search-form {
@@ -23,6 +23,7 @@
 				right: $search-icon-padding;
 			}
 			.search-input {
+				-webkit-appearance: none;
 				position: relative;
 				z-index: 1;
 				margin-top: $searchbar-padding;
@@ -38,23 +39,23 @@
 			}
 		}
 	}
-	.container.open {
+	.results-container.open {
 		display: block;
 		border-radius: 3px;
 		.search-results.open {
 			position: relative;
 			z-index: 5;
-			max-height: 80vh;
+			height: calc(100vh - #{$header-main-height});
 			transition: width .3s ease-in-out;
 			overflow-y: auto;
-			.result-container {
+			.result-list-item {
 				padding: 1em 0.5em;
 			}
-			ol {
+			.list {
 				padding-left: 0;
 			}
-			h3,
-			p {
+			.result-header,
+			.result-excerpt {
 				margin: 0;
 			}
 		}
@@ -62,7 +63,7 @@
 }
 
 @include for-tablet-up {
-	.wrapper {
+	.search-container {
 		align-self: flex-start;
 		flex: 0 1 auto;
 		.search-form {
@@ -87,10 +88,10 @@
 			width: 100%;
 			margin-top: $searchbar-height;
 		}
-		.container {
+		.results-container {
 			padding: $searchbar-padding;
 		}
-		.container.open {
+		.results-container.open {
 			width: $search-container-width;
 			max-width: $search-container-maxwidth;
 			min-height: $header-main-height;
@@ -110,15 +111,20 @@
 }
 
 @include for-mobile-only {
-	.search-input {
-		width: 100%;
-	}
-	.container {
-		position: absolute;
-		width: 100%;
-		.search-results.open {
-			background: inherit;
-			margin-top: 4px;
+	.search-container {
+		.search-input {
+			width: 100%;
+		}
+		.results-container {
+			position: absolute;
+			width: 100%;
+		}
+		.results-container.open {
+			.search-results.open {
+				background: inherit;
+				margin-top: 4px;
+				height: $header-mobile-scroll-height;
+			}
 		}
 	}
 }

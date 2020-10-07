@@ -5,30 +5,41 @@ import React from 'react';
 /* eslint-enable no-unused-vars */
 import { Link } from 'gatsby';
 
-import styles from './postlist.module.scss';
+import { useDocContext, useLocation } from '../../hooks';
 
-import { useLocation, usePostContext } from '../../hooks';
+import styles from './postlist.module.scss';
 
 /* Returns a list of posts for the current menu or group index */
 export default function PostList() {
-  const { menu } = usePostContext();
+  const { menu } = useDocContext();
   const location = useLocation();
+  const removeEndingSlash = (path) => path && path.replace(/\/$/, '');
+  const matchEndPath = (locationPath, menuPath) => {
+    const re = new RegExp(`${removeEndingSlash(menuPath)}$`);
+    return re.test(removeEndingSlash(locationPath));
+  };
 
-  const endSlash = location.pathname.match(/\/$/);
-  const path = `${location.pathname}${endSlash ? '' : '/'}`;
-  const isMenuIndex = menu && menu.path === path;
-  const groupIndex = menu && menu.items && menu.items.find((item) => item.path === path);
+  const isMenuIndex = menu && matchEndPath(location.pathname, menu.path);
+  const groupIndex = menu && menu.items && menu.items.find((item) => (
+    matchEndPath(location.pathname, item.path)
+  ));
+
   const currentMenu = isMenuIndex ? menu : groupIndex;
 
   if (!currentMenu) return null;
 
   return (
-    <ul className={styles.postList}>
+    <ul className={`post-list ${styles.postList}`}>
       {currentMenu.items.map((post) => (
-        <li key={post.id} sx={{ variant: 'listItems.postList' }}>
+        <li
+          key={post.id}
+          className="post-list-item"
+          sx={{ variant: 'listItems.postList' }}
+        >
           <Styled.a
             as={Link}
             to={post.path}
+            className="post-list-link"
             sx={{ variant: 'links.postList' }}
           >
             {post.title || post.name}

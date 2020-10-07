@@ -3,10 +3,10 @@ import { jsx } from 'theme-ui';
 import PropTypes from 'prop-types';
 import { useMDXComponents } from '@mdx-js/react';
 import {
-  LiveProvider,
   LiveEditor,
   LiveError,
   LivePreview,
+  LiveProvider,
 } from 'react-live';
 
 import { usePrismTheme } from '../../hooks';
@@ -18,7 +18,10 @@ export default function Playground({ code }) {
   const components = useMDXComponents();
 
   return (
-    <div className={styles.container} sx={{ variant: 'divs.playground' }}>
+    <div
+      className={`playground-container ${styles.container}`}
+      sx={{ variant: 'divs.playground' }}
+    >
       <LiveProvider code={code} scope={components} theme={theme}>
         <div className={`live-preview ${styles.preview}`}>
           <LivePreview />

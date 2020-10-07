@@ -6,6 +6,14 @@ export const buttons = {
     outline: 'none',
     fontWeight: 'body',
   },
+  clearSearch: {
+    border: 'none',
+    background: 'inherit',
+    color: 'text',
+    outline: 'none',
+    cursor: 'pointer',
+    fontWeight: 'body',
+  },
   dropdown: {
     border: 'none',
     bg: 'inherit',
@@ -15,14 +23,6 @@ export const buttons = {
       textTransform: 'uppercase',
       fontSize: '0.9rem',
     },
-  },
-  searchIcon: {
-    border: 'none',
-    background: 'inherit',
-    color: 'text',
-    outline: 'none',
-    cursor: 'pointer',
-    fontWeight: 'body',
   },
   toggle: {
     border: 'none',

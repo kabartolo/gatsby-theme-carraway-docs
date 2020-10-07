@@ -74,8 +74,8 @@ export const links = {
     ':hover': {
       color: 'siteTitleHover',
     },
-    h1: {
-      fontFamily: 'Raleway',
+    '.header-site-title-text': {
+      fontFamily: 'Raleway, "Open Sans", sans-serif',
       fontSize: '16px',
       fontWeight: 'heading',
       letterSpacing: '1px',

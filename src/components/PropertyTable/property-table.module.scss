@@ -4,18 +4,20 @@
 	margin: 2rem 0;
 	max-height: calc(100vh - #{$header-main-height});
 	overflow-y: auto;	
+	.title {
+	}
 }
 
 .property-table {
 	list-style: none;
 	padding-left: 0;
-	li {
+	.cell {
 		padding: 1rem 0;
 		&:last-child {
 			padding-bottom: 0;
 		}
 	}
-	.header {
+	.top-row {
 		display: flex;
 		align-items: center;
 		.name {

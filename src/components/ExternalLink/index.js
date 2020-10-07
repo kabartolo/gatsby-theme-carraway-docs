@@ -9,13 +9,19 @@ import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './externalLink.module.scss';
 
-export default function ExternalLink({ href, children }) {
+export default function ExternalLink({
+  children,
+  className,
+  href,
+  tooltip,
+}) {
   return (
     <Styled.a
       href={href}
-      target="_blank"
       rel="noopener noreferrer"
-      className="external-link"
+      target="_blank"
+      className={`external-link ${className}`}
+      title={tooltip}
     >
       {children}
       <FontAwesomeIcon className={styles.icon} icon={faExternalLinkAlt} />
@@ -28,5 +34,12 @@ ExternalLink.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]).isRequired,
+  className: PropTypes.string,
   href: PropTypes.string.isRequired,
+  tooltip: PropTypes.string,
+};
+
+ExternalLink.defaultProps = {
+  className: '',
+  tooltip: '',
 };
