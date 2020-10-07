@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 
 function useActiveId(itemIds, postId) {

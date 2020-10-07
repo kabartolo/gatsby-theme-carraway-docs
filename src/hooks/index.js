@@ -1,12 +1,11 @@
 export { useActiveId } from './useActiveId';
 export { useClickOutside } from './useClickOutside';
+export { useDocContext } from './useDocContext';
+export { useDocData } from 'gatsby-theme-carraway-docs-core/src/hooks/useDocData';
 export { useEscape } from './useEscape';
 export { useLocation } from './useLocation';
-export { usePostContext } from './usePostContext';
-export { usePostData } from './usePostData';
 export { usePrismTheme } from './usePrismTheme';
-export { useSearchIndex } from './useSearchIndex';
 export { useSiteMetadata } from './useSiteMetadata';
-export { useTableOfContents } from './useTableOfContents';
-export { useThemeOptions } from './useThemeOptions';
+export { useTableOfContents } from 'gatsby-theme-carraway-docs-core/src/hooks/useTableOfContents';
+export { useThemeOptions } from 'gatsby-theme-carraway-docs-core/src/hooks/useThemeOptions';
 export { useWindowDimensions } from './useWindowDimensions';

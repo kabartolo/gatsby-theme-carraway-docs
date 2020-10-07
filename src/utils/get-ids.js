@@ -1,4 +1,4 @@
-export function getIds(tableOfContents, depth, currentDepth = 2) {
+export default function getIds(tableOfContents, depth, currentDepth = 2) {
   if (!tableOfContents) return [];
 
   return tableOfContents.reduce((list, item) => {
