@@ -4,6 +4,7 @@ export const styles = {
   },
   inlineCode: {
     bg: 'highlight',
+    fontSize: '1rem',
   },
   table: {
     margin: '1rem 0 2em 0',

@@ -2,12 +2,13 @@
 import { jsx } from 'theme-ui';
 import { Children, useState } from 'react';
 import PropTypes from 'prop-types';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useUID } from 'react-uid';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCopy, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 import { usePrismTheme } from '../../hooks';
+
+import Copy from '../copy';
 
 import styles from './code-example.module.scss';
 
@@ -81,15 +82,7 @@ export default function CodeExample({
             )
             : <span className={`code-example-label ${styles.label}`}>{labels[0]}</span>}
           {(labels.length > 0) && <span className={`code-example-divider ${styles.divider}`} />}
-          <CopyToClipboard text={getText(blockValue)}>
-            <button
-              type="button"
-              title="Click to copy"
-              className={`code-example-copy-button ${styles.copyButton}`}
-            >
-              <FontAwesomeIcon icon={faCopy} />
-            </button>
-          </CopyToClipboard>
+          <Copy className={styles.copyButton} value={getText(blockValue)} />
         </span>
       </div>
       <div className={`code-example-code-container ${styles.codeBody}`}>

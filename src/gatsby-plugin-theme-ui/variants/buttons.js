@@ -14,6 +14,14 @@ export const buttons = {
     cursor: 'pointer',
     fontWeight: 'body',
   },
+  copy: {
+    cursor: 'pointer',
+    bg: 'transparent',
+    border: 'none',
+    '&[disabled]': {
+      cursor: 'none',
+    },
+  },
   dropdown: {
     border: 'none',
     bg: 'inherit',

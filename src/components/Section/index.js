@@ -46,10 +46,10 @@ export default function Section({ children }) {
       sum + block.offsetHeight
     ), 0);
     const rightColumn = document.getElementById(`right-column-${uid}`);
-    const padding = parseInt(window.getComputedStyle(rightColumn).paddingTop, 10);
+    const top = parseInt(window.getComputedStyle(rightColumn).top, 10);
     const numBlocks = rightColumnBlocks.length;
 
-    const screenHeight = height - padding;
+    const screenHeight = height - top;
     const areaHeight = screenHeight - ((numBlocks + 1) * sectionCodeBlockMargin);
     if (totalBlockHeight <= areaHeight) return;
 
