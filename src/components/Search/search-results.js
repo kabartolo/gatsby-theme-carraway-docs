@@ -34,9 +34,6 @@ export default function SearchResults({
   function getExcerpt(text) {
     return text.slice(0, EXCERPT_LENGTH);
   }
-  function hasSecondaryMatch(markedHeader, paragraphMatch) {
-    return markedHeader.length > 1 || (!primaryResultsOnly && paragraphMatch);
-  }
 
   function markText(text, words) {
     return reactStringReplace(text, words, (match, i) => (
@@ -46,6 +43,10 @@ export default function SearchResults({
 
   function hasMatch(text, words) {
     return markText(text, words).length > 1;
+  }
+
+  function hasSecondaryMatch(markedHeader, paragraphMatch) {
+    return markedHeader.length > 1 || (!primaryResultsOnly && paragraphMatch);
   }
 
   /* Each result is a full post */
@@ -108,6 +109,7 @@ export default function SearchResults({
         const excerpt = (!primaryResultsOnly && paragraphMatch)
           ? markText(getExcerpt(paragraphMatch.content), query)
           : '';
+
         const element = (
           <ResultLink
             excerpt={addEllipses(excerpt)}
@@ -121,7 +123,6 @@ export default function SearchResults({
 
         primaryResults.push(element);
       } else if (!primaryResultsOnly && !hasPrimaryResult) {
-        /* Paragraph matches without a header match */
         const paragraphMatches = paragraphs
           .filter((para) => hasMatch(para.content, query))
           .map((para) => (

@@ -61,6 +61,15 @@ export default function Header() {
     );
   }
 
+  function DropdownHeader() {
+    return (
+      <div className={`header-mobile-icons ${styles.icons}`}>
+        {githubURL && <GithubLink />}
+        {useThemeToggle && <ThemeToggle />}
+      </div>
+    );
+  }
+
   return (
     <div
       id="header"
@@ -106,10 +115,7 @@ export default function Header() {
             closeIcon={closeIcon}
             themeUI={{ variant: 'divs.mobileMenu' }}
           >
-            <div className={`header-mobile-icons ${styles.icons}`}>
-              {githubURL && <GithubLink />}
-              {useThemeToggle && <ThemeToggle />}
-            </div>
+            <DropdownHeader />
             {allowSiteSearch && <Search />}
             {MainMenu && (
               <MainMenu

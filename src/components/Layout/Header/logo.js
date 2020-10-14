@@ -4,7 +4,10 @@ import { graphql, useStaticQuery } from 'gatsby';
 
 import Image from '../../image';
 
+import { useSiteMetadata } from '../../../hooks';
+
 export default function Logo({ src }) {
+  const { siteTitle } = useSiteMetadata();
   const data = useStaticQuery(graphql`
     query {
       allFile {
@@ -22,7 +25,7 @@ export default function Logo({ src }) {
   `);
 
   return (
-    <Image src={src} data={data} />
+    <Image src={src} data={data} title={siteTitle} />
   );
 }
 

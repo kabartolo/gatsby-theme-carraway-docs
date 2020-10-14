@@ -17,4 +17,4 @@ module.exports = {
     'no-unused-expressions': [1, { 'allowTernary': true }],
     'react/jsx-pascal-case': 0,
   }
-}
+};

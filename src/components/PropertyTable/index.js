@@ -55,8 +55,10 @@ export default function PropertyTable({ children, title }) {
               <h4 className={`property-name ${styles.name}`}>{property.name}</h4>
               {property.type && <span className="property-type">{property.type}</span>}
             </div>
-            <div className="property-info">
-              {property.info}
+            <div className="second-row">
+              <span className={`property-info ${styles.info}`}>
+                {property.info}
+              </span>
               {(property.default.length > 0) && (
                 <span className={`property-default-value ${styles.defaultValue}`}>
                   <em>default: </em>

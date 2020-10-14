@@ -66,7 +66,6 @@ export const divs = {
     borderBottom: '2px solid',
     borderColor: 'border',
     '.property-table-title': {
-      color: 'grey',
     },
     '.property-table-cell': {
       listStyle: 'none',
@@ -75,19 +74,20 @@ export const divs = {
     },
     '.property-name': {
       fontFamily: 'Monospace',
-      fontSize: '1.1rem',
+      fontSize: '1rem',
+      bg: 'primary',
+      color: 'background',
+      borderRadius: '4px',
     },
     '.property-type': {
       fontWeight: 'bold',
       color: 'grey',
     },
     '.property-info': {
+      fontWeight: 'bold',
     },
     '.property-description': {
       fontSize: '1rem',
-    },
-    '.property-default': {
-      fontWeight: 'bold',
     },
     '.property-default-value': {
     },
