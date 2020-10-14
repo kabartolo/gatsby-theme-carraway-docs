@@ -2,12 +2,20 @@
 import { jsx, Styled } from 'theme-ui';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
+import { useUID } from 'react-uid';
 
 import getIds from '../../utils/get-ids';
 
-import { useActiveId, useDocContext, useTableOfContents } from '../../hooks';
+import {
+  useActiveId,
+  useDocContext,
+  useTableOfContents,
+  useLocation,
+} from '../../hooks';
 
 import styles from './toc.module.scss';
+
+const MAX_DEPTH = 6;
 
 function NestedList({
   activeId,
@@ -15,11 +23,12 @@ function NestedList({
   depth,
   items,
 }) {
+  const uid = useUID();
   return (
     <ol className="toc-nested-list">
       {items.map((item) => (
         <li
-          key={item.url}
+          key={`${uid}-${item.url}`}
           className="toc-nested-list-item"
           sx={{ variant: 'listItems.toc' }}
         >
@@ -52,13 +61,16 @@ export default function TOC({
   title,
 }) {
   const { docId } = useDocContext();
-  const storedTOC = useTableOfContents(docId);
+  const { pathname } = useLocation();
+
+  const storedTOC = useTableOfContents({ depth, docId, path: pathname });
   const tableOfContents = contents || storedTOC.nested;
-  const itemIds = getIds(tableOfContents.items, 6);
+
+  const hasTOC = tableOfContents && !!tableOfContents.items;
+  const itemIds = getIds(hasTOC && tableOfContents.items, depth);
   const activeId = useActiveId(itemIds, '');
 
-  if (!tableOfContents || !tableOfContents.items) return null;
-
+  if (!hasTOC) return null;
   return (
     <div
       className={`toc-container ${className}`}
@@ -68,7 +80,7 @@ export default function TOC({
       <nav
         className={`toc-scroll ${styles.scroll}`}
       >
-        <h2 className="toc-title">{title}</h2>
+        {title && <h2 className="toc-title">{title}</h2>}
         <NestedList
           activeId={activeId}
           count={0}
@@ -97,8 +109,8 @@ TOC.propTypes = {
 TOC.defaultProps = {
   className: '',
   contents: null,
-  depth: 2,
-  title: 'Table of Contents',
+  depth: MAX_DEPTH,
+  title: '',
 };
 
 NestedList.propTypes = {

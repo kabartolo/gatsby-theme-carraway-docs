@@ -19,9 +19,13 @@
 	padding: $sidebar-padding;
 	.header {
 		margin-top: 0;
+		height: $sidebar-header-height;
+		position: sticky;
+		display: flex;
+		align-items: center;
 	}
 	.scrollable {
-		height: calc(100vh - #{$header-main-height} - calc(2 * #{$sidebar-padding}));
+		height: calc(100vh - #{$header-main-height} - calc(2 * #{$sidebar-padding}) - #{$sidebar-header-height});
 		overflow-y: auto;
 		.accordion {		
 			:global(.accordion-row) {

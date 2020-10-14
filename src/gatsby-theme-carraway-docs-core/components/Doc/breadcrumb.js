@@ -6,8 +6,6 @@ import { Link } from 'gatsby';
 import styles from './doc.module.scss';
 
 export default function Breadcrumb({ data }) {
-  if (!data.length || data.length < 2) return null;
-
   const last = data.slice(-1)[0];
   const first = data.length > 1 ? data[0] : null;
   const middle = data.length > 2 ? data.slice(1, -1) : null;

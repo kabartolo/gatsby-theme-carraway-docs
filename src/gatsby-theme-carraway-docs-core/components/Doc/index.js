@@ -10,11 +10,10 @@ import { MDXRenderer } from 'gatsby-plugin-mdx';
 import {
   useDocContext,
   useTableOfContents,
-  useThemeOptions,
 } from '../../../hooks';
 
-import Breadcrumb from './Breadcrumb';
-import NavLink from './NavLink';
+import Breadcrumb from './breadcrumb';
+import NavLink from './nav-link';
 import SEO from '../../../components/SEO';
 import TOC from '../../../components/TOC';
 
@@ -29,8 +28,8 @@ export default function Doc({ data: { doc }, pageContext }) {
     setShowSidebar,
   } = useDocContext();
 
-  const { allowBreadCrumbs } = useThemeOptions();
-  const tableOfContents = useTableOfContents(doc && doc.id);
+  const tableOfContents = useTableOfContents({ docId: doc && doc.id });
+
   const {
     menu,
     breadcrumb,
@@ -51,28 +50,26 @@ export default function Doc({ data: { doc }, pageContext }) {
     };
   });
 
-  if (doc == null) {
-    throw new Error('Error: Doc does not exist or might contain errors.');
-  }
-
   const {
-    title,
-    description,
     body,
+    description,
     path,
     slug,
-    showTOC,
+    title,
+    showBreadcrumb,
     showPostNav,
+    showTOC,
   } = doc;
-
-  const tocVisible = showTOC && !!(tableOfContents.nested && tableOfContents.nested.items);
+  const breadcrumbData = breadcrumb.filter((link) => link.name);
+  const printBreadcrumb = showBreadcrumb && breadcrumbData.length && breadcrumbData.length >= 2;
+  const printTOC = showTOC && !!(tableOfContents.nested && tableOfContents.nested.items);
 
   return (
     <article id={slug} className={styles.article}>
       <SEO title={title} description={description} path={path} />
-      {allowBreadCrumbs && breadcrumb && (
+      {printBreadcrumb && (
         <Breadcrumb
-          data={breadcrumb}
+          data={breadcrumbData}
           path={path}
           title={title}
           slug={slug}
@@ -81,8 +78,14 @@ export default function Doc({ data: { doc }, pageContext }) {
       <header className={styles.pageHeader}>
         <h1>{title}</h1>
       </header>
-      <div className={`article-main ${styles.main} ${tocVisible ? styles.withToc : ''}`}>
-        {tocVisible && <TOC contents={tableOfContents.nested} className={styles.tocContainer} />}
+      <div className={`article-main ${styles.main} ${printTOC ? styles.withToc : ''}`}>
+        {printTOC && (
+          <TOC
+            contents={tableOfContents.nested}
+            className={styles.tocContainer}
+            title="Table of Contents"
+          />
+        )}
         <div className={`article-content ${styles.articleContent}`}>
           <MDXProvider components={shortcodes}>
             <MDXRenderer>{body}</MDXRenderer>

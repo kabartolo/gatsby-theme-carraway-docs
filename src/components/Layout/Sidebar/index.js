@@ -7,6 +7,12 @@ import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
 
 import getIds from '../../../utils/get-ids';
+import {
+  addTOC,
+  deepCopy,
+  formatTOC,
+  markOpenAccordions,
+} from '../../../utils/toc-helpers';
 
 import Accordion from '../Accordion';
 import Dropdown from '../Dropdown';
@@ -16,6 +22,7 @@ import {
   useDocContext,
   useLocation,
   useTableOfContents,
+  useThemeOptions,
 } from '../../../hooks';
 
 import styles from './sidebar.module.scss';
@@ -27,16 +34,18 @@ function Menu({
   items,
 }) {
   return (
-    <nav className={`sidebar-scrollable ${styles.scrollable}`}>
+    <>
       {children}
-      <div className={`sidebar-accordion-container ${styles.accordion}`}>
-        <Accordion
-          activeId={activeId}
-          items={items}
-          onClickLink={closeDropdown}
-        />
-      </div>
-    </nav>
+      <nav className={`sidebar-scrollable ${styles.scrollable}`}>
+        <div className={`sidebar-accordion-container ${styles.accordion}`}>
+          <Accordion
+            activeId={activeId}
+            items={items}
+            onClickLink={closeDropdown}
+          />
+        </div>
+      </nav>
+    </>
   );
 }
 
@@ -46,33 +55,28 @@ export default function Sidebar() {
     menu,
     showSidebar,
   } = useDocContext();
+  const newMenu = deepCopy(menu);
   const location = useLocation();
+  const { sidebarAllowTOC, sidebarDepth } = useThemeOptions();
 
-  const tableOfContents = useTableOfContents(docId);
-  const itemIds = getIds(tableOfContents.nested && tableOfContents.nested.items, 2);
+  const allTableOfContents = useTableOfContents({ depth: sidebarDepth });
+  const tableOfContents = allTableOfContents.find((toc) => toc.id === docId);
+  const hasTOC = tableOfContents && !!tableOfContents.nested;
+
+  const itemIds = getIds(hasTOC && tableOfContents.nested.items, sidebarDepth);
   const activeId = useActiveId(itemIds, docId);
-
-  function checkIfOpen(item, currentId) {
-    return item.id === currentId || !!item.items.find((subItem) => subItem.id === currentId);
-  }
 
   if (showSidebar === false || !menu || !menu.items) return null;
 
-  /* eslint-disable no-param-reassign */
-  menu.items.forEach((item) => {
-    let isOpen;
-    if (item.isGroup) {
-      isOpen = !!location.pathname.match(new RegExp(`^${item.path}`, 'i'));
-      item.items.forEach((subItem) => {
-        subItem.isOpen = checkIfOpen(subItem, docId);
-      });
-    } else {
-      isOpen = checkIfOpen(item, docId);
-    }
+  newMenu.items = addTOC(newMenu.items, allTableOfContents);
+  if (sidebarAllowTOC) newMenu.items = formatTOC(newMenu.items, sidebarDepth);
 
-    item.isOpen = isOpen;
-  });
-  /* eslint-enable no-param-reassign */
+  newMenu.items = markOpenAccordions(
+    activeId,
+    location.pathname,
+    newMenu.items,
+    sidebarDepth,
+  );
 
   return (
     <>
@@ -83,16 +87,20 @@ export default function Sidebar() {
       >
         <Menu
           activeId={activeId}
-          items={menu.items}
+          items={newMenu.items}
         >
-          <Styled.a
-            as={Link}
-            to={menu.path}
-            className="sidebar-label-link"
-            sx={{ variant: 'links.sidebarLabel' }}
-          >
-            <h2 className={`sidebar-label-header ${styles.header}`}>{menu.name}</h2>
-          </Styled.a>
+          {newMenu.sidebarLabel && (
+            <div className={`sidebar-header ${styles.header}`}>
+              <Styled.a
+                as={Link}
+                to={newMenu.path}
+                className="sidebar-label-link"
+                sx={{ variant: 'links.sidebarLabel' }}
+              >
+                <h2 className="sidebar-label">{newMenu.sidebarLabel}</h2>
+              </Styled.a>
+            </div>
+          )}
         </Menu>
       </div>
       <div
@@ -101,12 +109,12 @@ export default function Sidebar() {
       >
         <Dropdown
           className="mobile-sidebar"
-          label={menu.name}
+          label={newMenu.dropdownLabel}
           themeUI={{ backgroundColor: 'background' }}
         >
           <Menu
             activeId={activeId}
-            items={menu.items}
+            items={newMenu.items}
           />
         </Dropdown>
       </div>

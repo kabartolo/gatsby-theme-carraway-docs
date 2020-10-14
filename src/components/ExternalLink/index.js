@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 
-import styles from './externalLink.module.scss';
+import styles from './external-link.module.scss';
 
 export default function ExternalLink({
   children,
