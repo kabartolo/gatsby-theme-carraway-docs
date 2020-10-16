@@ -30,7 +30,6 @@
 		align-items: center;
 		.copy-button {
 			padding-left: 0;
-			height: 1em;
 		}
 		.select {
 			background: transparent;
@@ -55,14 +54,7 @@
 }
 
 .title {
-	font-size: 0.8rem;
-	font-weight: 500;
 	padding-left: 15px;
-}
-
-.label,
-.select {
-	font-size: 1em;
 }
 
 .select-wrapper {

@@ -102,7 +102,7 @@ TOC.propTypes = {
       }),
     ),
   }),
-  depth: PropTypes.number,
+  depth: PropTypes.oneOf([2, 3, 4, 5, 6]),
   title: PropTypes.string,
 };
 

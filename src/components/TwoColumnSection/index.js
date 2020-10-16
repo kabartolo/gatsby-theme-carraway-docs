@@ -14,12 +14,12 @@ import { useUID } from 'react-uid';
 
 import { useWindowDimensions } from '../../hooks';
 
-import styles from './section.module.scss';
+import styles from './two-column-section.module.scss';
 
 const SECTION_BREAKPOINT = 1350;
 const { sectionCodeBlockMargin } = styles;
 
-export default function Section({ children }) {
+export default function TwoColumnSection({ children }) {
   const uid = useUID();
   let height;
   let width;
@@ -92,8 +92,8 @@ export default function Section({ children }) {
   return (
     <section
       ref={sectionRef}
-      className={`section-container ${columnClass}`}
-      sx={{ variant: 'divs.section' }}
+      className={`two-column-section-container ${columnClass}`}
+      sx={{ variant: 'divs.twoColumnSection' }}
     >
       <div
         id={`left-column-${uid}`}
@@ -121,7 +121,7 @@ export default function Section({ children }) {
   );
 }
 
-Section.propTypes = {
+TwoColumnSection.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,

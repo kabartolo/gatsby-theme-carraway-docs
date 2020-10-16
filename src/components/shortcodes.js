@@ -14,6 +14,7 @@ import PostList from './PostList';
 import PropertyTable from './PropertyTable';
 import Section from './Section';
 import TOC from './TOC';
+import TwoColumnSection from './TwoColumnSection';
 
 import themeComponents from '../gatsby-plugin-theme-ui/components';
 
@@ -31,5 +32,6 @@ export const shortcodes = {
   PropertyTable,
   Section,
   TOC,
+  TwoColumnSection,
 };
 /* eslint-enable react/prop-types */

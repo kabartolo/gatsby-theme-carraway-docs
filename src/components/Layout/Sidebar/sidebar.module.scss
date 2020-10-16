@@ -17,6 +17,7 @@
 		width: $sidebar-width;
 	}
 	padding: $sidebar-padding;
+	padding-right: 0;
 	.header {
 		margin-top: 0;
 		height: $sidebar-header-height;
@@ -26,7 +27,8 @@
 	}
 	.scrollable {
 		height: calc(100vh - #{$header-main-height} - calc(2 * #{$sidebar-padding}) - #{$sidebar-header-height});
-		overflow-y: auto;
+		overflow-y: scroll;
+		padding-right: 1rem;
 		.accordion {		
 			:global(.accordion-row) {
 				margin: 0;

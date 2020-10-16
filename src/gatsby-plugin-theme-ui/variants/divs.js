@@ -1,17 +1,25 @@
 export const divs = {
+  code: {
+    fontSize: '0.9rem',
+    '.code-block-code': {
+      fontSize: '0.9rem',
+    },
+  },
   codeNumber: {
     color: 'white',
     opacity: '0.6',
   },
   codeTop: {
     bg: 'muted',
-    h3: {
+    '.code-example-title': {
+      color: 'primary',
+      fontSize: '1em',
+      fontWeight: 'body',
+    },
+    '.code-example-copy': {
       color: 'text',
     },
-    svg: {
-      color: 'text',
-    },
-    select: {
+    '.code-example-select': {
       color: 'text',
     },
   },
@@ -65,6 +73,9 @@ export const divs = {
     borderTop: '2px solid',
     borderBottom: '2px solid',
     borderColor: 'border',
+    code: {
+      fontSize: '0.9rem',
+    },
     '.property-table-title': {
     },
     '.property-table-cell': {
@@ -98,8 +109,6 @@ export const divs = {
     borderColor: 'border',
     boxShadowBottom: 'main',
   },
-  section: {
-  },
   sidebar: {
     borderRight: 'main',
     borderColor: 'border',
@@ -108,5 +117,7 @@ export const divs = {
     border: 'main',
     borderColor: 'border',
     boxShadow: 'main',
+  },
+  twoColumnSection: {
   },
 };

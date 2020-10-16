@@ -82,7 +82,7 @@ export default function CodeExample({
             )
             : <span className={`code-example-label ${styles.label}`}>{labels[0]}</span>}
           {(labels.length > 0) && <span className={`code-example-divider ${styles.divider}`} />}
-          <Copy className={styles.copyButton} value={getText(blockValue)} />
+          <Copy className={`code-example-copy ${styles.copyButton}`} value={getText(blockValue)} />
         </span>
       </div>
       <div className={`code-example-code-container ${styles.codeBody}`}>
