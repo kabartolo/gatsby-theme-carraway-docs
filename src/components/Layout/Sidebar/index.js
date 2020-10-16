@@ -72,10 +72,9 @@ export default function Sidebar() {
   if (sidebarAllowTOC) newMenu.items = formatTOC(newMenu.items, sidebarDepth);
 
   newMenu.items = markOpenAccordions(
-    activeId,
     location.pathname,
-    newMenu.items,
     sidebarDepth,
+    newMenu.items,
   );
 
   return (

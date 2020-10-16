@@ -44,22 +44,18 @@ function formatTOC(sidebarItems, depth, basePath = '') {
 }
 
 function markOpenAccordions(
-  activeId,
+  currentpath,
   depth,
   sidebarItems,
-  currentPath,
 ) {
   const items = deepCopy(sidebarItems);
 
-  function checkIfOpen(item) {
-    function isOpen(itemPath, itemId) {
-      return itemPath === currentPath || itemId === `#${activeId}`;
-    }
-
+  function checkIfOpen(item, path) {
     const hasOpenChild = item.items && item.items.find((subItem) => (
-      isOpen(subItem.path, subItem.id) || checkIfOpen(subItem, currentPath)
+      subItem.path === path || checkIfOpen(subItem, path)
     ));
-    return isOpen(item.path, item.id) || hasOpenChild;
+
+    return item.path === path || hasOpenChild;
   }
 
   /* eslint-disable no-param-reassign */
@@ -67,7 +63,7 @@ function markOpenAccordions(
     items,
     depth,
     (item) => {
-      item.isOpen = checkIfOpen(item);
+      item.isOpen = checkIfOpen(item, currentpath);
     },
   );
   /* eslint-enable no-param-reassign */
