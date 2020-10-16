@@ -45,7 +45,7 @@
 		.search-results.open {
 			position: relative;
 			z-index: 5;
-			height: calc(100vh - #{$header-main-height});
+			max-height: calc(100vh - #{$header-main-height});
 			transition: width .3s ease-in-out;
 			overflow-y: auto;
 			.result-list-item {

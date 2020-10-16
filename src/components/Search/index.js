@@ -10,25 +10,17 @@ import React, {
 /* eslint-enable no-unused-vars */
 import PropTypes from 'prop-types';
 import { Index } from 'elasticlunr';
-import { graphql, useStaticQuery } from 'gatsby';
 
 import SearchInput from './search-input';
 import SearchResults from './search-results';
 
+import { useDocsSearch } from '../../hooks/useDocsSearch';
+
 import styles from './search.module.scss';
 
-/* Ensure `allowSiteSearch` is `true` in the `gatsby-theme-carraway-docs` theme options
-    before using this component */
 export default function Search({ closeDropdown }) {
-  const { siteSearchIndex } = useStaticQuery(graphql`
-    query {
-      siteSearchIndex {
-        index
-      }
-    }
-  `);
-  const searchIndexData = siteSearchIndex.index;
-  const searchIndex = useMemo(() => Index.load(searchIndexData), [searchIndexData]);
+  const { index } = useDocsSearch();
+  const searchIndex = useMemo(() => Index.load(index), [index]);
 
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
@@ -55,7 +47,7 @@ export default function Search({ closeDropdown }) {
     }
   }, [query, searchIndex]);
 
-  if (!searchIndexData) return null;
+  if (!index) return null;
 
   return (
     <>
