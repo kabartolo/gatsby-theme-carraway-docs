@@ -63,7 +63,8 @@ export default function Accordion({
           items,
         } = item;
         const currentLinkClass = item === activePost ? 'activePost' : '';
-        const activeIdMatches = activeId && path && path.match(`#${activeId}`);
+        const activeURL = new RegExp(`#${activeId}$`);
+        const activeIdMatches = activeId && path && activeURL.test(path);
         const currentHeaderClass = path.match(location.pathname) && activeIdMatches ? 'activeHeader' : '';
         const isOpen = openSections[name];
 
@@ -91,9 +92,9 @@ export default function Accordion({
         return items && items.length
           ? (
             <li
-              key={id || slug}
-              className={`accordion-list-item ${styles.listItem}`}
-              sx={{ variant: 'listItems.accordion' }}
+                key={id || slug}
+                className={`accordion-list-item ${styles.listItem}`}
+                sx={{ variant: 'listItems.accordion' }}
             >
               <h3 className={`accordion-row ${styles.link}`}>
                 <span className={`accordion-row-label ${styles.label}`}>{label}</span>
