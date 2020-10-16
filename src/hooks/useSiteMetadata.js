@@ -5,8 +5,8 @@ function useSiteMetadata() {
     {
       site {
         siteMetadata {
-          siteTitle
-          siteDescription
+          title
+          description
           siteUrl
           siteLogo
           siteLanguage

@@ -6,8 +6,8 @@ import { useSiteMetadata } from '../hooks';
 
 export default function SEO({ description, title, path }) {
   const {
-    siteTitle,
-    siteDescription,
+    title: siteTitle,
+    description: siteDescription,
     siteUrl,
     siteLanguage,
   } = useSiteMetadata();

@@ -27,8 +27,8 @@ const sunIcon = <FontAwesomeIcon sx={{ variant: 'icons.sun' }} icon={faSun} />;
 const moonIcon = <FontAwesomeIcon sx={{ variant: 'icons.moon' }} icon={faCloudMoon} />;
 
 export default function Header() {
-  const { githubURL, siteLogo, siteTitle } = useSiteMetadata();
-  const { allowSiteSearch, toggleTheme: useThemeToggle, mainMenu } = useThemeOptions();
+  const { githubURL, siteLogo, title } = useSiteMetadata();
+  const { allowDocsSearch, toggleTheme: useThemeToggle, mainMenu } = useThemeOptions();
   const [mode, setMode] = useColorMode();
 
   function toggleTheme() {
@@ -85,11 +85,11 @@ export default function Header() {
         >
           <h1
             className={`header-site-title-logo ${styles.siteTitle}`}
-            title={siteTitle}
+            title={title}
           >
             {siteLogo && <Logo src={siteLogo} />}
             <span className={`header-site-title-text ${styles.siteTitleText}`}>
-              {siteTitle}
+              {title}
             </span>
           </h1>
         </Styled.a>
@@ -102,7 +102,7 @@ export default function Header() {
             />
           )}
           <span className={`header-right ${styles.headerRight}`}>
-            {allowSiteSearch && <Search />}
+            {allowDocsSearch && <Search />}
             <div className={`header-icons ${styles.icons}`}>
               {githubURL && <GithubLink />}
               {useThemeToggle && <ThemeToggle />}
@@ -116,7 +116,7 @@ export default function Header() {
             themeUI={{ variant: 'divs.mobileMenu' }}
           >
             <DropdownHeader />
-            {allowSiteSearch && <Search />}
+            {allowDocsSearch && <Search />}
             {MainMenu && (
               <MainMenu
                 menu={mainMenu}

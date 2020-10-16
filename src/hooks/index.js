@@ -2,6 +2,7 @@ export { useActiveId } from './useActiveId';
 export { useClickOutside } from './useClickOutside';
 export { useDocContext } from './useDocContext';
 export { useDocData } from 'gatsby-theme-carraway-docs-core/src/hooks/useDocData';
+export { useDocsSearch } from './useDocsSearch';
 export { useEscape } from './useEscape';
 export { useLocation } from './useLocation';
 export { usePrismTheme } from './usePrismTheme';
