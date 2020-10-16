@@ -5,11 +5,10 @@ import Img from 'gatsby-image';
 
 export default function Image({
   alt,
-  data,
   src,
   title,
 }) {
-  let queryData = useStaticQuery(graphql`
+  const { allFile } = useStaticQuery(graphql`
     query {
       allFile {
         nodes {
@@ -25,17 +24,14 @@ export default function Image({
     }
   `);
 
-  if (Object.keys(data).length) queryData = data;
-
-  const image = queryData.allFile.nodes.find((node) => node.relativePath === src);
+  const image = allFile.nodes.find((node) => node.relativePath === src);
   if (!image) return null;
 
-  const { fluid, fixed } = image.childImageSharp;
+  const { fluid } = image.childImageSharp;
 
   return (
     <Img
       fluid={fluid}
-      fixed={fixed}
       alt={alt}
       title={title || alt}
     />
@@ -44,13 +40,11 @@ export default function Image({
 
 Image.propTypes = {
   alt: PropTypes.string,
-  data: PropTypes.instanceOf(Object),
   src: PropTypes.string.isRequired,
   title: PropTypes.string,
 };
 
 Image.defaultProps = {
   alt: '',
-  data: {},
   title: '',
 };

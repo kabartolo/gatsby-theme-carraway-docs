@@ -1,14 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, useStaticQuery } from 'gatsby';
-
-import Image from '../../image';
+import Img from 'gatsby-image';
 
 import { useSiteMetadata } from '../../../hooks';
 
 export default function Logo({ src }) {
-  const { siteTitle } = useSiteMetadata();
-  const data = useStaticQuery(graphql`
+  const { title } = useSiteMetadata();
+  const { allFile } = useStaticQuery(graphql`
     query {
       allFile {
         nodes {
@@ -24,8 +23,11 @@ export default function Logo({ src }) {
     }
   `);
 
+  const image = allFile.nodes.find((node) => node.relativePath === src);
+  if (!image) return null;
+
   return (
-    <Image src={src} data={data} title={siteTitle} />
+    <Img fixed={image.childImageSharp.fixed} title={title} />
   );
 }
 
