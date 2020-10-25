@@ -5,6 +5,4 @@ export const DocContext = createContext({
   setDocId: () => {},
   menu: null,
   setMenu: () => {},
-  showSidebar: null,
-  setShowSidebar: () => {},
 });
