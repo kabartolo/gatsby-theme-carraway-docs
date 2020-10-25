@@ -6,7 +6,7 @@ import styles from './alert.module.scss';
 
 export default function Alert({ children, variant }) {
   return (
-    <aside className={`carraway-alert ${styles.alert}`} sx={{ variant: `alerts.${variant}` }}>
+    <aside className={`chicago-alert ${styles.alert}`} sx={{ variant: `alerts.${variant}` }}>
       {children}
     </aside>
   );
