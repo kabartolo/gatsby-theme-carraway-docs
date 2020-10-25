@@ -1,10 +1,16 @@
 /** @jsx jsx */
 /* eslint-disable no-unused-vars */
 import { jsx } from 'theme-ui';
-import React, { useState, useEffect } from 'react';
+import React, {
+  Children,
+  cloneElement,
+  isValidElement,
+  useState,
+  useEffect,
+} from 'react';
 /* eslint-enable no-unused-vars */
 import PropTypes from 'prop-types';
-import { SkipNavLink, SkipNavContent } from '@reach/skip-nav';
+import { SkipNavLink } from '@reach/skip-nav';
 
 import { DocContext } from './doc-context';
 import { SiteContext } from './site-context';
@@ -53,19 +59,23 @@ export default function Layout({ children }) {
             setDocId,
             menu,
             setMenu,
-            showSidebar,
-            setShowSidebar,
           }}
         >
           <>
             <Header />
-            <Sidebar />
+            {showSidebar && <Sidebar />}
           </>
-          <SkipNavContent />
-          <main id="main" className={`layout-main ${styles.main}`}>
-            {children}
-            <Footer />
-          </main>
+          <div className={`layout-main-wrapper ${styles.mainWrapper}`}>
+            <main id="main" className={`layout-main ${styles.main}`}>
+              {Children.map(children, (child) => {
+                if (isValidElement(child)) {
+                  return cloneElement(child, { setShowSidebar });
+                }
+                return child;
+              })}
+            </main>
+            <Footer className={showSidebar ? 'with-sidebar' : ''} />
+          </div>
         </DocContext.Provider>
       </div>
     </div>
