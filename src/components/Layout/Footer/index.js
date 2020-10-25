@@ -1,21 +1,38 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
+import PropTypes from 'prop-types';
 
 import ExternalLink from '../../ExternalLink';
 
 import styles from './footer.module.scss';
 
-export default function Footer() {
+export default function Footer({ className }) {
   return (
-    <div className={`footer ${styles.footer}`} sx={{ variant: 'divs.footer' }}>
+    <div
+      id="footer-container"
+      className={`footer-container ${styles.footer} ${className}`}
+      sx={{
+        borderTop: 'thick',
+        borderColor: 'border',
+        bg: 'background',
+      }}
+    >
       &#169;2020 K. A. Bartolo
-      <span>
+      <span className="footer-credit">
         <ExternalLink href="https://gatsby.org">Gatsby</ExternalLink>
         &nbsp;theme:&nbsp;
-        <ExternalLink href="https://kabartolo.github.io/carraway-docs">
-          Carraway Docs
+        <ExternalLink href="https://kabartolo.github.io/chicago-docs">
+          Chicago Docs
         </ExternalLink>
       </span>
     </div>
   );
 }
+
+Footer.propTypes = {
+  className: PropTypes.string,
+};
+
+Footer.defaultProps = {
+  className: '',
+};
