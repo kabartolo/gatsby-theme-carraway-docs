@@ -10,7 +10,7 @@ function useSiteMetadata() {
           siteUrl
           siteLogo
           siteLanguage
-          githubURL
+          githubUrl
         }
       }
     }

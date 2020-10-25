@@ -6,26 +6,26 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { MDXProvider } from '@mdx-js/react';
 import { MDXRenderer } from 'gatsby-plugin-mdx';
+import { SkipNavContent } from '@reach/skip-nav';
 
 import {
   useDocContext,
   useTableOfContents,
-} from '../../../hooks';
+} from '../../../../hooks';
 
 import Breadcrumb from './breadcrumb';
 import NavLink from './nav-link';
-import SEO from '../../../components/SEO';
-import TOC from '../../../components/TOC';
+import SEO from '../../../../components/SEO';
+import TOC from '../../../../components/TOC';
 
 import styles from './doc.module.scss';
 
-import { shortcodes } from '../../../components/shortcodes';
+import { shortcodes } from '../../../../components/shortcodes';
 
-export default function Doc({ data: { doc }, pageContext }) {
+export default function Doc({ data: { doc }, pageContext, setShowSidebar }) {
   const {
     setDocId,
     setMenu,
-    setShowSidebar,
   } = useDocContext();
 
   const tableOfContents = useTableOfContents({ docId: doc && doc.id });
@@ -58,14 +58,15 @@ export default function Doc({ data: { doc }, pageContext }) {
     title,
     showBreadcrumb,
     showPostNav,
+    showSidebar,
     showTOC,
   } = doc;
-  const breadcrumbData = breadcrumb.filter((link) => link.name);
-  const printBreadcrumb = showBreadcrumb && breadcrumbData.length && breadcrumbData.length >= 2;
+  const breadcrumbData = Array.isArray(breadcrumb) ? breadcrumb.filter((link) => link.name) : [];
+  const printBreadcrumb = showBreadcrumb && !!breadcrumbData.length;
   const printTOC = showTOC && !!(tableOfContents.nested && tableOfContents.nested.items);
 
   return (
-    <article id={slug} className={styles.article}>
+    <article id={slug} className={`article-container ${styles.article} ${showSidebar ? 'with-sidebar' : ''}`}>
       <SEO title={title} description={description} path={path} />
       {printBreadcrumb && (
         <Breadcrumb
@@ -86,6 +87,7 @@ export default function Doc({ data: { doc }, pageContext }) {
             title="Table of Contents"
           />
         )}
+        <SkipNavContent />
         <div className={`article-content ${styles.articleContent}`}>
           <MDXProvider components={shortcodes}>
             <MDXRenderer>{body}</MDXRenderer>
@@ -121,4 +123,9 @@ export default function Doc({ data: { doc }, pageContext }) {
 Doc.propTypes = {
   data: PropTypes.instanceOf(Object).isRequired,
   pageContext: PropTypes.instanceOf(Object).isRequired,
+  setShowSidebar: PropTypes.func,
+};
+
+Doc.defaultProps = {
+  setShowSidebar: () => {},
 };

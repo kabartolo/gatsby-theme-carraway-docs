@@ -1,4 +1,4 @@
-import WrappedLayout from './wrapPageElement';
+import WrappedLayout from './wrap-page-element';
 
 import 'normalize.css';
 import '@reach/skip-nav/styles.css';

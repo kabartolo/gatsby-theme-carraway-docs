@@ -1,4 +1,4 @@
-const withDefault = require('gatsby-theme-carraway-docs-core/utils/with-default');
+const withDefault = require('@kabartolo/gatsby-theme-chicago-docs-core/utils/with-default');
 
 module.exports = (options) => {
   const themeOptions = withDefault(options);
@@ -6,7 +6,7 @@ module.exports = (options) => {
   return {
     plugins: [
       {
-        resolve: 'gatsby-theme-carraway-docs-core',
+        resolve: '@kabartolo/gatsby-theme-chicago-docs-core',
         options: themeOptions,
       },
       'gatsby-plugin-react-helmet',

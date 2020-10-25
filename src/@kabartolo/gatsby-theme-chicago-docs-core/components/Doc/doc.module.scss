@@ -1,4 +1,4 @@
-@import '../../../styles/_global.scss';
+@import '../../../../styles/_global.scss';
 
 @include for-widescreen-up {
 	.main {
@@ -27,6 +27,22 @@
 	@include for-tablet-under {
 		width: 100%;
 		max-width: 100%;
+	}
+}
+
+// Also used by Footer component
+:global(.with-sidebar) {
+	margin-left: $sidebar-width;
+	@include for-desktop-up {
+		max-width: calc(100vw - #{$sidebar-width});
+	}
+	@include for-desktop-under {
+		max-width: calc(100vw - #{$sidebar-width-tablet});
+		margin-left: $sidebar-width-tablet;
+	}
+	@include for-mobile-only {
+		max-width: 100vw;
+		margin-left: 0;
 	}
 }
 

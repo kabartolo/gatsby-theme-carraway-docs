@@ -1,4 +1,4 @@
-import { traverseTOC } from 'gatsby-theme-carraway-docs-core/utils/helpers';
+import { traverseTOC } from '@kabartolo/gatsby-theme-chicago-docs-core/utils/helpers';
 
 export default function getIds(items, depth) {
   if (!items) return [];
