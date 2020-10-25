@@ -1,4 +1,4 @@
-import { deepCopy, traverseTOC } from 'gatsby-theme-carraway-docs-core/utils/helpers';
+import { deepCopy, traverseTOC } from '@kabartolo/gatsby-theme-chicago-docs-core/utils/helpers';
 
 function addTOC(sidebarItems, allTableOfContents) {
   return sidebarItems.map((item) => {
@@ -31,7 +31,7 @@ function formatTOC(sidebarItems, depth, basePath = '') {
         item.items = item.items.map((heading) => ({
           id: heading.url,
           name: heading.title,
-          type: heading.url,
+          slug: heading.url,
           path: `${path}${heading.url}`,
           items: heading.items,
         }));
@@ -44,29 +44,19 @@ function formatTOC(sidebarItems, depth, basePath = '') {
 }
 
 function markOpenAccordions(
-  currentpath,
-  depth,
+  currentPath,
   sidebarItems,
 ) {
   const items = deepCopy(sidebarItems);
+  const openItem = items.find((item) => {
+    const pathRegExp = new RegExp(item.path);
+    return pathRegExp.test(currentPath);
+  });
 
-  function checkIfOpen(item, path) {
-    const hasOpenChild = item.items && item.items.find((subItem) => (
-      subItem.path === path || checkIfOpen(subItem, path)
-    ));
-
-    return item.path === path || hasOpenChild;
+  if (openItem) {
+    openItem.isOpen = true;
+    if (openItem.items) openItem.items = markOpenAccordions(currentPath, openItem.items);
   }
-
-  /* eslint-disable no-param-reassign */
-  traverseTOC(
-    items,
-    depth,
-    (item) => {
-      item.isOpen = checkIfOpen(item, currentpath);
-    },
-  );
-  /* eslint-enable no-param-reassign */
 
   return items;
 }
