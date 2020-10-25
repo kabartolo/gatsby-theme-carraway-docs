@@ -48,9 +48,9 @@ export default function Dropdown({
         type="button"
         onClick={onClick}
         className={`dropdown-button ${styles.button}`}
-        sx={{ variant: 'buttons.dropdown' }}
+        sx={{ variant: 'buttons.default' }}
       >
-        {label !== '' && <span className="dropdown-label">{label}</span>}
+        {label !== '' && <span className={`dropdown-label ${styles.label}`}>{label}</span>}
         <span>{isOpen ? close : open}</span>
       </button>
       {isOpen && (

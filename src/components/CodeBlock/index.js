@@ -44,7 +44,6 @@ export default function CodeBlock({ children, metastring, className: gatsbyClass
   return (
     <div
       className={`code-block ${styles.codeBlock}`}
-      sx={{ variant: 'divs.code' }}
       style={{ backgroundColor: theme.plain.backgroundColor }}
     >
       <div className={`code-block-scroll ${styles.scrollContainer}`}>
@@ -64,11 +63,8 @@ export default function CodeBlock({ children, metastring, className: gatsbyClass
                       key={i}
                       className={`code-block-num ${styles.number}`}
                       style={{ color: theme.plain.color }}
-                      sx={{
-                        variant: [
-                          'divs.codeNumber',
-                          highlightLine(i) && 'divs.highlightNumber',
-                        ],
+                      sx={highlightLine(i) && {
+                        bg: 'highlight',
                       }}
                     >
                       {i + 1}
@@ -81,7 +77,7 @@ export default function CodeBlock({ children, metastring, className: gatsbyClass
                   {tokens.slice(0, -1).map((line, i) => {
                     const lineProps = getLineProps({ line, key: i });
                     lineProps.className = `code-block-line-container ${lineProps.className} ${styles.line}`;
-                    lineProps.sx = { variant: highlightLine(i) && 'divs.highlightLine' };
+                    lineProps.sx = highlightLine(i) ? { bg: 'highlight' } : {};
 
                     return (
                       <div

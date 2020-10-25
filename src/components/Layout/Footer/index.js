@@ -21,7 +21,7 @@ export default function Footer({ className }) {
       <span className="footer-credit">
         <ExternalLink href="https://gatsby.org">Gatsby</ExternalLink>
         &nbsp;theme:&nbsp;
-        <ExternalLink href="https://kabartolo.github.io/chicago-docs">
+        <ExternalLink href="https://kabartolo.github.io/chicago-docs-demo/">
           Chicago Docs
         </ExternalLink>
       </span>

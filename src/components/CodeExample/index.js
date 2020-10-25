@@ -51,9 +51,17 @@ export default function CodeExample({
     >
       <div
         className={`code-example-top-bar ${styles.topBar}`}
-        sx={{ variant: 'divs.codeTop' }}
+        sx={{ bg: 'muted' }}
       >
-        <h3 className={`code-example-title ${styles.title}`}>{title}</h3>
+        <h3
+          className={`code-example-title ${styles.title}`}
+          sx={{
+            color: 'primary',
+            fontWeight: 'body',
+          }}
+        >
+          {title}
+        </h3>
         <span className={`code-example-util ${styles.util}`}>
           {(labels.length > 1)
             ? (
@@ -63,6 +71,7 @@ export default function CodeExample({
                   className={`code-example-select ${styles.select}`}
                   onChange={onChange}
                   onBlur={onChange}
+                  sx={{ color: 'text' }}
                 >
                   {languages.map((lang, i) => (
                     <option
@@ -82,7 +91,10 @@ export default function CodeExample({
             )
             : <span className={`code-example-label ${styles.label}`}>{labels[0]}</span>}
           {(labels.length > 0) && <span className={`code-example-divider ${styles.divider}`} />}
-          <Copy className={`code-example-copy ${styles.copyButton}`} value={getText(blockValue)} />
+          <Copy
+            className={`code-example-copy ${styles.copyButton}`}
+            value={getText(blockValue)}
+          />
         </span>
       </div>
       <div className={`code-example-code-container ${styles.codeBody}`}>

@@ -14,7 +14,7 @@ import { Index } from 'elasticlunr';
 import SearchInput from './search-input';
 import SearchResults from './search-results';
 
-import { useDocsSearch } from '../../hooks/useDocsSearch';
+import { useDocsSearch } from '../../hooks';
 
 import styles from './search.module.scss';
 
@@ -66,6 +66,7 @@ export default function Search({ closeDropdown }) {
             closeDropdown={closeDropdown}
             focus={focus}
             query={query}
+            setQuery={setQuery}
             results={results}
           />
         )}

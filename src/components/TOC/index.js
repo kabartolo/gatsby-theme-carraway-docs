@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx, Styled } from 'theme-ui';
 import PropTypes from 'prop-types';
-import { Link } from 'gatsby';
 import { useUID } from 'react-uid';
 
 import getIds from '../../utils/get-ids';
@@ -27,16 +26,20 @@ function NestedList({
   return (
     <ol className="toc-nested-list">
       {items.map((item) => (
-        <li
+        <Styled.li
           key={`${uid}-${item.url}`}
           className="toc-nested-list-item"
-          sx={{ variant: 'listItems.toc' }}
         >
           <Styled.a
-            as={Link}
-            to={item.url}
+            href={item.url}
             className={`toc-nested-link ${(item.url === `#${activeId}`) ? 'activeHeader' : ''}`}
-            sx={{ variant: 'links.toc' }}
+            sx={{
+              variant: 'links.hover',
+              color: 'mediumGray',
+              '&.activeHeader': {
+                color: 'secondary',
+              },
+            }}
           >
             {item.title}
           </Styled.a>
@@ -48,7 +51,7 @@ function NestedList({
               items={item.items}
             />
           )}
-        </li>
+        </Styled.li>
       ))}
     </ol>
   );
@@ -62,7 +65,6 @@ export default function TOC({
 }) {
   const { docId } = useDocContext();
   const { pathname } = useLocation();
-
   const storedTOC = useTableOfContents({ depth, docId, path: pathname });
   const tableOfContents = contents || storedTOC.nested;
 
@@ -75,7 +77,11 @@ export default function TOC({
     <div
       className={`toc-container ${className}`}
       id="toc-container"
-      sx={{ variant: 'divs.toc' }}
+      sx={{
+        border: 'main',
+        borderColor: 'border',
+        boxShadow: 'main',
+      }}
     >
       <nav
         className={`toc-scroll ${styles.scroll}`}

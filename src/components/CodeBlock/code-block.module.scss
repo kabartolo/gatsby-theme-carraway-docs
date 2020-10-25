@@ -1,6 +1,7 @@
 @import '../../styles/_global.scss';
 
 .code-block {
+	font-size: 0.9rem;
 	max-height: calc(80vh - 65px);
 	padding: 1em 0;
 	border-radius: 3px;
@@ -29,11 +30,13 @@
 			padding-bottom: 1rem;
 			.number {
 				padding-right: 9px;
+				opacity: 0.65;
 			}
 		}
 		.prism-code {
 			.code {
 				display: inline-block;
+				font-size: 0.9rem;
 			    min-width: 100%;
 			}
 			margin: 0;

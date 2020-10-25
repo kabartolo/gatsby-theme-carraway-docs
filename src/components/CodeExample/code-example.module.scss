@@ -4,9 +4,9 @@
 	position: relative;
 	border-radius: 7px;
 	margin: 1.5rem 0;
-    min-width: 300px;
+    min-width: $code-block-min-width;
 	@include for-tablet-up {
-		max-width: 600px;
+		max-width: $code-block-max-width;
 		:global(.code-block) {
 			max-width: 100%;
 			:global(.code-block-code) {
@@ -23,6 +23,7 @@
 		opacity: .7;
 		.title {
 			margin: 0;
+			font-size: 1em;
 		}
 	}
 	.util {

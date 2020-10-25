@@ -29,7 +29,7 @@ export default function Toggle({
       type="button"
       onClick={(event) => click(event)}
       className={`toggle-button ${styles.button}`}
-      sx={{ variant: 'buttons.toggle' }}
+      sx={{ variant: 'buttons.default' }}
     >
       {icon}
     </button>

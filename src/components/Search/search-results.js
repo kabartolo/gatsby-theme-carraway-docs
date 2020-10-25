@@ -17,6 +17,7 @@ export const EXCERPT_LENGTH = 250;
 export default function SearchResults({
   closeDropdown,
   query,
+  setQuery,
   results,
 }) {
   const tableOfContents = useTableOfContents();
@@ -49,6 +50,11 @@ export default function SearchResults({
     return markedHeader.length > 1 || (!primaryResultsOnly && paragraphMatch);
   }
 
+  const onClickLink = () => {
+    closeDropdown();
+    setQuery('');
+  };
+
   /* Each result is a full post */
   results.forEach((post) => {
     const {
@@ -70,7 +76,7 @@ export default function SearchResults({
           excerpt={addEllipses(markedDescription)}
           heading={[]}
           key={id}
-          onClick={closeDropdown}
+          onClick={onClickLink}
           path={path}
           title={markedTitle}
         />
@@ -115,7 +121,7 @@ export default function SearchResults({
             excerpt={addEllipses(excerpt)}
             heading={markedHeader.length > 1 ? markedHeader : [original]}
             key={paragraphMatch ? paragraphMatch.id : slug}
-            onClick={closeDropdown}
+            onClick={onClickLink}
             path={path.replace(/\/$/, slug)}
             title={markedTitle}
           />
@@ -144,8 +150,13 @@ export default function SearchResults({
 
   return (
     <div
-      sx={{ variant: 'divs.resultsContainer' }}
       className={`search-results-container ${styles.resultsContainer} ${styles.open}`}
+      sx={{
+        bg: 'backgroundSecondary',
+        borderBottom: 'main',
+        borderColor: 'border',
+        boxShadowBottom: 'main',
+      }}
     >
       {!!newResults.length && query.length > 2 && (
         <section
@@ -163,11 +174,13 @@ export default function SearchResults({
 SearchResults.propTypes = {
   closeDropdown: PropTypes.func,
   query: PropTypes.string,
+  setQuery: PropTypes.func,
   results: PropTypes.instanceOf(Array),
 };
 
 SearchResults.defaultProps = {
   closeDropdown: () => null,
   query: '',
+  setQuery: () => null,
   results: [],
 };

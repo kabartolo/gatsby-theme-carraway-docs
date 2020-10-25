@@ -20,13 +20,33 @@ export default function Playground({ code }) {
   return (
     <div
       className={`playground-container ${styles.container}`}
-      sx={{ variant: 'divs.playground' }}
+      sx={{
+        borderTop: 'main',
+        borderColor: 'border',
+      }}
     >
-      <LiveProvider code={code} scope={components} theme={theme}>
-        <div className={`live-preview ${styles.preview}`}>
+      <LiveProvider
+        code={code}
+        scope={components}
+        theme={theme}
+      >
+        <div
+          className={`live-preview ${styles.preview}`}
+          sx={{
+            borderLeft: 'main',
+            borderRight: 'main',
+            borderColor: 'border',
+          }}
+        >
           <LivePreview />
         </div>
-        <div className={`live-editor ${styles.editor}`}>
+        <div
+          className={`live-editor ${styles.editor}`}
+          sx={{
+            border: 'main',
+            borderColor: 'border',
+          }}
+        >
           <LiveEditor />
         </div>
         <div className={`live-error ${styles.error}`}>

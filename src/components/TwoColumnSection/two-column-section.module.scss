@@ -1,9 +1,8 @@
 @import '../../styles/_global.scss';
 
-.oneColumn,
-.twoColumns {
+.container {
 	display: flex;
-	margin-bottom: 2.5rem;
+	margin: 2.5rem auto;
 	h2,
 	h3,
 	h4,
@@ -14,7 +13,7 @@
 	}	
 }
 
-.oneColumn {
+.one-column {
 	flex-direction: column;
 	.blocks {
 		width: 100%;
@@ -27,7 +26,7 @@
 	}
 }
 
-.twoColumns {
+.two-columns {
 	align-items: center;
 	justify-content: space-between;
 	.no-columns {

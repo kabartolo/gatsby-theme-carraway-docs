@@ -1,26 +1,34 @@
-/*
-  Variant styles for the Alert component.
-  Colors are defined in gatsby-plugin-theme-ui/colors.js.
-*/
 export const alerts = {
   error: {
     bg: 'errorBackground',
-    borderLeft: '7px solid',
+    borderLeft: 'thickest',
     borderColor: 'errorBorder',
+    a: {
+      color: 'alertLink',
+    },
   },
   information: {
     bg: 'informationBackground',
-    borderLeft: '7px solid',
+    borderLeft: 'thickest',
     borderColor: 'informationBorder',
+    a: {
+      color: 'alertLink',
+    },
   },
   success: {
     bg: 'successBackground',
-    borderLeft: '7px solid',
+    borderLeft: 'thickest',
     borderColor: 'successBorder',
+    a: {
+      color: 'alertLink',
+    },
   },
   warning: {
     bg: 'warningBackground',
-    borderLeft: '7px solid',
+    borderLeft: 'thickest',
     borderColor: 'warningBorder',
+    a: {
+      color: 'alertLink',
+    },
   },
 };

@@ -1,26 +1,28 @@
 @import '../../styles/_global.scss';
 
-.main {
-	position: relative;
-	z-index: 1;
-	margin: 0 auto;
-	padding: 0 $main-padding;
+.main-wrapper {
 	padding-top: $main-padding-top;
-	margin-left: $sidebar-width;
-	@include for-desktop-up {
-		max-width: calc(100vw - #{$sidebar-width});
-	}
-	@include for-desktop-under {
-		max-width: calc(100vw - #{$sidebar-width-tablet});
-		padding: 10vw;
-		padding-top: $main-padding-top;
-		margin-left: $sidebar-width-tablet;
-	}
 	@include for-mobile-only {
-		max-width: 100vw;
-		padding: 5vw;
 		padding-top: calc(#{$main-padding-top} + 5vw);
-		margin-left: 0;
+	}
+	.main {
+		min-height: calc(100vh - #{$main-padding-top});
+		@include for-mobile-only {
+			min-height: calc(100vh - #{$main-padding-top} + 5vw);
+		}
+		position: relative;
+		z-index: 1;
+		margin: 0 auto;
+		padding: 0 $main-padding;
+		padding-top: 0;
+		@include for-desktop-under {
+			padding: 10vw;
+			padding-top: 0;
+		}
+		@include for-mobile-only {
+			padding: 5vw;
+			padding-top: 0;
+		}
 	}
 }
 

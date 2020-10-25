@@ -1,9 +1,3 @@
-/* Sidebar */
-$sidebar-width: 300px;
-$sidebar-width-tablet: 250px;
-$sidebar-padding: 16px;
-$sidebar-header-height: 60px;
-
 /* Search */
 $searchbar-height: 35px;
 $searchbar-padding: 15px;
@@ -23,11 +17,23 @@ $header-mobile-scroll-height: calc(100vh
 	- #{$searchbar-padding}
 );
 
+/* Footer */
+$footer-height: 40px;
+
 /* Post */
 $main-padding: 3em;
 $main-padding-top: calc(#{$header-main-height} + #{$main-padding});
 $post-dropdown-height: 2em;
 $post-dropdown-top: calc(#{$header-main-height} + #{$post-dropdown-height});
+
+/* Sidebar */
+$sidebar-width: 300px;
+$sidebar-width-tablet: 250px;
+$sidebar-padding: 16px;
+$sidebar-padding-top: calc(#{$main-padding-top} - #{$header-main-height}});
+$sidebar-header-height: 60px;
+$sidebar-non-scroll-height: calc(#{$main-padding-top}) - #{$sidebar-header-height};
+$sidebar-height: calc(100vh	- #{$sidebar-non-scroll-height};
 
 /* TOC */
 $toc-padding: 2rem;
@@ -35,6 +41,10 @@ $toc-top: calc(#{$header-main-height} + 3em);
 
 /* CodeExample */
 $top-bar-height: 2.5rem;
+
+/* Code */
+$code-block-min-width: 350px;
+$code-block-max-width: 750px;
 
 /* TwoColumnSection */
 $header-line-height: 40px;

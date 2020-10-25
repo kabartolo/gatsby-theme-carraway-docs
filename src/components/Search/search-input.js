@@ -65,7 +65,7 @@ export default function SearchInput({
       <FontAwesomeIcon
         icon={faSearch}
         className={`search-icon ${styles.searchIcon}`}
-        sx={{ variant: 'icons.search' }}
+        sx={{ color: 'mediumGray' }}
       />
       <input
         id="search-input"
@@ -77,7 +77,15 @@ export default function SearchInput({
         type="search"
         value={query}
         className={`searchbar ${styles.searchInput} ${focus ? styles.expanded : ''}`}
-        sx={{ variant: 'inputs.searchbar' }}
+        sx={{
+          border: 'main',
+          borderColor: 'border',
+          boxShadow: 'search',
+          ':focus': {
+            borderColor: 'borderFocus',
+            boxShadow: 'searchFocus',
+          },
+        }}
       />
       {query && (
         <button
@@ -87,12 +95,12 @@ export default function SearchInput({
           }}
           type="button"
           className={`search-close-button ${styles.button}`}
-          sx={{ variant: 'buttons.clearSearch' }}
+          sx={{ variant: 'buttons.default' }}
         >
           <FontAwesomeIcon
             className={`search-close-icon ${styles.closeIcon}`}
             icon={faTimesCircle}
-            sx={{ variant: 'icons.clearSearch' }}
+            sx={{ color: 'mediumGray' }}
           />
         </button>
       )}

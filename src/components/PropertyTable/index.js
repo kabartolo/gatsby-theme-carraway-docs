@@ -1,6 +1,6 @@
 /** @jsx jsx */
 /* eslint-disable no-unused-vars */
-import { jsx } from 'theme-ui';
+import { jsx, Styled } from 'theme-ui';
 import React, { Children } from 'react';
 import PropTypes from 'prop-types';
 import { useUID } from 'react-uid';
@@ -53,13 +53,12 @@ export default function PropertyTable({ children, title }) {
       <h3 className={`property-table-title ${styles.title}`}>{title}</h3>
       <ul className={`property-table-list ${styles.propertyTable}`}>
         {properties.map((property) => (
-          <li
+          <Styled.li
             key={property.id}
             className={`property-table-cell ${styles.cell}`}
             sx={{
               borderTop: 'main',
               borderColor: 'border',
-              variant: 'listItems.plain',
             }}
           >
             <div className={`property-top-row ${styles.topRow}`}>
@@ -95,7 +94,7 @@ export default function PropertyTable({ children, title }) {
               )}
             </div>
             <p className={`property-description ${styles.description}`}>{property.description}</p>
-          </li>
+          </Styled.li>
         ))}
       </ul>
     </div>

@@ -30,6 +30,8 @@
 				padding: $searchbar-padding 2rem;
 				height: $searchbar-height;
 				min-width: calc(#{$search-container-width} / 2);
+				border-radius: 3px;
+				outline: none;
 			}
 			.button {
 			    padding: 0;
@@ -50,6 +52,7 @@
 			overflow-y: auto;
 			.result-list-item {
 				padding: 1em 0.5em;
+				font-size: 0.8rem;
 			}
 			.list {
 				padding-left: 0;

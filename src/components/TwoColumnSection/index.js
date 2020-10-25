@@ -92,8 +92,7 @@ export default function TwoColumnSection({ children }) {
   return (
     <section
       ref={sectionRef}
-      className={`two-column-section-container ${columnClass}`}
-      sx={{ variant: 'divs.twoColumnSection' }}
+      className={`two-column-section-container ${styles.container} ${columnClass}`}
     >
       <div
         id={`left-column-${uid}`}

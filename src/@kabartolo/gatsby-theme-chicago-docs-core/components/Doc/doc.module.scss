@@ -47,6 +47,7 @@
 }
 
 .article {
+	word-wrap: break-word;
 	.breadcrumb {
 		margin-bottom: 2em;
 	}
@@ -61,7 +62,6 @@
 			margin-top: 0;
 		}
 	}
-	/* Theme-UI: links.navLink */
 	.post-nav {
 		width: 100%;
 		display: flex;

@@ -17,16 +17,33 @@ export default function ResultLink({
   title,
 }) {
   return (
-    <li
-      sx={{ variant: 'listItems.searchResult' }}
+    <Styled.li
       className={`search-result-list-item ${styles.resultListItem}`}
+      sx={{
+        borderBottom: 'main',
+        borderColor: 'border',
+        ':first-of-type': {
+          borderTop: 'main',
+          borderColor: 'border',
+        },
+        ':hover': {
+          bg: 'muted',
+        },
+        mark: {
+          color: 'secondary',
+          bg: 'inherit',
+        },
+      }}
     >
       <Styled.a
         as={Link}
         to={path}
         onClick={onClick}
         className="search-result-link"
-        sx={{ variant: 'links.searchResult' }}
+        sx={{
+          color: 'text',
+          textDecoration: 'none',
+        }}
       >
         <h3 className={`search-result-header ${styles.resultHeader}`}>
           <span className="search-result-title">
@@ -44,7 +61,7 @@ export default function ResultLink({
           <p className={`search-result-excerpt ${styles.resultExcerpt}`}>{excerpt}</p>
         )}
       </Styled.a>
-    </li>
+    </Styled.li>
   );
 }
 

@@ -1,9 +1,17 @@
 @import '../../styles/_global.scss';
 
 .container {
+	min-width: $code-block-min-width;
+	@include for-tablet-up {
+		max-width: $code-block-max-width;
+	}
+	.editor {
+	}
 	.preview,
 	.error {
 		padding: 1rem;
+		display: flex;
+		align-items: center;
 	}
 	.title {
 		margin: 0;

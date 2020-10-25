@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
+import { jsx, Styled } from 'theme-ui';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -70,19 +70,33 @@ export default function Accordion({
         const activeIdMatches = activeId && path && activeURL.test(path);
         const currentHeaderClass = path.match(location.pathname) && activeIdMatches ? 'activeHeader' : '';
         const isOpen = openSections[name];
-
+        console.log(name);
+        console.log(items);
         const label = path ? (
-          <Link
-            className={`accordion-link ${currentLinkClass || currentHeaderClass}`}
+          <FlexibleLink
+            className={`
+              accordion-link
+              ${currentLinkClass || currentHeaderClass}
+              ${isGroup ? styles.group : styles.link}
+            `}
             onClick={() => {
               onClickLink();
               onClick(name, true);
             }}
             href={path}
-            sx={{ variant: ['links.accordion', isGroup ? 'links.accordionGroup' : ''] }}
+            sx={{
+              variant: 'links.hover',
+              '&.activePost': {
+                color: 'secondary',
+                fontWeight: 'bold',
+              },
+              '&.activeHeader': {
+                color: 'secondary',
+              },
+            }}
           >
             {name}
-          </Link>
+          </FlexibleLink>
         ) : name;
 
         const icon = isOpen
@@ -91,10 +105,9 @@ export default function Accordion({
 
         return items && items.length
           ? (
-            <li
+            <Styled.li
               key={id || slug}
               className={`accordion-list-item ${styles.listItem}`}
-              sx={{ variant: 'listItems.accordion' }}
             >
               <h3 className={`accordion-row ${styles.row}`}>
                 <span className={`accordion-row-label ${styles.label}`}>{label}</span>
@@ -102,7 +115,7 @@ export default function Accordion({
                   type="button"
                   onClick={() => onClick(name)}
                   className={`accordion-row-button ${styles.button}`}
-                  sx={{ variant: 'buttons.accordion' }}
+                  sx={{ variant: 'buttons.default' }}
                 >
                   {icon}
                 </button>
@@ -115,16 +128,15 @@ export default function Accordion({
                   outerOpenSections={openSections}
                 />
               )}
-            </li>
+            </Styled.li>
           )
           : (
-            <li
+            <Styled.li
               key={id}
               className={`accordion-list-item ${styles.listItem}`}
-              sx={{ variant: 'listItems.accordion' }}
             >
               <h3 className={`accordion-row ${styles.row}`}>{label}</h3>
-            </li>
+            </Styled.li>
           );
       })}
     </ul>

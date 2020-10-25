@@ -31,6 +31,8 @@
 				margin-right: 0.6rem;
 			}
 			.site-title-text {
+				font-size: 1rem;
+				font-family: "Raleway", "Open Sans", "sans-serif";
 				@include for-tablet-under {
 					display: none;
 				}

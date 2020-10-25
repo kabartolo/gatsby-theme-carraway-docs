@@ -18,7 +18,13 @@ export default function Copy({ className, delay, value }) {
           await new Promise((resolve) => setTimeout(resolve, delay));
           setCopied(false);
         }}
-        sx={{ variant: 'buttons.copy' }}
+        sx={{
+          bg: 'transparent',
+          '&[disabled]': {
+            cursor: 'none',
+          },
+          variant: 'buttons.default',
+        }}
       >
         {copied ? 'Copied' : 'Copy'}
       </button>

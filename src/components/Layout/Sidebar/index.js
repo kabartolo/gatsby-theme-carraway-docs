@@ -68,12 +68,13 @@ export default function Sidebar() {
 
   if (showSidebar === false || !menu || !menu.items) return null;
 
-  newMenu.items = addTOC(newMenu.items, allTableOfContents);
-  if (sidebarAllowTOC) newMenu.items = formatTOC(newMenu.items, sidebarDepth);
+  if (sidebarAllowTOC) {
+    newMenu.items = addTOC(newMenu.items, allTableOfContents);
+    newMenu.items = formatTOC(newMenu.items, sidebarDepth);
+  }
 
   newMenu.items = markOpenAccordions(
-    location.pathname,
-    sidebarDepth,
+    `${location.pathname}${location.hash}`,
     newMenu.items,
   );
 
@@ -82,7 +83,10 @@ export default function Sidebar() {
       <div
         className={`sidebar-container ${styles.sidebar}`}
         id="sidebar-container"
-        sx={{ variant: 'divs.sidebar' }}
+        sx={{
+          borderRight: 'main',
+          borderColor: 'border',
+        }}
       >
         <Menu
           activeId={activeId}
@@ -94,9 +98,12 @@ export default function Sidebar() {
                 as={Link}
                 to={newMenu.path}
                 className="sidebar-label-link"
-                sx={{ variant: 'links.sidebarLabel' }}
+                sx={{
+                  color: 'secondary',
+                  textDecoration: 'none',
+                }}
               >
-                <h2 className="sidebar-label">{newMenu.sidebarLabel}</h2>
+                <h2 className={`sidebar-label ${styles.label}`}>{newMenu.sidebarLabel}</h2>
               </Styled.a>
             </div>
           )}
@@ -104,7 +111,11 @@ export default function Sidebar() {
       </div>
       <div
         className={`sidebar-dropdown-container ${styles.dropdown}`}
-        sx={{ variant: 'divs.mobileSidebar' }}
+        sx={{
+          borderBottom: 'thick',
+          borderColor: 'border',
+          bg: 'background',
+        }}
       >
         <Dropdown
           className="mobile-sidebar"

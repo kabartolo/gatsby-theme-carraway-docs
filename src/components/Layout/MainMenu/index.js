@@ -7,29 +7,29 @@ import styles from './main-menu.module.scss';
 
 export default function MainMenu({
   closeDropdown,
-  listItemVariant,
-  linkVariant,
+  listItemSX,
+  linkSX,
   menu,
 }) {
   return (
     <nav className="main-menu">
       <ul className={`main-menu-list ${styles.mainMenu}`}>
         {menu.map((item) => (
-          <li
+          <Styled.li
             key={item.name}
             className={`main-menu-list-item ${styles.listItem}`}
-            sx={{ variant: listItemVariant }}
+            sx={listItemSX}
           >
             <Styled.a
               as={Link}
               to={item.path}
               onClick={() => closeDropdown()}
               className={`main-menu-link ${styles.link}`}
-              sx={{ variant: linkVariant }}
+              sx={linkSX}
             >
               {item.name}
             </Styled.a>
-          </li>
+          </Styled.li>
         ))}
       </ul>
     </nav>
@@ -38,13 +38,13 @@ export default function MainMenu({
 
 MainMenu.propTypes = {
   closeDropdown: PropTypes.func,
-  listItemVariant: PropTypes.string,
-  linkVariant: PropTypes.string,
+  listItemSX: PropTypes.instanceOf(Object),
+  linkSX: PropTypes.instanceOf(Object),
   menu: PropTypes.instanceOf(Array).isRequired,
 };
 
 MainMenu.defaultProps = {
   closeDropdown: () => null,
-  listItemVariant: '',
-  linkVariant: '',
+  listItemSX: {},
+  linkSX: {},
 };

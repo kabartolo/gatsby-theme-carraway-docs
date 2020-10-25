@@ -1,6 +1,5 @@
 /** @jsx jsx */
-import { jsx, Styled, useColorMode } from 'theme-ui';
-import { Link } from 'gatsby';
+import { jsx, useColorMode } from 'theme-ui';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBars,
@@ -13,9 +12,9 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { useSiteMetadata, useThemeOptions } from '../../../hooks';
 
 import Dropdown from '../Dropdown';
-import Logo from './logo';
 import MainMenu from '../MainMenu';
 import Search from '../../Search';
+import SiteTitle from './site-title';
 import Toggle from '../Toggle';
 
 import styles from './header.module.scss';
@@ -23,11 +22,11 @@ import styles from './header.module.scss';
 const menuIcon = <FontAwesomeIcon icon={faBars} />;
 const closeIcon = <FontAwesomeIcon icon={faWindowClose} />;
 const githubIcon = <FontAwesomeIcon icon={faGithub} />;
-const sunIcon = <FontAwesomeIcon sx={{ variant: 'icons.sun' }} icon={faSun} />;
-const moonIcon = <FontAwesomeIcon sx={{ variant: 'icons.moon' }} icon={faCloudMoon} />;
+const sunIcon = <FontAwesomeIcon sx={{ variant: 'icons.default', color: 'accent' }} icon={faSun} />;
+const moonIcon = <FontAwesomeIcon sx={{ variant: 'icons.default' }} icon={faCloudMoon} />;
 
 export default function Header() {
-  const { githubURL, siteLogo, title } = useSiteMetadata();
+  const { githubUrl } = useSiteMetadata();
   const { allowDocsSearch, toggleTheme: useThemeToggle, mainMenu } = useThemeOptions();
   const [mode, setMode] = useColorMode();
 
@@ -42,7 +41,7 @@ export default function Header() {
         icon2={mode === 'dark' ? moonIcon : sunIcon}
         name="theme-toggle"
         onToggle={() => toggleTheme()}
-        tooltip="Toggle dark/light mode"
+        tooltip={mode === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
       />
     );
   }
@@ -50,10 +49,10 @@ export default function Header() {
   function GithubLink() {
     return (
       <a
-        href={githubURL}
+        href={githubUrl}
         rel="noopener noreferrer"
         target="_blank"
-        sx={{ variant: 'icons.github' }}
+        sx={{ variant: 'icons.default' }}
         title="Go to GitHub repository"
       >
         {githubIcon}
@@ -64,7 +63,7 @@ export default function Header() {
   function DropdownHeader() {
     return (
       <div className={`header-mobile-icons ${styles.icons}`}>
-        {githubURL && <GithubLink />}
+        {githubUrl && <GithubLink />}
         {useThemeToggle && <ThemeToggle />}
       </div>
     );
@@ -74,37 +73,25 @@ export default function Header() {
     <div
       id="header"
       className={`header-container ${styles.container}`}
-      sx={{ variant: 'divs.header' }}
+      sx={{
+        borderBottom: 'thick',
+        borderColor: 'border',
+        bg: 'background',
+      }}
     >
       <span className={`header-main ${styles.header}`}>
-        <Styled.a
-          as={Link}
-          to="/"
-          className="header-site-title-link"
-          sx={{ variant: 'links.siteTitle' }}
-        >
-          <h1
-            className={`header-site-title-logo ${styles.siteTitle}`}
-            title={title}
-          >
-            {siteLogo && <Logo src={siteLogo} />}
-            <span className={`header-site-title-text ${styles.siteTitleText}`}>
-              {title}
-            </span>
-          </h1>
-        </Styled.a>
+        <SiteTitle />
         <span className={`header-content ${styles.headerContent}`}>
           {MainMenu && (
             <MainMenu
               menu={mainMenu}
-              linkVariant="links.mainMenu"
-              listItemVariant="listItems.mainMenu"
+              linkSX={{ variant: 'links.layout' }}
             />
           )}
           <span className={`header-right ${styles.headerRight}`}>
             {allowDocsSearch && <Search />}
             <div className={`header-icons ${styles.icons}`}>
-              {githubURL && <GithubLink />}
+              {githubUrl && <GithubLink />}
               {useThemeToggle && <ThemeToggle />}
             </div>
           </span>
@@ -113,15 +100,27 @@ export default function Header() {
           <Dropdown
             openIcon={menuIcon}
             closeIcon={closeIcon}
-            themeUI={{ variant: 'divs.mobileMenu' }}
+            themeUI={{
+              bg: 'backgroundSecondary',
+              borderBottom: 'thick',
+              borderColor: 'border',
+              boxShadowBottom: 'main',
+            }}
           >
             <DropdownHeader />
             {allowDocsSearch && <Search />}
             {MainMenu && (
               <MainMenu
                 menu={mainMenu}
-                linkVariant="links.dropdown"
-                listItemVariant="listItems.dropdown"
+                listItemSX={{
+                  borderBottom: 'main',
+                  borderColor: 'border',
+                  ':first-of-type': {
+                    borderTop: 'main',
+                    borderColor: 'border',
+                  },
+                }}
+                linkSX={{ variant: 'links.layout' }}
               />
             )}
           </Dropdown>

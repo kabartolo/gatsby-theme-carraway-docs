@@ -23,11 +23,40 @@ export default function NavLink({ direction, title, path }) {
     : 'Next';
 
   return (
-    <Link to={path} sx={{ variant: 'links.navLink' }} className={`nav-link ${styles.navLink}`}>
-      <span className={`nav-link-label ${styles.navLinkLabel}`}>{label}</span>
+    <Link
+      to={path}
+      className={`nav-link ${styles.navLink}`}
+      sx={{
+        color: 'primary',
+        textDecoration: 'none',
+        ':hover': {
+          textDecoration: 'underline',
+          '.nav-link-label': {
+            color: 'primary',
+            fontWeight: 'heading',
+          },
+        },
+      }}
+    >
+      <span
+        className={`nav-link-label ${styles.navLinkLabel}`}
+        sx={{
+          color: 'text',
+        }}
+      >
+        {label}
+      </span>
       <div className={styles.icon}>
         {direction === 'previous' && arrow}
-        <span className={`nav-link-title ${styles.title}`}>{title}</span>
+        <span
+          className={`nav-link-title ${styles.title}`}
+          sx={{
+            color: 'primary',
+            fontWeight: 'heading',
+          }}
+        >
+          {title}
+        </span>
         {direction === 'next' && arrow}
       </div>
     </Link>

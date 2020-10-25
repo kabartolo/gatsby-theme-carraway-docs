@@ -7,6 +7,7 @@
 }
 
 .sidebar {
+	z-index: 2;
 	@include for-mobile-only {
 		display: none;
 	}
@@ -16,30 +17,22 @@
 	@include for-desktop-up {
 		width: $sidebar-width;
 	}
-	padding: $sidebar-padding;
+	padding-top: $sidebar-padding-top;
 	padding-right: 0;
 	.header {
 		margin-top: 0;
 		height: $sidebar-header-height;
 		position: sticky;
-		display: flex;
-		align-items: center;
+		.label {
+			font-size: 1.2rem;
+			margin-top: 0;
+			padding-left: $sidebar-padding;
+		}
 	}
 	.scrollable {
-		height: calc(100vh - #{$header-main-height} - calc(2 * #{$sidebar-padding}) - #{$sidebar-header-height});
+		height: $sidebar-height;
 		overflow-y: scroll;
-		padding-right: 1rem;
-		.accordion {		
-			:global(.accordion-row) {
-				margin: 0;
-			}
-			:global(.accordion-list) {
-				padding-left: 1rem;
-			}
-		}
-		.accordion > :global(.accordion-list) {
-			padding-left: 0;
-		}
+		padding-right: 1em;
 	}
 }
 
