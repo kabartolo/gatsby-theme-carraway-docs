@@ -9,7 +9,7 @@ import CodeBlock from './CodeBlock';
 import CodeExample from './CodeExample';
 import ExternalLink from './ExternalLink';
 import Image from './image';
-import FlexibleLink from './link';
+import FlexibleLink from './flexible-link';
 import Playground from './Playground';
 import PostList from './PostList';
 import PropertyTable from './PropertyTable';
