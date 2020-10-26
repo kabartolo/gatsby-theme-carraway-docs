@@ -24,6 +24,8 @@ const closeIcon = <FontAwesomeIcon icon={faWindowClose} />;
 const githubIcon = <FontAwesomeIcon icon={faGithub} />;
 const sunIcon = <FontAwesomeIcon sx={{ variant: 'icons.default', color: 'accent' }} icon={faSun} />;
 const moonIcon = <FontAwesomeIcon sx={{ variant: 'icons.default' }} icon={faCloudMoon} />;
+const DARK_THEME_TOOLTIP = 'Switch to light theme';
+const LIGHT_THEME_TOOLTIP = 'Switch to dark theme';
 
 export default function Header() {
   const { githubUrl } = useSiteMetadata();
@@ -41,7 +43,7 @@ export default function Header() {
         icon2={mode === 'dark' ? moonIcon : sunIcon}
         name="theme-toggle"
         onToggle={() => toggleTheme()}
-        tooltip={mode === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+        tooltip={mode === 'dark' ? DARK_THEME_TOOLTIP : LIGHT_THEME_TOOLTIP}
       />
     );
   }
@@ -85,6 +87,7 @@ export default function Header() {
           {MainMenu && (
             <MainMenu
               menu={mainMenu}
+              listItemSX={{ variant: 'listItems.layout' }}
               linkSX={{ variant: 'links.layout' }}
             />
           )}
@@ -119,6 +122,7 @@ export default function Header() {
                     borderTop: 'main',
                     borderColor: 'border',
                   },
+                  variant: 'listItems.layout',
                 }}
                 linkSX={{ variant: 'links.layout' }}
               />

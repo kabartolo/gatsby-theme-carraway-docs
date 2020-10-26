@@ -14,6 +14,7 @@ import { borders } from './variants/borders';
 import { buttons } from './variants/buttons';
 import { icons } from './variants/icons';
 import { links } from './variants/links';
+import { listItems } from './variants/listItems';
 
 const typography = toTheme(noriegaTheme);
 
@@ -37,4 +38,5 @@ export default merge(theme, {
   borders,
   icons,
   links,
+  listItems,
 });

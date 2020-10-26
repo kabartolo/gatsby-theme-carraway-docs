@@ -15,7 +15,7 @@ export default function MainMenu({
     <nav className="main-menu">
       <ul className={`main-menu-list ${styles.mainMenu}`}>
         {menu.map((item) => (
-          <Styled.li
+          <li
             key={item.name}
             className={`main-menu-list-item ${styles.listItem}`}
             sx={listItemSX}
@@ -29,7 +29,7 @@ export default function MainMenu({
             >
               {item.name}
             </Styled.a>
-          </Styled.li>
+          </li>
         ))}
       </ul>
     </nav>

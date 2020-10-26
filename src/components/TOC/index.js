@@ -26,9 +26,10 @@ function NestedList({
   return (
     <ol className="toc-nested-list">
       {items.map((item) => (
-        <Styled.li
+        <li
           key={`${uid}-${item.url}`}
           className="toc-nested-list-item"
+          sx={{ variant: 'listItems.layout' }}
         >
           <Styled.a
             href={item.url}
@@ -51,7 +52,7 @@ function NestedList({
               items={item.items}
             />
           )}
-        </Styled.li>
+        </li>
       ))}
     </ol>
   );

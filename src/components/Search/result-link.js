@@ -17,11 +17,12 @@ export default function ResultLink({
   title,
 }) {
   return (
-    <Styled.li
+    <li
       className={`search-result-list-item ${styles.resultListItem}`}
       sx={{
         borderBottom: 'main',
         borderColor: 'border',
+        variant: 'listItems.layout',
         ':first-of-type': {
           borderTop: 'main',
           borderColor: 'border',
@@ -61,7 +62,7 @@ export default function ResultLink({
           <p className={`search-result-excerpt ${styles.resultExcerpt}`}>{excerpt}</p>
         )}
       </Styled.a>
-    </Styled.li>
+    </li>
   );
 }
 

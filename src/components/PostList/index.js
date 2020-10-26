@@ -31,9 +31,10 @@ export default function PostList() {
   return (
     <ul className={`post-list ${styles.postList}`}>
       {currentMenu.items.map((post) => (
-        <Styled.li
+        <li
           key={post.id}
           className="post-list-item"
+          sx={{ variant: 'listItems.layout' }}
         >
           <Styled.a
             as={Link}
@@ -48,7 +49,7 @@ export default function PostList() {
           >
             {post.title || post.name}
           </Styled.a>
-        </Styled.li>
+        </li>
       ))}
     </ul>
   );

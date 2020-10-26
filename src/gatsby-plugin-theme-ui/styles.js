@@ -3,9 +3,6 @@ export const styles = {
     bg: 'highlight',
     fontSize: '1rem',
   },
-  li: {
-    listStyle: 'none',
-  },
   pre: {
     marginTop: 0,
   },

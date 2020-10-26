@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Styled } from 'theme-ui';
+import { jsx } from 'theme-ui';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -70,8 +70,7 @@ export default function Accordion({
         const activeIdMatches = activeId && path && activeURL.test(path);
         const currentHeaderClass = path.match(location.pathname) && activeIdMatches ? 'activeHeader' : '';
         const isOpen = openSections[name];
-        console.log(name);
-        console.log(items);
+
         const label = path ? (
           <FlexibleLink
             className={`
@@ -105,9 +104,10 @@ export default function Accordion({
 
         return items && items.length
           ? (
-            <Styled.li
+            <li
               key={id || slug}
               className={`accordion-list-item ${styles.listItem}`}
+              sx={{ variant: 'listItems.layout' }}
             >
               <h3 className={`accordion-row ${styles.row}`}>
                 <span className={`accordion-row-label ${styles.label}`}>{label}</span>
@@ -128,15 +128,16 @@ export default function Accordion({
                   outerOpenSections={openSections}
                 />
               )}
-            </Styled.li>
+            </li>
           )
           : (
-            <Styled.li
+            <li
               key={id}
               className={`accordion-list-item ${styles.listItem}`}
+              sx={{ variant: 'listItems.layout' }}
             >
               <h3 className={`accordion-row ${styles.row}`}>{label}</h3>
-            </Styled.li>
+            </li>
           );
       })}
     </ul>
