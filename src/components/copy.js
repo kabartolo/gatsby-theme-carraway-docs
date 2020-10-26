@@ -6,6 +6,8 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 export default function Copy({ className, delay, value }) {
   const [copied, setCopied] = useState(false);
+  const COPIED_TEXT = 'Copied';
+  const COPY_TEXT = 'Copy';
 
   return (
     <CopyToClipboard text={value}>
@@ -26,7 +28,7 @@ export default function Copy({ className, delay, value }) {
           variant: 'buttons.default',
         }}
       >
-        {copied ? 'Copied' : 'Copy'}
+        {copied ? COPIED_TEXT : COPY_TEXT}
       </button>
     </CopyToClipboard>
   );
