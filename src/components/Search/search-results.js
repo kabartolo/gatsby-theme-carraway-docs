@@ -12,8 +12,6 @@ import { useTableOfContents, useThemeOptions } from '../../hooks';
 
 import styles from './search.module.scss';
 
-export const EXCERPT_LENGTH = 250;
-
 export default function SearchResults({
   closeDropdown,
   query,
@@ -24,6 +22,9 @@ export default function SearchResults({
   const { primaryResultsOnly } = useThemeOptions();
   const primaryResults = [];
   let otherResults = [];
+
+  const EXCERPT_LENGTH = 250;
+  const NO_RESULTS_TEXT = 'No results for';
 
   function addEllipses(excerpt) {
     if (!excerpt.length) return [];
@@ -158,13 +159,26 @@ export default function SearchResults({
         boxShadowBottom: 'main',
       }}
     >
-      {!!newResults.length && query.length > 2 && (
-        <section
-          className={`search-results ${styles.searchResults} ${results.length ? styles.open : ''}`}
+      {query.length > 2 && (
+        <section className={`
+          search-results
+          ${styles.searchResults}
+          ${styles.open}`}
         >
-          <ol className={`search-results-list ${styles.list}`}>
-            {newResults}
-          </ol>
+          {!newResults.length
+            ? (
+              <div className={`search-results-none ${styles.noResults}`}>
+                {NO_RESULTS_TEXT}
+                <span sx={{ color: 'primary', fontWeight: 'bold' }}>
+                  &nbsp;
+                  {query}
+                </span>
+              </div>
+            ) : (
+              <ol className={`search-results-list ${styles.list}`}>
+                {newResults}
+              </ol>
+            )}
         </section>
       )}
     </div>
