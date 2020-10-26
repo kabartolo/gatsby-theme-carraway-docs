@@ -12,7 +12,7 @@ export default function SEO({ description, title, path }) {
     siteLanguage,
   } = useSiteMetadata();
 
-  const metaTitle = title ? `${title} | ${siteTitle}` : siteTitle;
+  const metaTitle = (title && title !== siteTitle) ? `${title} | ${siteTitle}` : siteTitle;
   const metaUrl = `${siteUrl}${path}`;
   const metaDescription = description || siteDescription;
 

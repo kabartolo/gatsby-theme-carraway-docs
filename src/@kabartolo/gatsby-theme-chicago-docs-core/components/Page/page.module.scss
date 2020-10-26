@@ -1,0 +1,13 @@
+@import '../../../../styles/_global.scss';
+
+.page {
+	@include for-desktop-up {
+		padding: 0 20vw;
+	}
+	@include for-desktop-under {
+		padding: 0 15vw;
+	}
+	@include for-mobile-only {
+		padding: 0 5vw;
+	}
+}
