@@ -27,7 +27,7 @@ function NestedList({
     <ol className="toc-nested-list">
       {items.map((item) => (
         <li
-          key={`${uid}-${item.url}`}
+          key={`${item.url}-${uid}`}
           className="toc-nested-list-item"
           sx={{ variant: 'listItems.layout' }}
         >

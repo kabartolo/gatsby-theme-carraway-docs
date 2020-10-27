@@ -3,6 +3,7 @@
 import { jsx, Styled } from 'theme-ui';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
+import { isExternalLink, isFragmentLink } from '../utils/path-helpers';
 
 import ExternalLink from './ExternalLink';
 
@@ -12,8 +13,7 @@ import ExternalLink from './ExternalLink';
    Used for <a> tags in MDX files.
 */
 export default function FlexibleLink({ children, href, ...props }) {
-  // External link
-  if (href.match(/^http/)) {
+  if (isExternalLink(href)) {
     return (
       <ExternalLink
         href={href}
@@ -25,7 +25,7 @@ export default function FlexibleLink({ children, href, ...props }) {
   }
 
   // Fragment link (to location on current page) or internal link (to location within site)
-  return href.slice(0, 1) === '#'
+  return isFragmentLink(href)
     ? (
       <Styled.a
         href={href}

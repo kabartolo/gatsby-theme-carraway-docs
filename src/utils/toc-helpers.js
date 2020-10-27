@@ -1,4 +1,5 @@
 import { deepCopy, traverseTOC } from '@kabartolo/gatsby-theme-chicago-docs-core/utils/helpers';
+import { removeFragment } from '@kabartolo/gatsby-theme-chicago-docs-core/utils/path-helpers';
 
 function addTOC(sidebarItems, allTableOfContents) {
   return sidebarItems.map((item) => {
@@ -25,7 +26,7 @@ function formatTOC(sidebarItems, depth, basePath = '') {
     items,
     depth,
     (item) => {
-      if (item.path) path = item.path.replace(/#.+/, '');
+      if (item.path) path = removeFragment(item.path);
 
       if (item.items && !item.isGroup) {
         item.items = item.items.map((heading) => ({

@@ -16,7 +16,7 @@ function getProperties(table) {
     const rows = tbody.props.children;
     properties = Children.map(rows, (row) => {
       const property = {
-        id: useUID(),
+        id: `property-table-row-${useUID()}`,
         name: [],
         type: [],
         info: [],

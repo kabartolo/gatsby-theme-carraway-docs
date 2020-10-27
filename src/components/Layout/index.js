@@ -46,7 +46,7 @@ export function Wrapper({ children, location: locationProp }) {
 export default function Layout({ children }) {
   const [docId, setDocId] = useState('');
   const [showSidebar, setShowSidebar] = useState();
-  const [menu, setMenu] = useState([]);
+  const [menu, setMenu] = useState({});
 
   return (
     <div className="layout-container">

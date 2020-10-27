@@ -13,17 +13,18 @@ import styles from './postlist.module.scss';
 export default function PostList() {
   const { menu } = useDocContext();
   const location = useLocation();
-  const removeEndingSlash = (path) => path && path.replace(/\/$/, '');
+  const menuExists = Object.keys(menu).length !== 0;
+
+  const removeEndingSlash = (path) => (path === '/' ? '/' : path.replace(/\/$/, ''));
   const matchEndPath = (locationPath, menuPath) => {
     const re = new RegExp(`${removeEndingSlash(menuPath)}$`);
     return re.test(removeEndingSlash(locationPath));
   };
 
-  const isMenuIndex = menu && matchEndPath(location.pathname, menu.path);
-  const groupIndex = menu && menu.items && menu.items.find((item) => (
+  const isMenuIndex = menuExists && matchEndPath(location.pathname, menu.path);
+  const groupIndex = menuExists && menu.items && menu.items.find((item) => (
     matchEndPath(location.pathname, item.path)
   ));
-
   const currentMenu = isMenuIndex ? menu : groupIndex;
 
   if (!currentMenu) return null;

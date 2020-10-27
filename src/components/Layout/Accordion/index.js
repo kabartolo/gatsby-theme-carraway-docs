@@ -4,6 +4,12 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import {
+  getActivePostId,
+  getFragment,
+  hasCurrentPageFragment,
+  isActiveUrl,
+} from '../../../utils/path-helpers';
 
 import { useLocation, useThemeOptions } from '../../../hooks';
 
@@ -17,14 +23,9 @@ export default function Accordion({
   onClickLink,
   outerOpenSections,
 }) {
-  let activePostId;
   const { sidebarAllowMultipleOpen: allowMultipleOpen } = useThemeOptions();
   const location = useLocation();
-  const activePost = parentItems.find((item) => (
-    item.path === location.pathname
-    && !item.path.match('#')
-  ));
-  if (activePost) activePostId = activePost.id;
+  const activePostId = getActivePostId(parentItems, location.pathname);
 
   /* eslint-disable no-param-reassign */
   const sections = parentItems.reduce((map, item) => {
@@ -65,24 +66,27 @@ export default function Accordion({
           isGroup,
           items,
         } = item;
-        const currentLinkClass = id === activePostId ? 'activePost' : '';
-        const activeURL = new RegExp(`#${activeId}$`);
-        const activeIdMatches = activeId && path && activeURL.test(path);
-        const currentHeaderClass = path.match(location.pathname) && activeIdMatches ? 'activeHeader' : '';
+        const isActiveHeader = isActiveUrl(activeId, path, location.pathname);
+        const activePostClass = id === activePostId ? 'activePost' : '';
+        const activeHeaderClass = isActiveHeader ? 'activeHeader' : '';
         const isOpen = openSections[name];
+        const isFragmentLink = hasCurrentPageFragment(path, location.pathname);
 
+        const pathForFlexibleLink = isFragmentLink ? getFragment(path) : path;
+
+        // If there's no path, just print the name of the post or group
         const label = path ? (
           <FlexibleLink
             className={`
               accordion-link
-              ${currentLinkClass || currentHeaderClass}
+              ${activePostClass || activeHeaderClass}
               ${isGroup ? styles.group : styles.link}
             `}
             onClick={() => {
               onClickLink();
               onClick(name, true);
             }}
-            href={path}
+            href={pathForFlexibleLink}
             sx={{
               variant: 'links.hover',
               '&.activePost': {
