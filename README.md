@@ -23,7 +23,7 @@ To install the **starter** and create a **new site**, run:
 gatsby new your-site-name @kabartolo/gatsby-starter-chicago-docs
 ```
 
-If you just want the data without the components or styling, use the <a href="https://github.com/kabartolo/gatsby-starter-chicago-docs-core">**core starter**</a>to start a docs site from scratch:
+If you just want the data without the components or styling, use the <a href="https://github.com/kabartolo/gatsby-starter-chicago-docs-core">**core starter**</a> to start a docs site from scratch:
 
 ```
 gatsby new your-site-name @kabartolo/gatsby-starter-chicago-docs-core
@@ -251,7 +251,7 @@ See <a href="/docs/configuration/site-options/#frontmatter">Configuration: Front
 
 To create a doc, create an MDX file in `src/docs` (or the `docsPath` defined in the <a href="#theme-options">theme options</a>):
 
-```js
+```
 ---
 title: Title for your doc
 shortTitle: Alternate (shorter) title used in navigation
@@ -279,9 +279,7 @@ Other pages can be created using React, regular JavaScript, or MDX. An MDX file 
 
 To create a non-doc MDX page, create an MDX file in your specified `pagesPath` directory:
 
-<CodeExample title="src/mdxPages/example-doc.mdx" labels={['MDX']}>
-
-```js
+```
 ---
 title: Title for your page
 description: Brief description of the page (used in metadata)
@@ -294,7 +292,3 @@ Use Chicago Docs components here.
 <TOC />
 
 ```
-
-</CodeExample> 
-
-</TwoColumnSection>
