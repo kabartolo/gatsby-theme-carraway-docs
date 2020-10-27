@@ -27,7 +27,7 @@ export default function Logo({ src }) {
   if (!image) return null;
 
   return (
-    <Img fixed={image.childImageSharp.fixed} title={title} />
+    <Img fixed={image.childImageSharp.fixed} title={title} fadeIn={false} />
   );
 }
 
