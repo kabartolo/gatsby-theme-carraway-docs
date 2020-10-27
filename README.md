@@ -17,7 +17,7 @@ The <a href="https://kabartolo.github.io/chicago-docs-demo/">Chicago Docs theme<
 
 ### Start a new site
 
-To install the **starter** and create a **new site**, run:
+To install the <a href="https://github.com/kabartolo/gatsby-starter-chicago-docs">**starter**</a> and create a **new site**, run:
 
 ```
 gatsby new your-site-name @kabartolo/gatsby-starter-chicago-docs
