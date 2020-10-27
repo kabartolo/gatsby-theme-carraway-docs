@@ -27,7 +27,6 @@ export default function Doc({ data: { doc }, pageContext, setShowSidebar }) {
     setDocId,
     setMenu,
   } = useDocContext();
-
   const tableOfContents = useTableOfContents({ docId: doc && doc.id });
 
   const {

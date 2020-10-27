@@ -27,7 +27,7 @@ export default function Page({ data: { page } }) {
     <section id={slug} className={`page-container ${styles.page}`}>
       <SEO title={title} description={description} path={path} />
       <header>
-        <h1 sx={{ color: 'primary' }}>{title}</h1>
+        <h1>{title}</h1>
       </header>
       <div className="page-main">
         <SkipNavContent />
