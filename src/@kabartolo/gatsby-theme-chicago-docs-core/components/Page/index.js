@@ -14,14 +14,14 @@ import { shortcodes } from '../../../../components/shortcodes';
 
 import styles from './page.module.scss';
 
-export default function Page({ data: { page } }) {
+export default function Page({ data: { chicagoDocsPage } }) {
   const {
     title,
     description,
     path,
     slug,
     body,
-  } = page;
+  } = chicagoDocsPage;
 
   return (
     <section id={slug} className={`page-container ${styles.page}`}>
