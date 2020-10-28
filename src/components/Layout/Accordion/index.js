@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import {
-  getActivePostId,
   getFragment,
   hasCurrentPageFragment,
   isActiveUrl,
@@ -25,7 +24,6 @@ export default function Accordion({
 }) {
   const { sidebarAllowMultipleOpen: allowMultipleOpen } = useThemeOptions();
   const location = useLocation();
-  const activePostId = getActivePostId(parentItems, location.pathname);
 
   /* eslint-disable no-param-reassign */
   const sections = parentItems.reduce((map, item) => {
@@ -67,19 +65,20 @@ export default function Accordion({
           items,
         } = item;
         const isActiveHeader = isActiveUrl(activeId, path, location.pathname);
-        const activePostClass = id === activePostId ? 'activePost' : '';
         const activeHeaderClass = isActiveHeader ? 'activeHeader' : '';
-        const isOpen = openSections[name];
-        const isFragmentLink = hasCurrentPageFragment(path, location.pathname);
 
+        const isOpen = openSections[name];
+
+        const isFragmentLink = hasCurrentPageFragment(path, location.pathname);
         const pathForFlexibleLink = isFragmentLink ? getFragment(path) : path;
 
         // If there's no path, just print the name of the post or group
         const label = path ? (
           <FlexibleLink
+            activeClassName="activePost"
             className={`
               accordion-link
-              ${activePostClass || activeHeaderClass}
+              ${isActiveHeader ? activeHeaderClass : ''}
               ${isGroup ? styles.group : styles.link}
             `}
             onClick={() => {
