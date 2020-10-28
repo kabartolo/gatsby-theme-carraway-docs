@@ -19,7 +19,7 @@ export default function Footer({ className }) {
     >
       &#169;2020 K. A. Bartolo
       <span className="footer-credit">
-        <ExternalLink href="https://gatsby.org">Gatsby</ExternalLink>
+        <ExternalLink href="https://gatsbyjs.com/">Gatsby</ExternalLink>
         &nbsp;theme:&nbsp;
         <ExternalLink href="https://kabartolo.github.io/chicago-docs-demo/">
           Chicago Docs
