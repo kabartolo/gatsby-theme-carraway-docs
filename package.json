@@ -55,7 +55,7 @@
 		"gatsby-plugin-sass": "^2.3.7",
 		"gatsby-plugin-styled-components": "^3.3.10",
 		"gatsby-plugin-theme-ui": "0.3.0",
-		"@kabartolo/gatsby-theme-chicago-docs-core": "*",
+		"@kabartolo/gatsby-theme-chicago-docs-core": "^1.1.0",
 		"node-sass": "^4.14.1",
 		"normalize.css": "^8.0.1",
 		"prism-react-renderer": "^1.1.1",
