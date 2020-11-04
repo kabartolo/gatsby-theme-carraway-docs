@@ -2,36 +2,59 @@
 /* eslint-disable no-unused-vars */
 import { jsx } from 'theme-ui';
 import React, { Children } from 'react';
+/* eslint-enable no-unused-vars */
 import PropTypes from 'prop-types';
 import { useUID } from 'react-uid';
 
 import styles from './property-table.module.scss';
+
+/** Renders a table-style list of properties if the table has certain headers.
+    All required headers must be in the table.
+    Otherwise prints the table as normal. */
+
+const REQUIRED_HEADERS = [
+  'name',
+  'type',
+  'info',
+  'default',
+  'description',
+];
+
+const hasRequiredHeaders = (headers) => {
+  const lowerCaseHeaders = headers.map((header) => header.toLowerCase());
+  return REQUIRED_HEADERS.every((header) => lowerCaseHeaders.includes(header));
+};
 
 function getProperties(table) {
   let properties = [];
 
   if (table.props.originalType === 'table') {
     const [thead, tbody] = table.props.children;
-    const columnHeads = thead.props.children.props.children;
-    const rows = tbody.props.children;
-    properties = Children.map(rows, (row) => {
-      const property = {
-        id: `property-table-row-${useUID()}`,
-        name: [],
-        type: [],
-        info: [],
-        default: [],
-        description: [],
-      };
 
-      Children.map(row.props.children, (cell, index) => {
-        let key = columnHeads[index].props.children;
+    let columnHeads = [];
+    let rows = [];
+    columnHeads = columnHeads.concat(thead.props.children.props.children);
+    columnHeads = columnHeads.map((header) => header.props.children);
+    rows = rows.concat(tbody.props.children);
+
+    if (!hasRequiredHeaders(columnHeads)) return null;
+
+    properties = Children.map(rows, (row) => {
+      const property = {};
+      REQUIRED_HEADERS.forEach((header) => {
+        property[header] = [];
+      });
+
+      Children.forEach(row.props.children, (cell, index) => {
+        let key = columnHeads[index];
         const value = cell.props.children;
         if (typeof key === 'string') {
           key = key.toLowerCase();
-          property[key].push(value);
+          if (Object.keys(property).includes(key)) property[key].push(value);
         }
       });
+
+      property.id = `property-table-row-${useUID()}`;
       return property;
     });
   }
@@ -41,6 +64,9 @@ function getProperties(table) {
 
 export default function PropertyTable({ children, title }) {
   const properties = getProperties(children);
+  if (!properties) {
+    return children;
+  }
   return (
     <div
       className={`property-table-container ${styles.container}`}
@@ -50,15 +76,23 @@ export default function PropertyTable({ children, title }) {
         borderColor: 'border',
       }}
     >
-      <h3 className={`property-table-title ${styles.title}`}>{title}</h3>
+      {title && (
+        <h3
+          className={`property-table-title ${styles.title}`}
+          sx={{
+            borderBottom: 'main',
+            borderColor: 'border',
+          }}
+        >
+          {title}
+        </h3>
+      )}
       <ul className={`property-table-list ${styles.propertyTable}`}>
         {properties.map((property) => (
           <li
             key={property.id}
             className={`property-table-cell ${styles.cell}`}
             sx={{
-              borderTop: 'main',
-              borderColor: 'border',
               variant: 'listItems.layout',
             }}
           >
