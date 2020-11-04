@@ -1,7 +1,8 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
 import PropTypes from 'prop-types';
-import { useMDXComponents } from '@mdx-js/react';
+import { mdx as createElement, MDXProvider, useMDXComponents } from '@mdx-js/react';
+import mdx from '@mdx-js/mdx';
 import {
   LiveEditor,
   LiveError,
@@ -13,9 +14,42 @@ import { usePrismTheme } from '../../hooks';
 
 import styles from './playground.module.scss';
 
-export default function Playground({ code }) {
-  const theme = usePrismTheme();
+export default function Playground({ code, renderMDX }) {
+  const prismTheme = usePrismTheme();
+
+  const transformCode = (isMDX) => (src) => {
+    if (!isMDX) {
+      return `<>${src}</>`;
+    }
+
+    let transpiledMDX;
+
+    try {
+      transpiledMDX = mdx.sync(src, { skipExport: true });
+    } catch (e) {
+      return '';
+    }
+
+    return `
+      ${transpiledMDX}
+
+      render(
+        <MDXProvider components={components}>
+          <MDXContent {...props} />
+        </MDXProvider>
+      );
+    `;
+  };
+
   const components = useMDXComponents();
+
+  const scope = {
+    ...components,
+    components,
+    mdx: createElement,
+    MDXProvider,
+    props: {},
+  };
 
   return (
     <div
@@ -27,8 +61,10 @@ export default function Playground({ code }) {
     >
       <LiveProvider
         code={code}
-        scope={components}
-        theme={theme}
+        transformCode={transformCode(renderMDX)}
+        scope={scope}
+        noInline={renderMDX}
+        theme={prismTheme}
       >
         <div
           className={`live-preview ${styles.preview}`}
@@ -38,7 +74,7 @@ export default function Playground({ code }) {
             borderColor: 'border',
           }}
         >
-          <LivePreview />
+          <LivePreview style={{ width: '100%' }} />
         </div>
         <div
           className={`live-editor ${styles.editor}`}
@@ -59,4 +95,9 @@ export default function Playground({ code }) {
 
 Playground.propTypes = {
   code: PropTypes.string.isRequired,
+  renderMDX: PropTypes.bool,
+};
+
+Playground.defaultProps = {
+  renderMDX: false,
 };

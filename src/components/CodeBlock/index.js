@@ -37,7 +37,7 @@ export default function CodeBlock({ children, metastring, className: gatsbyClass
 
   if (metastring === 'live') {
     return (
-      <Playground code={children} />
+      <Playground renderMDX={language === 'mdx'} code={children} />
     );
   }
 
