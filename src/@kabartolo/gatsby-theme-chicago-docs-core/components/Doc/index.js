@@ -1,6 +1,6 @@
 /** @jsx jsx */
 /* eslint-disable no-unused-vars */
-import { jsx, useColorMode } from 'theme-ui';
+import { jsx, Styled, useColorMode } from 'theme-ui';
 import React, { useEffect } from 'react';
 /* eslint-enable no-unused-vars */
 import PropTypes from 'prop-types';
@@ -76,7 +76,7 @@ export default function Doc({ data: { doc }, pageContext, setShowSidebar }) {
         />
       )}
       <header className={styles.pageHeader}>
-        <h1>{title}</h1>
+        <Styled.h1>{title}</Styled.h1>
       </header>
       <div className={`article-main ${styles.main} ${printTOC ? styles.withToc : ''}`}>
         {printTOC && (

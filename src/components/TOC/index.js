@@ -87,7 +87,7 @@ export default function TOC({
       <nav
         className={`toc-scroll ${styles.scroll}`}
       >
-        {title && <h2 className="toc-title">{title}</h2>}
+        {title && <Styled.h2 className="toc-title">{title}</Styled.h2>}
         <NestedList
           activeId={activeId}
           count={0}
