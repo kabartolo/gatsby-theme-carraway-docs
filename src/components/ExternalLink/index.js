@@ -13,6 +13,7 @@ export default function ExternalLink({
   children,
   className,
   href,
+  showIcon,
   tooltip,
 }) {
   return (
@@ -24,7 +25,7 @@ export default function ExternalLink({
       title={tooltip}
     >
       {children}
-      <FontAwesomeIcon className={styles.icon} icon={faExternalLinkAlt} />
+      {showIcon && <FontAwesomeIcon className={styles.icon} icon={faExternalLinkAlt} />}
     </Styled.a>
   );
 }
@@ -36,10 +37,12 @@ ExternalLink.propTypes = {
   ]).isRequired,
   className: PropTypes.string,
   href: PropTypes.string.isRequired,
+  showIcon: PropTypes.bool,
   tooltip: PropTypes.string,
 };
 
 ExternalLink.defaultProps = {
   className: '',
+  showIcon: true,
   tooltip: '',
 };
