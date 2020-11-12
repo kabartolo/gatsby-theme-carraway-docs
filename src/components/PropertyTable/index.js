@@ -97,15 +97,20 @@ export default function PropertyTable({ children, title }) {
             }}
           >
             <div className={`property-top-row ${styles.topRow}`}>
-              <h4
-                className={`property-name ${styles.name}`}
-                sx={{
-                  bg: 'primary',
-                  color: 'background',
-                }}
-              >
-                {property.name}
-              </h4>
+              <span className={`property-name-and-type ${styles.topLeft}`}>
+                <h4
+                  className={`property-name ${styles.name}`}
+                  sx={{
+                    bg: 'primary',
+                    color: 'background',
+                  }}
+                >
+                  {property.name}
+                </h4>
+                <span className={`property-info ${styles.info}`}>
+                  {property.info}
+                </span>
+              </span>
               {property.type && (
                 <span
                   className={`property-type ${styles.type}`}
@@ -118,9 +123,6 @@ export default function PropertyTable({ children, title }) {
               )}
             </div>
             <div className="second-row">
-              <span className={`property-info ${styles.info}`}>
-                {property.info}
-              </span>
               {(property.default.length > 0 && typeof (property.default[0]) !== 'undefined') && (
                 <span className={`property-default-value ${styles.defaultValue}`}>
                   <em>default: </em>

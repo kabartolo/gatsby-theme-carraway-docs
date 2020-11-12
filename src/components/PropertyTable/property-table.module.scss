@@ -6,7 +6,8 @@
 	overflow-y: auto;
 	.title {
 		margin-bottom: 0;
-		padding-bottom: 1rem;
+		padding: 1rem;
+		padding-top: inherit;
 	}
 }
 
@@ -16,33 +17,40 @@
 		font-size: 0.9rem;
 	}
 	.cell {
-		padding: 1rem 0;
+		padding: 1rem;
 		&:last-child {
 			padding-bottom: 0;
 		}
 	}
 	.top-row {
 		display: flex;
+		justify-content: space-between;
 		align-items: center;
 		margin-bottom: 1em;
-		.name {
-			border-radius: 4px;
-			font-family: 'Monospace';
-			font-size: 1rem;
-			margin: 0;
-			margin-right: 1em;
-			padding: 0 1em;
-			code {
-				background: inherit;
+		.top-left {
+			display: flex;
+			align-items: center;
+			.name {
+				border-radius: 4px;
+				font-family: 'Monospace';
+				font-size: 1rem;
+				margin: 0;
+				margin-right: 1em;
+				padding: 0 1em;
+				code {
+					background: inherit;
+				}
+			}
+			.info {
+				font-weight: bold;
+				font-style: italic;
 			}
 		}
 		.type {
 			font-weight: bold;
+			font-family: 'Monospace';
+			// font-size: 1rem;
 		}
-	}
-	.info {
-		margin-right: 1rem;
-		font-weight: bold;
 	}
 	.description {
 		font-size: 1rem;
