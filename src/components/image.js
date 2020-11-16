@@ -15,7 +15,7 @@ export default function Image({
           relativePath
           name
           childImageSharp {
-            fluid(quality: 100) {
+            fluid(maxWidth: 2800, quality: 100) {
               ...GatsbyImageSharpFluid
             }
           }
