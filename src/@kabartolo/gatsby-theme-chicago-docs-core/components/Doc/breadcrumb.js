@@ -8,7 +8,7 @@ import { useThemeOptions } from '../../../../hooks';
 import styles from './doc.module.scss';
 
 export default function Breadcrumb({ data }) {
-  const { basePath } = useThemeOptions();
+  const { basePath, basePathLabel } = useThemeOptions();
   const last = data.slice(-1)[0];
   const first = data.length > 1 ? data[0] : null;
   const middle = data.length > 2 ? data.slice(1, -1) : null;
@@ -17,7 +17,7 @@ export default function Breadcrumb({ data }) {
     <nav className={`breadcrumb-nav ${styles.breadcrumb}`}>
       <span key={basePath}>
         <Styled.a as={Link} to={basePath}>
-          Home
+          {basePathLabel}
         </Styled.a>
       </span>
       {first && (
